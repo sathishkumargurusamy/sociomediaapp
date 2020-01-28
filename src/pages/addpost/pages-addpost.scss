@@ -1,0 +1,36 @@
+.bar-button-default-md {
+    color: white;
+}
+
+textarea.text-input {
+    background-color: lightgrey;
+    color: black;
+}
+
+.line {
+    width: 40px;
+    margin-bottom: 5px;
+    margin-right: 5%;
+    height: 5px;
+    background-color: black;
+}
+
+.logo {
+    height: 73px;
+    width: 74px;
+    background-position: center;
+    background-size: cover;
+    background-image: url('../../assets/logo.gif');
+}
+
+.linemain {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.but {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}

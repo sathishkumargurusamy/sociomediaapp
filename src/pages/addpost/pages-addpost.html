@@ -1,0 +1,47 @@
+<ion-menu [content]="mycontent" id='addpost' type='overlay'>
+    <ion-content #mycontent>
+        <ion-list>
+            <ion-item menuClose detail-none>
+                <ion-icon name="close"></ion-icon>
+            </ion-item>
+
+            <ion-item>
+                <ion-label>
+                    <div style="display: flex; justify-content: flex-start; align-items: center;" (tap)='logout()'>
+                        <p style='color:blue; font-size: 22px; margin-right:5px;padding:5px;cursor: pointer;'>Logout</p>
+                        <ion-icon name="power"></ion-icon>
+                    </div>
+                </ion-label>
+
+            </ion-item>
+
+        </ion-list>
+    </ion-content>
+</ion-menu>
+<ion-header>
+    <ion-navbar hideBackButton>
+        <ion-title>
+            <div class=linemain>
+                <div style='cursor: pointer;' (tap)='menutoggle()'>
+                    <div class='line'></div>
+                    <div class='line'></div>
+                    <div class='line'></div>
+                </div>
+                <div class="logo"> </div>
+                <div class='heading'>Add Post</div>
+
+            </div>
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+    <h5>Write Your Post here...</h5>
+    <ion-textarea rows="6" cols="20" [(ngModel)]='mypost' placeholder="Whats in Your mind..."></ion-textarea>
+
+    <div class="but">
+        <button ion-button (click)='addpost()'>Add</button>
+    </div>
+    <ion-item-divider></ion-item-divider>
+</ion-content>

@@ -1,0 +1,81 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            Chat
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-segment [(ngModel)]="segment">
+
+        <ion-segment-button value="chat">
+            Chat
+        </ion-segment-button>
+        <ion-segment-button value="group">
+            Groups
+        </ion-segment-button>
+
+    </ion-segment>
+    <div [ngSwitch]="segment">
+        <ion-card *ngSwitchCase="'chat'">
+            <ion-card-header>
+                Friends
+            </ion-card-header>
+            <ion-card-content>
+                <div *ngFor='let f of friends'>
+                    <div *ngIf='f.username!=username'>
+                        <ion-item *ngIf='f.status==="1"' (click)='gotouser(f.username)'>
+
+                            <ion-avatar item-start>
+                                <img src="../../assets/profile.png">
+                            </ion-avatar>
+                            <ion-label>
+                                <h2>{{f.username}}</h2>
+                                <div [ngClass]="f.status==='1'?'status':'status_off'"></div>
+                            </ion-label>
+                        </ion-item>
+                    </div>
+                </div>
+
+                <div *ngFor='let f of friends'>
+                    <div *ngIf='f.status==="0"'>
+                        <ion-item *ngIf='f.username!=username'>
+
+                            <ion-avatar item-start>
+                                <img src="../../assets/profile.png">
+                            </ion-avatar>
+                            <ion-label>
+                                <h2>{{f.username}}</h2>
+                                <div [ngClass]="f.status=='1'?'status':'status_off'"></div>
+                            </ion-label>
+                        </ion-item>
+                    </div>
+                </div>
+
+            </ion-card-content>
+        </ion-card>
+
+        <ion-card *ngSwitchCase="'group'">
+            <ion-card-content>
+                <ion-grid>
+                    <ion-label>Create group....</ion-label>
+                    <ion-input type='text' [(ngModel)]='groupname' placeholder='Enter group name....'></ion-input>
+                    <button ion-button (tap)='creategroup()'>Create</button>
+                    <br>
+                    <ion-label>Choose group....</ion-label>
+                    <button *ngFor='let g of groups' ion-button (tap)='setroom(g.groupname,g._id)'>{{g.groupname}}</button> {{room}}
+
+                    <ion-row>
+                        <ion-col>
+                            <button ion-button (click)="gotochat()">Join</button>
+
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+
+</ion-content>

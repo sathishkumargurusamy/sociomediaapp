@@ -1,0 +1,27 @@
+<ion-content *ngIf="!disp" padding>
+    <div class="maincontent">
+        <div class='loginlogo'>
+
+        </div>
+        <div class="card1">
+
+            <ion-item>
+
+                <ion-input placeholder='Email' [(ngModel)]="username" type="text"></ion-input>
+            </ion-item>
+            <br>
+            <ion-item>
+
+                <ion-input placeholder='Password' [(ngModel)]='password' type="password"></ion-input>
+            </ion-item>
+            <br>
+
+            <button ion-button (click)='login()'>Login</button>
+
+
+        </div>
+    </div>
+</ion-content>
+<ion-nav *ngIf="disp" [root]="rootPage">
+
+</ion-nav>

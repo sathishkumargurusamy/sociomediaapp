@@ -1,0 +1,71 @@
+page-pages-chat {
+    .user_name {
+        color: #afafaf;
+    }
+    .message {
+        padding: 10px !important;
+        transition: all 250ms ease-in-out !important;
+        border-radius: 10px !important;
+        margin-bottom: 4px !important;
+    }
+    .my_message {
+        background: color($colors, primary) !important;
+        color: #000 !important;
+    }
+    .other_message {
+        background: #dcdcdc !important;
+        color: #000 !important;
+    }
+    .offline {
+        position: relative;
+    }
+    .arrow {
+        background-image: url('../../assets/arrow.png');
+        width: 10px;
+        height: 10px;
+        background-size: cover;
+        position: absolute;
+        top: 7px;
+        right: 0;
+        transform: rotate(90deg);
+        transition: 0.3s ease-in;
+    }
+    .arrow_reverse {
+        background-image: url('../../assets/arrow.png');
+        width: 10px;
+        height: 10px;
+        background-size: cover;
+        position: absolute;
+        top: 7px;
+        right: 0;
+        transition: 0.3s ease-in;
+    }
+    .time {
+        color: #afafaf;
+        float: right;
+        font-size: small;
+    }
+    .message_row {
+        background-color: #fff;
+    }
+    .status {
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        top: 24px;
+        border-radius: 50%;
+        right: 0;
+        z-index: 100;
+        background-color: green;
+    }
+    .status_off {
+        width: 10px;
+        height: 10px;
+        position: absolute;
+        top: 24px;
+        border-radius: 50%;
+        right: 0;
+        z-index: 100;
+        background-color: red;
+    }
+}

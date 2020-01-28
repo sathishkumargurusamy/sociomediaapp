@@ -1,0 +1,139 @@
+<ion-menu [content]="mycontent" id='home' type='overlay'>
+    <ion-content #mycontent>
+        <ion-list>
+            <ion-item menuClose detail-none>
+                <ion-icon name="close"></ion-icon>
+            </ion-item>
+
+            <ion-item>
+                <ion-label>
+                    <div style="display: flex; justify-content: flex-start; align-items: center;" (tap)='logout()'>
+                        <p style='color:blue; font-size: 22px; margin-right:5px;padding:5px;cursor: pointer;'>Logout</p>
+                        <ion-icon name="power"></ion-icon>
+                    </div>
+                </ion-label>
+
+            </ion-item>
+
+        </ion-list>
+    </ion-content>
+</ion-menu>
+<ion-header>
+
+    <ion-navbar>
+
+
+        <ion-title>
+            <div class=linemain>
+                <div style='cursor: pointer;' (tap)='menutoggle()'>
+                    <div class='line'></div>
+                    <div class='line'></div>
+                    <div class='line'></div>
+                </div>
+                <div class="logo"> </div>
+                <div class='heading'>News Feed</div>
+
+            </div>
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <div style='padding:10px;font-size:20px;display: flex; justify-content: center; align-items: center;'>Hallo!
+        <div class='hand'></div> {{username}}..</div>
+    <br>
+    <div style='padding:5px;font-size:20px;display: flex; justify-content: center; align-items: center;'>Check what's happening arround you!.</div>
+
+    <!-- <div class='but'>
+        <div class='writeicon'></div>
+        <div class='but1' (click)='gotoaddpost()'>Add New Post</div>
+    </div> -->
+
+
+    <ion-card *ngFor='let i of post,let j=index'>
+        <ion-item-divider>
+            <ion-item>
+                <!-- <ion-avatar item-start>
+            <img src="img/marty-avatar.png">
+        </ion-avatar> -->
+                <h2 style="color:mediumblue;" (click)='gotoprofile(i.userid)'>{{i.username}}</h2>
+
+                <div class="dots" *ngIf='userid==i.userid' (click)='popuptoggle1(j)'>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                    <div class="dot"></div>
+                </div>
+
+
+
+            </ion-item>
+
+            <ion-card-content>
+                <p>{{i.post}}</p>
+                <div class='currentdate'>{{i.time|date:'dd MMM,yy'}}</div>
+            </ion-card-content>
+        </ion-item-divider>
+        <div class='popup' *ngIf='popuptoggle[j]'>
+
+            <!-- <img src="img/advance-card-bttf.png"> -->
+            <div class='popuptext' (click)='deletepost(i._id,j)'>
+                <div class="dicon"></div>Delete</div>
+
+        </div>
+        <ion-row>
+
+            <ion-col>
+                <button ion-button icon-start clear small>
+        <ion-icon *ngIf='!liketoggle[i._id]' name="thumbs-down"></ion-icon>
+        <ion-icon *ngIf='liketoggle[i._id]' name="thumbs-up"></ion-icon>
+                <div (click)="addlikes(j,userid,i._id,username)"><span style="color:black; ">{{i.likes}}</span> Like</div>
+                </button>
+            </ion-col>
+            <ion-col>
+                <button ion-button icon-start clear small>
+        <ion-icon name="text"></ion-icon>
+        <div (click)='showcommenttoggle(j,i._id)'>  Comments</div>
+      </button>
+            </ion-col>
+
+        </ion-row>
+
+        <div *ngIf='showcommenttoggle1[j]'>
+            <div *ngFor='let c of dispcomment'>
+                <ion-card *ngIf='i._id==c.postid'>
+
+                    <ion-item>
+                        <!-- <ion-avatar item-start>
+                <img src="img/marty-avatar.png">
+            </ion-avatar> -->
+                        <h2 style="color:mediumblue;">{{c.username}}</h2>
+                        <div class="dcicon" *ngIf='userid==c.userid' (click)='deletecomment(c._id)'>
+
+                        </div>
+
+
+                    </ion-item>
+
+                    <!-- <img src="img/advance-card-bttf.png"> -->
+
+                    <ion-card-content>
+                        <p>{{c.comment}}</p>
+                    </ion-card-content>
+
+                </ion-card>
+            </div>
+        </div>
+        <ion-row>
+            <div class='comment'>
+                <ion-item>
+                    <ion-textarea rows="4" [(ngModel)]='comments[j]' type="text" placeholder="Comment .... "></ion-textarea>
+                </ion-item>
+
+
+                <button ion-button small float-right round (click)="addcomment(i._id,userid,j,username)">Add Comment</button>
+            </div>
+        </ion-row>
+
+    </ion-card>
+
+</ion-content>

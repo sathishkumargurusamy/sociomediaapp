@@ -1,0 +1,153 @@
+* {
+    font-family: 'Arvo', serif;
+}
+
+.input-cover {
+    height: auto !important;
+}
+
+.toolbar-background-md {
+    border-color: darkslateblue;
+    background: darkslateblue;
+}
+
+.toolbar-title-md {
+    padding: 0 12px;
+    font-size: 2rem;
+    font-weight: 500;
+    color: white;
+    font-family: 'Special Elite', cursive;
+}
+
+.dicon {
+    width: 20px;
+    height: 20px;
+    background-image: url('../../assets/delete.png');
+    background-size: cover;
+    position: absolute;
+    top: 12px;
+    right: 59px;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.dcicon {
+    width: 20px;
+    height: 20px;
+    background-image: url('../../assets/delete.png');
+    background-size: cover;
+    position: absolute;
+    top: 12px;
+    right: 8px;
+    z-index: 2;
+    cursor: pointer;
+}
+
+.card-md {
+    position: relative;
+}
+
+.popuptext {
+    color: black;
+    z-index: 2;
+}
+
+.dots {
+    display: flex;
+    position: absolute;
+    top: 1px;
+    right: 2px;
+}
+
+.dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: black;
+    margin-right: 3px;
+}
+
+.but {
+    display: flex;
+    justify-content: center;
+}
+
+.line {
+    width: 40px;
+    margin-bottom: 5px;
+    margin-right: 50px;
+    height: 5px;
+    background-color: black;
+}
+
+.popup {
+    width: 140px;
+    height: 80px;
+    position: absolute;
+    top: 23px;
+    z-index: 100;
+    transition: 1s ease-in;
+    right: 10px;
+    border-radius: 5%;
+    display: flex;
+    padding: 15px;
+    justify-content: start;
+    background-color: white;
+    box-shadow: 4px 3px 14px 0px rgba(0, 0, 0, 0.75);
+}
+
+.currentdate {
+    position: absolute;
+    bottom: 10px;
+    right: 6px;
+    font-size: 10px;
+}
+
+.hand {
+    background-image: url('../../assets/hand.gif');
+    width: 32px;
+    height: 30px;
+    background-size: cover;
+}
+
+.heading {
+    width: 100px;
+}
+
+.linemain {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+}
+
+.my-custom-menu {
+    --width: 500px;
+}
+
+.but1 {
+    margin: 20px 0;
+    width: 50%;
+    height: 4rem;
+    background-color: blueviolet;
+    display: flex;
+    align-items: center;
+    border-radius: 5%;
+    justify-content: center;
+    font-size: 18px;
+    font-family: 'Righteous', cursive;
+}
+
+.logo {
+    height: 73px;
+    width: 74px;
+    background-position: center;
+    background-size: cover;
+    background-image: url('../../assets/logo.gif');
+}

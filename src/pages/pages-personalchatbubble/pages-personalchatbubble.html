@@ -1,0 +1,48 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>
+            {{this.navParams.get('room')}}
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid>
+        <ion-label *ngFor='let gd of groupdetail'>Created by....{{gd.username}}</ion-label>
+        <button ion-button (click)="leave()">Leave</button>
+        <div class='defaultmessage' *ngFor="let item1 of defaultmessage">{{this.navParams.get('room')}} is waiting for your message....</div>
+        <div class='defaultmessage1' *ngFor="let item2 of defaultmessage1">{{this.navParams.get('room')}} is idle and cant see your message....</div>
+        <ion-row *ngFor="let item of messageArray">
+
+            <ion-col col-9 *ngIf="item.user !== username" class="message" [ngClass]="{'my_message': item.user === username, 'other_message': item.user !== username}">
+                <span class="user_name">{{ item.user }}:</span><br>
+                <span>{{ item.message }} </span>
+
+            </ion-col>
+
+            <ion-col offset-3 col-9 *ngIf="item.user === username" class="message" [ngClass]="{'my_message': item.user === username, 'other_message': item.user !== username}">
+                <span class="user_name">{{ item.user }}:</span><br>
+                <span>{{ item.message }}</span>
+            </ion-col>
+
+        </ion-row>
+    </ion-grid>
+
+</ion-content>
+
+<ion-footer>
+    <ion-toolbar>
+        <ion-row class="message_row">
+            <ion-col col-9>
+                <ion-item no-lines>
+                    <ion-input type="text" placeholder="Message" [(ngModel)]="messageText"></ion-input>
+                </ion-item>
+            </ion-col>
+            <ion-col col-3>
+                <button ion-button (click)="sendMessage()">
+      Send
+    </button>
+            </ion-col>
+        </ion-row>
+    </ion-toolbar>
+</ion-footer>
