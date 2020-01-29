@@ -65,7 +65,7 @@ export class HomePage {
     this.getpost();
     this.getcomment();
 
-    }, 8000);  
+    }, 2000);  
     
     
   }
@@ -162,7 +162,7 @@ this.errcomment='Be First to comment this post....'
     }
     
 
-        this.liketoggle[pid]=!this.liketoggle[j];
+        this.liketoggle[pid]=!this.liketoggle[pid];
         
         if(this.liketoggle[pid]){
           console.log(this.likecount[pid]+1);
