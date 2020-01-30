@@ -11,7 +11,7 @@ import {Observable} from 'rxjs/Observable';
 */
 @Injectable()
 export class ChatProvider {
-  private socket = io('http://localhost:3001');
+  private socket = io('https://sociomediaapp-server.herokuapp.com/api');
   constructor(public http: HttpClient) {
     console.log('Hello ChatProvider Provider');
   }

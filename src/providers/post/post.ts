@@ -6,7 +6,7 @@ import{map} from 'rxjs/operators';
 @Injectable()
 export class PostProvider {
 
-  apiurl='http://localhost:3000/api';
+  apiurl='https://sociomediaapp-server.herokuapp.com/api';
   constructor(public http:HttpClient) { }
 
 

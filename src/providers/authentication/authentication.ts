@@ -9,7 +9,7 @@ export class AuthenticationProvider {
 
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
-  apiurl='http://localhost:3000/api';
+  apiurl='https://sociomediaapp-server.herokuapp.com/api';
   constructor(private http: HttpClient) { 
     this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
