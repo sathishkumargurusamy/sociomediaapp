@@ -69,7 +69,8 @@
 
             <ion-col>
                 <button ion-button icon-start clear small>
-    <ion-icon name="thumbs-up"></ion-icon>
+                    <ion-icon *ngIf='!liketoggle[i._id]' name="thumbs-down"></ion-icon>
+                    <ion-icon *ngIf='liketoggle[i._id]' name="thumbs-up"></ion-icon>
     <div (click)="addlikes(j,userid,i._id)"><span style="color:black; ">{{i.likes}}</span> Like</div>
   </button>
             </ion-col>

@@ -19,8 +19,18 @@ export class MyApp {
 disp:boolean;
 username:any;
 password:any;
+dispreg:boolean=true;
+displogin:boolean;
+fname:any;
+lname:any;
+uname:any;
+pass:any;
+cpass:any;
+
+
 userid;
 user;
+valid=true;
   constructor(platform: Platform,public loadingcontroller:LoadingController, statusBar: StatusBar, splashScreen: SplashScreen,public auth:AuthenticationProvider,public toastController: ToastController) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -32,6 +42,7 @@ user;
   ngOnInit(){
     this.presentLoadingWithOptions();
     this.disp=Boolean(localStorage.getItem('state'));
+    this.displogin=Boolean(localStorage.getItem('state'));
     
   }
   login(){
@@ -54,6 +65,7 @@ this.userid=u._id;
                 }
                 this.auth.setstatus(body).subscribe(data=>{});
                 this.disp=Boolean(localStorage.getItem('state'));
+                this.displogin=Boolean(localStorage.getItem('state'));
               }
               
             },
@@ -70,6 +82,15 @@ this.userid=u._id;
     toast.present();
     
   }
+  async reg() {
+    const toast = await this.toastController.create({
+      message: 'Registered Successfully!!',
+      duration: 2000,
+      position:'top'
+    });
+    toast.present();
+    
+  }
   async presentLoadingWithOptions() {
     const loading = await this.loadingcontroller.create({
       spinner: 'hide',
@@ -80,4 +101,31 @@ this.userid=u._id;
     });
     return await loading.present();
   }
+
+register(){
+  
+    let body={
+      "username":this.uname,
+      "firstname":this.fname,
+      "lastname":this.lname,
+      "password":this.pass,
+    }
+    this.auth.register(body).subscribe(data=>{
+if(data==="User added Successfully"){
+  this.reg();
+
+}
+else{
+  console.log(data);
+}
+
+    });
+  
+}
+logintoggle(){
+ console.log(this.displogin,this.dispreg);
+  this.displogin=!this.displogin;
+  this.dispreg=!this.dispreg;
+}
+
 }

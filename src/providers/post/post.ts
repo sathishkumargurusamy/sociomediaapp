@@ -62,8 +62,8 @@ export class PostProvider {
     return this.http.delete(this.apiurl+`/comments/`+id);
   }
 
-  getlikes(){
-    return this.http.get(this.apiurl+`/likes`);
+  getlikes(uid){
+    return this.http.get(this.apiurl+`/likes/`+uid);
   }
   postlikes(body){
     return this.http.post(this.apiurl+`/likes`,body);

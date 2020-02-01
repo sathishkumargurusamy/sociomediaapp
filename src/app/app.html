@@ -1,10 +1,9 @@
-<ion-content *ngIf="!disp" padding>
+<ion-content class='login' *ngIf="!disp && !displogin">
     <div class="maincontent">
-        <div class='loginlogo'>
 
-        </div>
         <div class="card1">
-
+            <h1 align='center'>LOGIN</h1>
+            <br>
             <ion-item>
 
                 <ion-input placeholder='Email' [(ngModel)]="username" type="text"></ion-input>
@@ -16,12 +15,62 @@
             </ion-item>
             <br>
 
-            <button ion-button (click)='login()'>Login</button>
+            <button ion-button full (click)='login()'>Login</button>
+            <br>
 
-
+            <span style='font-size: 16px;'>Create an account? <span (click)='logintoggle()'><u>Register..</u></span></span>
         </div>
     </div>
 </ion-content>
 <ion-nav *ngIf="disp" [root]="rootPage">
 
 </ion-nav>
+
+
+
+
+<ion-content class='login' *ngIf='!dispreg '>
+
+    <div class='maincontent'>
+
+        <div class="card2">
+            <h1 align='center'>REGISTER</h1>
+            <br>
+            <ion-item>
+                <ion-input type="text" [(ngModel)]='fname' placeholder="First Name" name="fname" required></ion-input>
+            </ion-item>
+            <br>
+            <ion-item>
+                <ion-input type="text" [(ngModel)]='lname' placeholder="Last Name" name="lname" required></ion-input>
+            </ion-item>
+            <br>
+            <ion-item>
+                <ion-input type="text" [(ngModel)]='uname' placeholder="Username" name="username" required></ion-input>
+            </ion-item>
+            <br>
+
+            <ion-item>
+                <ion-input type="password" [(ngModel)]='pass' placeholder="Password" name="password" required></ion-input>
+            </ion-item>
+            <br>
+
+            <ion-item>
+                <ion-input type="password" [(ngModel)]='cpass' placeholder="Confirm Password" name="confirmation_password" required></ion-input>
+
+            </ion-item>
+            <br>
+            <div style='color:darkgray; font-size:16px;' *ngIf='!(pass==cpass)'>Password doesn't match!!</div>
+
+
+            <ion-row>
+                <ion-col class="signup-col">
+                    <button ion-button color='danger' (click)='register()' class="submit-btn" full [disabled]="!(fname && lname && uname && pass && cpass && pass==cpass)">Register</button>
+                </ion-col>
+            </ion-row>
+            <br>
+            <span style='font-size: 16px;'>Already have an account? <span (click)='logintoggle()'><u>Login..</u></span></span>
+
+        </div>
+    </div>
+
+</ion-content>

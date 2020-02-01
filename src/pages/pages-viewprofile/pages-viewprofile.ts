@@ -24,9 +24,10 @@ export class PagesViewprofilePage {
   user;
   likecount:any=[];
   username:any='';
- 
+  allikes;
   likes:any='';
   userid:any='';
+  interval;
   liketoggle=[];
   thispost:any='';
   showcommenttoggle1:any=[];
@@ -45,12 +46,21 @@ ngOnInit(){
     this.userid=i._id;
 
   }
+  this.interval = setInterval(() => {
 this.getmypost(this.userid);
+
 this.getcomment();
+this.alllikes(this.userid);
+  },8000);
 }
 ionViewWillEnter() {
-  this.getmypost(this.userid);
-  this.getcomment();
+  
+ 
+    this.getmypost(this.userid);
+    
+    this.getcomment();
+    this.alllikes(this.userid);
+     
   
 }
 addlikes(j,uid,pid){
@@ -58,35 +68,45 @@ addlikes(j,uid,pid){
   this.postserv.getthispost(pid).subscribe(data=>{
     this.thispost=data;
   for(let p of this.thispost){
-    this.likecount[j]=p.likes;
-  }
+    this.likecount[pid]=p.likes;
+  } 
   
 
-      this.liketoggle[j]=!this.liketoggle[j];
+      this.liketoggle[pid]=!this.liketoggle[pid];
       
-      if(this.liketoggle[j]){
-        console.log(this.likecount[j]+1);
-        this.likecount[j]=this.likecount[j]+1;
+      if(this.liketoggle[pid]){
+        console.log(this.likecount[pid]+1);
+        this.likecount[pid]=this.likecount[pid]+1;
         let body={
           _id:pid,
     
-          likes:this.likecount[j]
+          likes:this.likecount[pid]
         };
         this.postserv.updatepost(body).subscribe(data=>{this.getmypost(this.userid);});
+        let body1={
+          userid:uid,
+          username:this.username,
+          postid:pid,
+          status:true
+        };
+     
+        this.postserv.postlikes(body1).subscribe(data1=>{console.log(data1);});
         
       } 
       else{
-        if(this.likecount[j]>0){
-          console.log(this.likecount[j]-1);
-          this.likecount[j]=this.likecount[j]-1;
+        if(this.likecount[pid]>0){
+          console.log(this.likecount[pid]-1);
+          this.likecount[pid]=this.likecount[pid]-1;
           let body={
             _id:pid,
             userid:this.post.userid,
             username:this.post.username,
             post:this.post.post,
-            likes:this.likecount[j]
+            likes:this.likecount[pid]
           };
           this.postserv.updatepost(body).subscribe(data=>{this.getmypost(this.userid);});
+          this.postserv.deletelikes(this.userid).subscribe(data1=>{console.log(data1);});
+          
         }
         
       }
@@ -128,6 +148,16 @@ deletepost(id){
   this.postserv.deletepost(id).subscribe(data=>{
     this.getmypost(this.userid);
   });
+
+}
+alllikes(uid){
+  this.postserv.getlikes(uid).subscribe(data=>{this.allikes=data;
+    for(let l of this.allikes){
+     
+      this.liketoggle[l.postid]=l.status;
+     
+     }});
+ 
 
 }
 deletecomment(id){

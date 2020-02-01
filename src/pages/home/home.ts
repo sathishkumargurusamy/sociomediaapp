@@ -51,7 +51,7 @@ export class HomePage {
     this.menu.toggle('home');
 }
   ngOnInit() {
-    this.alllikes();
+    
    
     
     for(const i of this.user){
@@ -64,15 +64,21 @@ export class HomePage {
       this.getlikes();
     this.getpost();
     this.getcomment();
+    this.alllikes(this.userid);
 
-    }, 2000);  
+    }, 8000);  
     
     
   }
+  
   ionViewWillEnter() {
-     this.getlikes();
+   
+      this.getlikes();
     this.getpost();
     this.getcomment();
+    this.alllikes(this.userid);
+ 
+    
     
   }
   popuptoggle1(j){
@@ -91,7 +97,7 @@ export class HomePage {
    gotoprofile(id){
     this.navCtrl.push(PagesViewpostPage,{
       id:id
-      });
+      },{animate: true, direction: 'left'});
     
   }
   addcomment(id,userid,j,username){
@@ -142,8 +148,8 @@ this.errcomment='Be First to comment this post....'
     
     
   }
-  alllikes(){
-    this.postserv.getlikes().subscribe(data=>{this.allikes=data;
+  alllikes(uid){
+    this.postserv.getlikes(uid).subscribe(data=>{this.allikes=data;
       for(let l of this.allikes){
        
         this.liketoggle[l.postid]=l.status;
@@ -244,11 +250,11 @@ logout(){
   this.auth.setstatus(body).subscribe(data=>{});
   this.app.getRootNav().setRoot(MyApp);
 }
-ionViewDidLeave() {
-  if (this.interval) {
-    clearInterval(this.interval);
-  }
-}
+// ionViewDidLeave() {
+//   if (this.interval) {
+//     clearInterval(this.interval);
+//   }
+// }
 }
 
 

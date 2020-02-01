@@ -44,8 +44,10 @@ setstatus(body)
 }
 
 
+register(body){
+  return this.http.post(this.apiurl+`/newuser`,body);
 
-
+}
 logout() {
   
   localStorage.removeItem('currentUser');

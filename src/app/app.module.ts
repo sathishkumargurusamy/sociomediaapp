@@ -20,7 +20,7 @@ import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 import { ChatProvider } from '../providers/chat/chat';
 import{PagesChatbubblePage} from '../pages/pages-chatbubble/pages-chatbubble';
 import{PagesPersonalchatbubblePage} from '../pages/pages-personalchatbubble/pages-personalchatbubble';
-const config: SocketIoConfig = { url: 'http://localhost:3001', options: {} };
+const config: SocketIoConfig = { url: 'https://sociomediaapp-server.herokuapp.com', options: {} };
 
 
 @NgModule({

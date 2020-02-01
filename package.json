@@ -23,6 +23,7 @@
     "@ionic-native/core": "4.20.0",
     "@ionic-native/splash-screen": "4.20.0",
     "@ionic-native/status-bar": "4.20.0",
+    "@ionic-tools/emoji-picker": "^1.4.0",
     "@ionic/storage": "2.2.0",
     "cordova-android": "8.1.0",
     "ionic-angular": "^3.9.9",

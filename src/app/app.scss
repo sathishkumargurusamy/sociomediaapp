@@ -1,22 +1,25 @@
 .maincontent {
     width: 100%;
-    height: 100%;
-    background-image: url('../assets/bg.gif');
+    height: 80%;
     background-size: cover;
-    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 15px;
+    padding: 10px;
 }
 
 .loginlogo {
     background-image: url('../assets/login.png');
     width: 100%;
     height: 100%;
+    margin: 0 auto;
     max-width: 260px;
     max-height: 300px;
     background-size: cover;
+}
+
+.login {
+    border: 5px solid steelblue;
 }
 
 .text-input::-moz-placeholder {
@@ -33,11 +36,22 @@
 
 .card1 {
     width: 100%;
+    height: 20%;
     padding: 15px 15px;
     background: inherit;
-    display: flex;
     justify-content: center;
     flex-direction: column;
+    margin-top: 50%
+}
+
+.card2 {
+    width: 100%;
+    height: 20%;
+    padding: 15px 15px;
+    background: inherit;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 40%
 }
 
 ion-item:first-child {
@@ -53,7 +67,7 @@ ion-item:last-child {
 ion-item.item {
     background-color: transparent;
     margin-bottom: 1px;
-    color: blanchedalmond;
+    color: black;
     .label {
         width: 10%;
         color: black;

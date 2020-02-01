@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Socket } from 'ng-socket-io';
 import { ChatProvider } from '../../providers/chat/chat';
 import{PostProvider} from '../../providers/post/post';
-
+// import { EmojiPickerModule } from '@ionic-tools/emoji-picker';
 
 /**
  * Generated class for the PagesPersonalchatbubblePage page.
@@ -24,7 +24,7 @@ export class PagesPersonalchatbubblePage {
   user;
 
   interval;
- 
+  toggled: boolean = false;
   messageText:String='';
   messageArray:Array<{user:String,message:String}> = [];
  defaultmessage:Array<{user:String,message:String}> = [];
@@ -71,6 +71,9 @@ export class PagesPersonalchatbubblePage {
   {
       this._chatService.sendMessage({user:this.username, room: this.navParams.get('room'), message:this.messageText});
   }
-
+  // handleSelection(event) {
+  //   this.messageText = this.messageText + " " + event.char;
+  //   this.toggled=!this.toggled;
+  // }
 
 }
