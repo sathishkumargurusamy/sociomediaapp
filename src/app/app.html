@@ -1,11 +1,9 @@
 <ion-content class='login' *ngIf="!disp && !displogin">
     <div class="maincontent">
-
         <div class="card1">
             <h1 align='center'>LOGIN</h1>
             <br>
             <ion-item>
-
                 <ion-input placeholder='Email' [(ngModel)]="username" type="text"></ion-input>
             </ion-item>
             <br>
@@ -25,9 +23,6 @@
 <ion-nav *ngIf="disp" [root]="rootPage">
 
 </ion-nav>
-
-
-
 
 <ion-content class='login' *ngIf='!dispreg '>
 
@@ -72,5 +67,4 @@
 
         </div>
     </div>
-
 </ion-content>

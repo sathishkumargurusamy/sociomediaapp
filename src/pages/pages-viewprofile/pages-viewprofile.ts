@@ -5,6 +5,7 @@ import { ToastController,App } from 'ionic-angular';
 import { MenuController } from 'ionic-angular';
 import{AuthenticationProvider} from '../../providers/authentication/authentication';
 import{MyApp} from '../../app/app.component';
+import * as jwt_decode from 'jwt-decode';
 
 
 @IonicPage()
@@ -32,7 +33,9 @@ export class PagesViewprofilePage {
   thispost:any='';
   showcommenttoggle1:any=[];
   constructor(public navCtrl: NavController,public app:App,public auth:AuthenticationProvider,private menu: MenuController,public toastController: ToastController, public navParams: NavParams,public postserv:PostProvider) {
-    this.user=JSON.parse(localStorage.getItem('currentUser'));
+    const jwt = JSON.parse(localStorage.getItem('currentUser'));
+    const jwtData = jwt_decode(jwt);
+    this.user = jwtData.user;
   }
   menutoggle () {
     this.menu.enable(false, 'home');
@@ -54,26 +57,18 @@ this.alllikes(this.userid);
   },8000);
 }
 ionViewWillEnter() {
-  
- 
     this.getmypost(this.userid);
-    
     this.getcomment();
     this.alllikes(this.userid);
-     
-  
 }
 addlikes(j,uid,pid){
   console.log('Hii');
   this.postserv.getthispost(pid).subscribe(data=>{
     this.thispost=data;
-  for(let p of this.thispost){
+  for(const p of this.thispost){
     this.likecount[pid]=p.likes;
   } 
-  
-
       this.liketoggle[pid]=!this.liketoggle[pid];
-      
       if(this.liketoggle[pid]){
         console.log(this.likecount[pid]+1);
         this.likecount[pid]=this.likecount[pid]+1;
