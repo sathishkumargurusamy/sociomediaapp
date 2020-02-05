@@ -1,8 +1,9 @@
-import { Component, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavController, App } from 'ionic-angular';
 import { PostProvider } from '../../providers/post/post';
 import { ModalController } from 'ionic-angular';
 import { PagesAddpostPage } from '../addpost/pages-addpost';
+import {PagesEditprofilePage} from '../pages-editprofile/pages-editprofile';
 import { ToastController } from 'ionic-angular';
 import { MenuController } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
@@ -37,9 +38,10 @@ export class HomePage {
   thispost: any = '';
   showcommenttoggle1: any = [];
   constructor(public navCtrl: NavController, public app: App, public auth: AuthenticationProvider, private menu: MenuController, public postserv: PostProvider, public modalController: ModalController, public toastController: ToastController) {
-    const jwt = JSON.parse(localStorage.getItem('currentUser'));
-    const jwtData = jwt_decode(jwt);
-    this.user = jwtData.user;
+    // const jwt = JSON.parse(localStorage.getItem('currentUser'));
+    // const jwtData = jwt_decode(jwt);
+    this.user=JSON.parse(localStorage.getItem('currentUser'));
+    
   }
   menutoggle() {
     this.menu.enable(false, 'myprofile');
@@ -48,9 +50,7 @@ export class HomePage {
     this.menu.toggle('home');
   }
   ngOnInit() {
-
-
-
+    console.log(this.user);
     for (const i of this.user) {
       this.username = i.username;
       this.userid = i._id;
@@ -248,6 +248,9 @@ export class HomePage {
     }
     this.auth.setstatus(body).subscribe(data => { });
     this.app.getRootNav().setRoot(MyApp);
+  }
+  gotoeditprofile(){
+    this.navCtrl.push(PagesEditprofilePage);
   }
   // ionViewDidLeave() {
   //   if (this.interval) {

@@ -1,0 +1,21 @@
+page-pages-editprofile {
+    .input {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        position: relative;
+        align-items: flex-end;
+    }
+    .editico {
+        position: absolute;
+        right: 6px;
+        top: 10px;
+        z-index: 100;
+        font-size: 19px;
+    }
+    .button {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+}

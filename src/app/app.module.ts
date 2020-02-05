@@ -6,7 +6,6 @@ import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
 import { TabsPage } from '../pages/tabs/tabs';
-import { JwtModule } from '@auth0/angular-jwt';
 import { PagesAddpostPage } from '../pages/addpost/pages-addpost';
 import { PagesViewpostPage } from '../pages/pages-viewpost/pages-viewpost';
 import { PagesLoginPage } from '../pages/pages-login/pages-login';
@@ -20,7 +19,9 @@ import { PagesChatPage } from '../pages/pages-chat/pages-chat';
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 import { ChatProvider } from '../providers/chat/chat';
 import { PagesChatbubblePage } from '../pages/pages-chatbubble/pages-chatbubble';
+import {PagesEditprofilePage} from '../pages/pages-editprofile/pages-editprofile'
 import { PagesPersonalchatbubblePage } from '../pages/pages-personalchatbubble/pages-personalchatbubble';
+import { Camera } from '@ionic-native/camera/ngx';
 const config: SocketIoConfig = { url: 'https://sociomediaapp-server.herokuapp.com', options: {} };
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ const config: SocketIoConfig = { url: 'https://sociomediaapp-server.herokuapp.co
     PagesAddpostPage,
     PagesViewpostPage,
     PagesLoginPage,
+    PagesEditprofilePage,
     PagesViewprofilePage,
     PagesChatPage,
     PagesChatbubblePage,
@@ -43,15 +45,7 @@ const config: SocketIoConfig = { url: 'https://sociomediaapp-server.herokuapp.co
       tabsHideOnSubPages: true
     }),
     SocketIoModule.forRoot(config),
-    HttpClientModule,
-    JwtModule.forRoot({
-      config: {
-        tokenGetter: function  tokenGetter() {
-             return     localStorage.getItem('token');},
-        whitelistedDomains: ['https://sociomediaapp-server.herokuapp.com'],
-        blacklistedRoutes: ['https://sociomediaapp-server.herokuapp.com/api/user']
-      }
-    })],
+    HttpClientModule],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
@@ -61,6 +55,7 @@ const config: SocketIoConfig = { url: 'https://sociomediaapp-server.herokuapp.co
     TabsPage,
     PagesChatPage,
     PagesLoginPage,
+    PagesEditprofilePage,
     PagesAddpostPage,
     PagesViewprofilePage,
     PagesViewpostPage,
@@ -69,6 +64,7 @@ const config: SocketIoConfig = { url: 'https://sociomediaapp-server.herokuapp.co
   ],
   providers: [
     StatusBar,
+    Camera,
     ChatProvider,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },

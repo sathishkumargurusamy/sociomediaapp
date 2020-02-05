@@ -1,0 +1,67 @@
+<ion-header>
+    <ion-navbar>
+        <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+        <ion-title>
+            Client Profile
+        </ion-title>
+
+    </ion-navbar>
+</ion-header>
+<ion-content padding id="page6">
+    <ion-list id="clientProfile-list2">
+
+        <ion-item color="none" id="clientProfile-list-item4">
+            <ion-thumbnail item-left>
+                <img src="../../assets/profile.png" />
+            </ion-thumbnail>
+        </ion-item>
+        <div class="input">
+            <div>
+                <ion-label>
+                    Firstname
+                </ion-label>
+            </div>
+            <ion-item>
+                <ion-input [(ngModel)]='firstname' [readonly]='isreadonly'></ion-input>
+            </ion-item>
+            <div class='editico' (tap)='toggleedit()'>
+                <ion-icon *ngIf='isreadonly' name="create"></ion-icon>
+                <ion-icon *ngIf='!isreadonly' name="checkmark"></ion-icon>
+            </div>
+        </div>
+        <div class="input">
+            <div>
+                <ion-label>
+                    Lastname
+                </ion-label>
+            </div>
+            <ion-item>
+                <ion-input [(ngModel)]='lastname' [readonly]='isreadonly'></ion-input>
+            </ion-item>
+            <div class='editico' (tap)='toggleedit()'>
+                <ion-icon *ngIf='isreadonly' name="create"></ion-icon>
+                <ion-icon *ngIf='!isreadonly' name="checkmark"></ion-icon>
+            </div>
+        </div>
+        <div class="input">
+            <div>
+                <ion-label>
+                    Username
+                </ion-label>
+            </div>
+            <ion-item>
+                <ion-input [(ngModel)]='username' [readonly]='isreadonly'></ion-input>
+            </ion-item>
+            <div class='editico' (tap)='toggleedit()'>
+                <ion-icon *ngIf='isreadonly' name="create"></ion-icon>
+                <ion-icon *ngIf='!isreadonly' name="checkmark"></ion-icon>
+            </div>
+        </div>
+        <div class="button">
+            <ion-item>
+                <button ion-button>Update</button>
+            </ion-item>
+        </div>

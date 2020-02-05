@@ -27,7 +27,7 @@ export class AuthenticationProvider {
             }
             else{
              
-              localStorage.setItem('currentUser', JSON.stringify(user['token']));
+              localStorage.setItem('currentUser', JSON.stringify(user));
               localStorage.setItem('state', '1');
               this.currentUserSubject.next(user);
             }
@@ -49,5 +49,4 @@ logout() {
   localStorage.removeItem('currentUser');
   localStorage.setItem('state', '');
   this.currentUserSubject.next(null);
-  return this.http.get(this.apiurl+`/logout`); 
 }}
