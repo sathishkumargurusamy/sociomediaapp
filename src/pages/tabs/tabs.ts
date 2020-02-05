@@ -8,7 +8,6 @@ import { PagesViewprofilePage } from '../pages-viewprofile/pages-viewprofile';
 import { NavController } from 'ionic-angular';
 import { MyApp } from '../../app/app.component';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
-
 @Component({
   templateUrl: 'tabs.html'
 })

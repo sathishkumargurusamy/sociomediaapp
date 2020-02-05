@@ -12,17 +12,18 @@ import * as jwt_decode from 'jwt-decode';
 })
 export class PagesPersonalchatbubblePage {
 
-  username;
-  userid;
-  user;
-  interval;
-  toggled: boolean = false;
-  messageText: String = '';
-  messageArray: Array<{ user: String, message: String }> = [];
-  defaultmessage: Array<{ user: String, message: String }> = [];
-  defaultmessage1: Array<{ user: String, message: String }> = [];
+  public username;
+  public userid;
+  public user;
+  public interval;
+  public toggled: boolean = false;
+  public messageText: String = '';
+  public messageArray: Array<{ user: String, message: String }> = [];
+  public defaultmessage: Array<{ user: String, message: String }> = [];
+  public defaultmessage1: Array<{ user: String, message: String }> = [];
 
-  constructor(public navCtrl: NavController, public postserv: PostProvider, public navParams: NavParams, private socket: Socket, public _chatService: ChatProvider) {
+  constructor(public navCtrl: NavController, public postserv: PostProvider, public navParams: NavParams, 
+    private socket: Socket, public _chatService: ChatProvider) {
     const jwt = JSON.parse(localStorage.getItem('currentUser'));
     const jwtData = jwt_decode(jwt);
     this.user = jwtData.user;
@@ -61,7 +62,6 @@ export class PagesPersonalchatbubblePage {
 
   }
 
-
   leave() {
     this._chatService.leaveRoom({ user: this.username, room: this.navParams.get('room') });
   }
@@ -69,9 +69,4 @@ export class PagesPersonalchatbubblePage {
   sendMessage() {
     this._chatService.sendMessage({ user: this.username, room: this.navParams.get('room'), message: this.messageText });
   }
-  // handleSelection(event) {
-  //   this.messageText = this.messageText + " " + event.char;
-  //   this.toggled=!this.toggled;
-  // }
-
 }

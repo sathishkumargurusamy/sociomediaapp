@@ -17,11 +17,14 @@ export class PagesAddpostPage {
   userid: any;
   mypost: any;
   user;
-  constructor(public navCtrl: NavController, public app: App, public auth: AuthenticationProvider, private menu: MenuController, public navParams: NavParams, public toastController: ToastController, public postserv: PostProvider) {
+  constructor(public navCtrl: NavController, public app: App,
+    public auth: AuthenticationProvider,
+    private menu: MenuController, public navParams: NavParams,
+    public toastController: ToastController, public postserv: PostProvider) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
     // this.user = jwtData.user;
-    this.user=JSON.parse(localStorage.getItem('currentUser'));
+    this.user = JSON.parse(localStorage.getItem('currentUser'));
   }
   menutoggle() {
     this.menu.enable(false, 'home');
@@ -36,7 +39,6 @@ export class PagesAddpostPage {
     }
   }
   ionViewDidLoad() {
-    console.log('ionViewDidLoad PagesAddpostPage');
   }
   async presentToast() {
     const toast = await this.toastController.create({
@@ -53,7 +55,6 @@ export class PagesAddpostPage {
       post: this.mypost,
       likes: 0
     };
-    console.log('Hi');
     this.mypost = '';
     this.postserv.createpost(body).subscribe(data => {
       this.presentToast();

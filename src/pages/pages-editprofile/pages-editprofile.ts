@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera/ngx';
-
-
 @IonicPage()
 @Component({
   selector: 'page-pages-editprofile',
@@ -23,7 +21,6 @@ export class PagesEditprofilePage {
       this.lastname = u.lastname;
       this.username = u.username;
     }
-
   }
   toggleedit() {
     this.isreadonly = !this.isreadonly;
@@ -47,15 +44,8 @@ export class PagesEditprofilePage {
       // this.base64Image = ‘data: image / jpeg; base64, ’+imageData;
 
       // this.picture = imageData;
-
-    }, (err) => {
-
-      console.log(err);
-
-    });
-
+    }, (err) => {});
   }
-
   AccessGallery() {
 
     this.camera.getPicture({
@@ -71,14 +61,7 @@ export class PagesEditprofilePage {
       // this.picture = imageData;
 
     }, (err) => {
-
-      console.log(err);
-
     });
-
   }
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PagesEditprofilePage');
-  }
-
+  ionViewDidLoad() {}
 }

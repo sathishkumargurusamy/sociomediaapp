@@ -4,47 +4,34 @@ import { Socket } from 'ng-socket-io';
 import { ChatProvider } from '../../providers/chat/chat';
 import { PostProvider } from '../../providers/post/post';
 import * as jwt_decode from 'jwt-decode';
-
-
-/**
- * Generated class for the PagesChatbubblePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-pages-chatbubble',
   templateUrl: 'pages-chatbubble.html',
 })
 export class PagesChatbubblePage {
-  username;
-  userid;
-  user;
-  groupdetail;
-  interval;
-  messageText: String = '';
-  messageArray: Array<{ user: String, message: String }> = [];
-  constructor(public navCtrl: NavController, public postserv: PostProvider, public navParams: NavParams, private socket: Socket, public _chatService: ChatProvider) {
+  public username;
+  public userid;
+  public user;
+  public groupdetail;
+  public interval;
+  public messageText: String = '';
+  public messageArray: Array<{ user: String, message: String }> = [];
+  constructor(public navCtrl: NavController, public postserv: PostProvider, public navParams: NavParams,
+     private socket: Socket, public _chatService: ChatProvider) {
     const jwt = JSON.parse(localStorage.getItem('currentUser'));
     const jwtData = jwt_decode(jwt);
     this.user = jwtData.user;
     this._chatService.newUserJoined()
       .subscribe(data => this.messageArray.push(data));
-
-
     this._chatService.userLeftRoom()
       .subscribe(data => this.messageArray.push(data));
-
     this._chatService.newMessageReceived()
       .subscribe(data => {
         this.messageArray.push(data);
       });
   }
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PagesChatPage');
-  }
+  ionViewDidLoad() {}
   ngOnInit() {
     for (const i of this.user) {
       this.username = i.username;
@@ -56,16 +43,13 @@ export class PagesChatbubblePage {
   join() {
     this._chatService.joinRoom({ user: this.username, room: this.navParams.get('room') });
   }
-
   getgrpdetail() {
     this.postserv.getgrpdetail(this.navParams.get('groupid')).subscribe(data => this.groupdetail = data);
   }
   leave() {
     this._chatService.leaveRoom({ user: this.username, room: this.navParams.get('room') });
   }
-
   sendMessage() {
     this._chatService.sendMessage({ user: this.username, room: this.navParams.get('room'), message: this.messageText });
   }
-
 }

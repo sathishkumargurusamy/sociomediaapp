@@ -9,39 +9,37 @@ import { MenuController } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { MyApp } from '../../app/app.component';
 import { PagesViewpostPage } from '../pages-viewpost/pages-viewpost';
-import * as jwt_decode from 'jwt-decode';
+// import * as jwt_decode from 'jwt-decode';
 // import{AboutPage} from '../about/about';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
-  // @HostListener('window:beforeunload', [ '$event' ])
-  // beforeUnloadHandler(event) {
-  //   this.logout();
-  // }
-  post;
-  comments: any = [];
-  dispcomment: any = '';
-  comment;
-  errcomment: any = '';
-  user;
-  likecount: any = [];
-  username: any = '';
-  var: any = [];
-  interval;
-  allikes;
-  likes: any = '';
-  userid: any = '';
-  liketoggle = [];
-  popuptoggle = [];
-  thispost: any = '';
-  showcommenttoggle1: any = [];
-  constructor(public navCtrl: NavController, public app: App, public auth: AuthenticationProvider, private menu: MenuController, public postserv: PostProvider, public modalController: ModalController, public toastController: ToastController) {
+  public post;
+  public comments: any = [];
+  public dispcomment: any = '';
+  public comment;
+  public errcomment: any = '';
+  public user;
+  public likecount: any = [];
+  public username: any = '';
+  public var: any = [];
+  public interval;
+  public allikes;
+  public likes: any = '';
+  public userid: any = '';
+  public liketoggle = [];
+  public popuptoggle = [];
+  public thispost: any = '';
+  public showcommenttoggle1: any = [];
+  constructor(public navCtrl: NavController, public app: App, public auth: AuthenticationProvider, 
+    private menu: MenuController, public postserv: PostProvider, public modalController: ModalController, 
+    public toastController: ToastController) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
     this.user=JSON.parse(localStorage.getItem('currentUser'));
-    
+
   }
   menutoggle() {
     this.menu.enable(false, 'myprofile');
@@ -50,41 +48,29 @@ export class HomePage {
     this.menu.toggle('home');
   }
   ngOnInit() {
-    console.log(this.user);
     for (const i of this.user) {
       this.username = i.username;
       this.userid = i._id;
     }
 
     this.interval = setInterval(() => {
-
       this.getlikes();
       this.getpost();
       this.getcomment();
       this.alllikes(this.userid);
-
     }, 8000);
-
-
   }
 
   ionViewWillEnter() {
-
     this.getlikes();
     this.getpost();
     this.getcomment();
     this.alllikes(this.userid);
-
-
-
   }
   popuptoggle1(j) {
-    console.log('pop toggle...', j);
     this.popuptoggle[j] = !this.popuptoggle[j];
   }
   getpost() {
-
-    console.log(this.username);
     this.postserv.getpost().subscribe(data => {
       this.post = data;
 
@@ -100,13 +86,10 @@ export class HomePage {
   addcomment(id, userid, j, username) {
 
     this.postserv.addcomment(userid, id, username, this.comments[j]).subscribe(data => {
-      console.log('Added Successfully');
-
       this.getcomment();
       this.comments[j] = '';
       this.presentToast();
     });
-
   }
   getcomment() {
     this.postserv.getcomment().subscribe(data => {
@@ -142,39 +125,26 @@ export class HomePage {
     this.postserv.getpost().subscribe(data => {
       this.post = data;
     });
-
-
   }
   alllikes(uid) {
     this.postserv.getlikes(uid).subscribe(data => {
       this.allikes = data;
       for (const l of this.allikes) {
-
         this.liketoggle[l.postid] = l.status;
-
       }
     });
-
-
   }
   addlikes(j, uid, pid, username) {
-
-    console.log('Hii');
     this.postserv.getthispost(pid).subscribe(data => {
       this.thispost = data;
       for (const p of this.thispost) {
         this.likecount[pid] = p.likes;
       }
-
-
       this.liketoggle[pid] = !this.liketoggle[pid];
-
       if (this.liketoggle[pid]) {
-        console.log(this.likecount[pid] + 1);
         this.likecount[pid] = this.likecount[pid] + 1;
         let body = {
           _id: pid,
-
           likes: this.likecount[pid]
         };
         this.postserv.updatepost(body).subscribe(data => { this.getpost(); });
@@ -184,12 +154,10 @@ export class HomePage {
           postid: pid,
           status: true
         };
-
-        this.postserv.postlikes(body1).subscribe(data1 => { console.log(data1); });
+        this.postserv.postlikes(body1).subscribe(data1 => {});
       }
       else {
         if (this.likecount[pid] > 0) {
-          console.log(this.likecount[pid] - 1);
           this.likecount[pid] = this.likecount[pid] - 1;
           let body = {
             _id: pid,
@@ -199,18 +167,13 @@ export class HomePage {
             likes: this.likecount[pid]
           };
           this.postserv.updatepost(body).subscribe(data => { this.getpost(); });
-          this.postserv.deletelikes(this.userid).subscribe(data1 => { console.log(data1); });
+          this.postserv.deletelikes(this.userid).subscribe(data1 => {});
         }
-
       }
-
-
     });
-
   }
   showcommenttoggle(j) {
     this.showcommenttoggle1[j] = !this.showcommenttoggle1[j];
-
   }
   async delpost() {
     const toast = await this.toastController.create({
@@ -252,12 +215,4 @@ export class HomePage {
   gotoeditprofile(){
     this.navCtrl.push(PagesEditprofilePage);
   }
-  // ionViewDidLeave() {
-  //   if (this.interval) {
-  //     clearInterval(this.interval);
-  //   }
-  // }
 }
-
-
-

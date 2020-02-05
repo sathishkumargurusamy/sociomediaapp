@@ -114,7 +114,6 @@ export class MyApp {
     });
   }
   logintoggle() {
-    console.log(this.displogin, this.dispreg);
     this.displogin = !this.displogin;
     this.dispreg = !this.dispreg;
   }

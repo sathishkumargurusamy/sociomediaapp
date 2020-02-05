@@ -4,38 +4,30 @@ import { PostProvider } from '../../providers/post/post';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import * as jwt_decode from 'jwt-decode';
 
-
-/**
- * Generated class for the PagesViewpostPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-pages-viewpost',
   templateUrl: 'pages-viewpost.html',
 })
 export class PagesViewpostPage {
-  post: any;
-  comments: any = [];
-  dispcomment: any = '';
-  comment;
-  errcomment: any = '';
-  user;
-  likecount: any = [];
-  username: any = '';
-  allikes;
-  likes: any = '';
-  userid: any = '';
-  liketoggle = [];
-  thispost: any = '';
-  interval;
-  showcommenttoggle1: any = [];
-  loggeduser;
-  loggeduserid;
-  loggedusername;
+  public post: any;
+  public comments: any = [];
+  public dispcomment: any = '';
+  public comment;
+  public errcomment: any = '';
+  public user;
+  public likecount: any = [];
+  public username: any = '';
+  public allikes;
+  public likes: any = '';
+  public userid: any = '';
+  public liketoggle = [];
+  public thispost: any = '';
+  public interval;
+  public showcommenttoggle1: any = [];
+  public loggeduser;
+  public loggeduserid;
+  public loggedusername;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public auth: AuthenticationProvider, public postserv: PostProvider) {
   }
@@ -51,22 +43,16 @@ export class PagesViewpostPage {
     this.getprofile(this.userid);
     this.getuser(this.userid);
     this.interval = setInterval(() => {
-
       this.getcomment();
       this.alllikes(this.loggeduserid);
-
     }, 8000);
   }
   ionViewWillEnter() {
     this.userid = this.navParams.get('id');
     this.getprofile(this.userid);
     this.getuser(this.userid);
-
-
     this.getcomment();
     this.alllikes(this.loggeduserid);
-
-
   }
 
   getuser(id) {
@@ -74,10 +60,8 @@ export class PagesViewpostPage {
       this.user = data;
       for (const i of this.user) {
         this.username = i.username;
-
       }
     });
-
   }
 
   addlikes(j, uid, pid) {
@@ -88,7 +72,6 @@ export class PagesViewpostPage {
       }
       this.liketoggle[pid] = !this.liketoggle[pid];
       if (this.liketoggle[pid]) {
-        console.log(this.likecount[pid] + 1);
         this.likecount[pid] = this.likecount[pid] + 1;
         let body = {
           _id: pid,
@@ -101,13 +84,10 @@ export class PagesViewpostPage {
           postid: pid,
           status: true
         };
-
-        this.postserv.postlikes(body1).subscribe(data1 => { console.log(data1); });
-
+        this.postserv.postlikes(body1).subscribe(data1 => { });
       }
       else {
         if (this.likecount[pid] > 0) {
-          console.log(this.likecount[pid] - 1);
           this.likecount[pid] = this.likecount[pid] - 1;
           let body = {
             _id: pid,
@@ -117,76 +97,51 @@ export class PagesViewpostPage {
             likes: this.likecount[pid]
           };
           this.postserv.updatepost(body).subscribe(data => { this.getprofile(this.userid); });
-          this.postserv.deletelikes(this.userid).subscribe(data1 => { console.log(data1); });
-
+          this.postserv.deletelikes(this.userid).subscribe(data1 => { });
         }
-
       }
-
-
     });
-
   }
   alllikes(uid) {
     this.postserv.getlikes(uid).subscribe(data => {
     this.allikes = data;
-      for (let l of this.allikes) {
-
+      for (const l of this.allikes) {
         this.liketoggle[l.postid] = l.status;
-
       }
     });
-
-
   }
   getprofile(userid) {
     this.postserv.getmypost(userid).subscribe(data => {
       this.post = data;
-    })
-
+    });
   }
   getcomment() {
     this.postserv.getcomment().subscribe(data => {
       if (data) {
         this.dispcomment = data;
       }
-
     });
-
   }
   addcomment(id, userid, j, username) {
-    console.log(id, userid, this.comments[j], username);
-
     this.postserv.addcomment(userid, id, username, this.comments[j]).subscribe(data => {
-      console.log('Added Successfully');
       this.getcomment();
     });
   }
-
   // gotoprofile(id){
   //   this.route.navigateByUrl('/viewprofile/'+id);
-
   // }
   deletepost(id) {
     this.postserv.deletepost(id).subscribe(data => {
       this.getprofile(this.userid);
     });
-
   }
-
   deletecomment(id) {
     this.postserv.deletecomment(id).subscribe(data => {
       this.getcomment();
     });
-
   }
   showcommenttoggle(j) {
     this.showcommenttoggle1[j] = !this.showcommenttoggle1[j];
-
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PagesViewpostPage');
-  }
-
+  ionViewDidLoad() {}
 }
