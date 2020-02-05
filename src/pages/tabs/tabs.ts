@@ -19,7 +19,6 @@ export class TabsPage {
   tab3Root = ContactPage;
   viewprofile = PagesViewprofilePage;
   chat = PagesChatPage;
-
   constructor(public auth: AuthenticationProvider, public nav: NavController) {
 
   }
