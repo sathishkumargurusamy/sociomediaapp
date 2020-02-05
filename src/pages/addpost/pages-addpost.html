@@ -39,7 +39,29 @@
 
     <h5>Write Your Post here...</h5>
     <ion-textarea rows="6" cols="20" [(ngModel)]='mypost' placeholder="Whats in Your mind..."></ion-textarea>
+    <img class='image' [src]="base64Image" *ngIf='base64Image' />
+    <div class='toggleicon' (tap)='imgopttoggle()'>
+        <ion-icon name='camera'></ion-icon>
+    </div>
+    <div class='imagepopup' *ngIf='imgopt_toggle'>
+        <ion-col>
 
+            <div class='popupicons'> <button ion-button ion-button small icon-only (tap)='opencamera()'>
+                    <ion-icon name='camera'>Camera</ion-icon>
+     </button>
+            </div>
+
+        </ion-col>
+        <ion-col>
+
+            <div class='popupicons'> <button ion-button small icon-only (click)='AccessGallery()'>
+    
+      <ion-icon  name='image'>Gallery</ion-icon>
+    
+     </button></div>
+
+        </ion-col>
+    </div>
     <div class="but">
         <button ion-button (click)='addpost()'>Add</button>
     </div>

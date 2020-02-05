@@ -53,9 +53,9 @@
     <ion-card *ngFor='let i of post,let j=index'>
         <ion-item-divider>
             <ion-item>
-                <!-- <ion-avatar item-start>
-            <img src="img/marty-avatar.png">
-        </ion-avatar> -->
+                <ion-avatar item-start>
+                    <img [src]="profileimage[i.userid]">
+                </ion-avatar>
                 <h2 style="color:mediumblue;" (click)='gotoprofile(i.userid)'>{{i.username}}</h2>
 
                 <div class="dots" *ngIf='userid==i.userid' (click)='popuptoggle1(j)'>
@@ -64,8 +64,10 @@
                     <div class="dot"></div>
                 </div>
             </ion-item>
+            <hr>
             <ion-card-content>
                 <p>{{i.post}}</p>
+                <!-- <div class='currentdate1'>{{i.time|date:'h'}}</div> -->
                 <div class='currentdate'>{{i.time|date:'dd MMM,yy'}}</div>
             </ion-card-content>
         </ion-item-divider>

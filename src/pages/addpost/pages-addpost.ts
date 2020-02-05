@@ -5,6 +5,7 @@ import { PostProvider } from '../../providers/post/post';
 import { MenuController, App } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { MyApp } from '../../app/app.component';
+import { Camera } from '@ionic-native/camera';
 import * as jwt_decode from 'jwt-decode';
 
 @IonicPage()
@@ -16,11 +17,15 @@ export class PagesAddpostPage {
   username: any;
   userid: any;
   mypost: any;
+  public base64Image;
+  public picture;
+  public imgopt_toggle = false;
   user;
   constructor(public navCtrl: NavController, public app: App,
     public auth: AuthenticationProvider,
     private menu: MenuController, public navParams: NavParams,
-    public toastController: ToastController, public postserv: PostProvider) {
+    public toastController: ToastController, public postserv: PostProvider,
+    public camera: Camera) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
     // this.user = jwtData.user;
@@ -59,6 +64,62 @@ export class PagesAddpostPage {
     this.postserv.createpost(body).subscribe(data => {
       this.presentToast();
     });
+  }
+  opencamera() {
+    this.camera.getPicture({
+
+      targetWidth: 512,
+
+      targetHeight: 512,
+
+      correctOrientation: true,
+
+      sourceType: this.camera.PictureSourceType.CAMERA,
+
+      destinationType: this.camera.DestinationType.DATA_URL
+
+    }).then((imageData) => {
+
+      this.base64Image = 'data:image/jpeg;base64,' + imageData;
+
+      this.picture = imageData;
+      this.imgopt_toggle = !this.imgopt_toggle;
+
+    }, (err) => {
+
+      console.log(err);
+
+    });
+  }
+  AccessGallery() {
+
+    this.camera.getPicture({
+
+      targetWidth: 512,
+
+      targetHeight: 512,
+
+      correctOrientation: true,
+
+      sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
+
+      destinationType: this.camera.DestinationType.DATA_URL
+
+    }).then((imageData) => {
+
+      this.base64Image = 'data:image/jpeg;base64,' + imageData;
+
+      this.picture = imageData;
+      this.imgopt_toggle = !this.imgopt_toggle;
+
+    }, (err) => {
+
+      console.log(err);
+
+    });
+  }
+  imgopttoggle() {
+    this.imgopt_toggle = !this.imgopt_toggle;
   }
   logout() {
     this.auth.logout();

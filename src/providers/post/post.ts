@@ -9,10 +9,15 @@ export class PostProvider {
   apiurl='https://sociomediaapp-server.herokuapp.com/api';
   constructor(public http:HttpClient) { }
 
-
+allusers(){
+  return this.http.get(this.apiurl+`/allusers`);
+}
   createpost(newpost){
     return this.http.post(this.apiurl+`/post`,newpost);
   
+  }
+  updateprofile(body){
+    return this.http.put(this.apiurl+`/updateuser/`+body._id,body);
   }
   getuser(id){
     return this.http.get(this.apiurl+`/user/`+id);

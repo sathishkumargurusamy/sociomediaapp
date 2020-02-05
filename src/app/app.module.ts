@@ -21,8 +21,9 @@ import { ChatProvider } from '../providers/chat/chat';
 import { PagesChatbubblePage } from '../pages/pages-chatbubble/pages-chatbubble';
 import {PagesEditprofilePage} from '../pages/pages-editprofile/pages-editprofile'
 import { PagesPersonalchatbubblePage } from '../pages/pages-personalchatbubble/pages-personalchatbubble';
-import { Camera } from '@ionic-native/camera/ngx';
+import { Camera } from '@ionic-native/camera';
 const config: SocketIoConfig = { url: 'https://sociomediaapp-server.herokuapp.com', options: {} };
+import { DatePipe } from '@angular/common';
 @NgModule({
   declarations: [
     MyApp,
@@ -64,6 +65,7 @@ const config: SocketIoConfig = { url: 'https://sociomediaapp-server.herokuapp.co
   ],
   providers: [
     StatusBar,
+    DatePipe,
     Camera,
     ChatProvider,
     SplashScreen,

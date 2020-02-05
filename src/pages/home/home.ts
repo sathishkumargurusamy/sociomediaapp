@@ -9,6 +9,7 @@ import { MenuController } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { MyApp } from '../../app/app.component';
 import { PagesViewpostPage } from '../pages-viewpost/pages-viewpost';
+import { DatePipe } from '@angular/common';
 // import * as jwt_decode from 'jwt-decode';
 // import{AboutPage} from '../about/about';
 @Component({
@@ -27,15 +28,19 @@ export class HomePage {
   public var: any = [];
   public interval;
   public allikes;
+  public profileimage=[];
   public likes: any = '';
   public userid: any = '';
   public liketoggle = [];
   public popuptoggle = [];
   public thispost: any = '';
+  public now=new Date();
+  public allusers;
+  public currenttime=this.datePipe.transform(this.now, 'h');
   public showcommenttoggle1: any = [];
   constructor(public navCtrl: NavController, public app: App, public auth: AuthenticationProvider, 
     private menu: MenuController, public postserv: PostProvider, public modalController: ModalController, 
-    public toastController: ToastController) {
+    public toastController: ToastController,private datePipe: DatePipe) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
     this.user=JSON.parse(localStorage.getItem('currentUser'));
@@ -48,6 +53,7 @@ export class HomePage {
     this.menu.toggle('home');
   }
   ngOnInit() {
+    this.alluser();
     for (const i of this.user) {
       this.username = i.username;
       this.userid = i._id;
@@ -57,10 +63,19 @@ export class HomePage {
       this.getlikes();
       this.getpost();
       this.getcomment();
+      this.alluser();
       this.alllikes(this.userid);
     }, 8000);
   }
+alluser(){
+  this.postserv.allusers().subscribe(data=>{
+    this.allusers=data;
+    for(const all_users of this.allusers){
+      this.profileimage[all_users._id]=all_users.profileimage;
+    }
 
+  })
+}
   ionViewWillEnter() {
     this.getlikes();
     this.getpost();
@@ -73,7 +88,6 @@ export class HomePage {
   getpost() {
     this.postserv.getpost().subscribe(data => {
       this.post = data;
-
     });
 
   }

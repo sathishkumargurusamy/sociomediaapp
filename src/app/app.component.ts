@@ -74,7 +74,6 @@ export class MyApp {
     });
     toast.present();
   }
-  public
   async reg(msg) {
     const toast = await this.toastController.create({
       message: msg,
@@ -100,7 +99,7 @@ export class MyApp {
       "username": this.uname,
       "firstname": this.fname,
       "lastname": this.lname,
-      "password": this.pass,
+      "password": this.pass
     }
     this.auth.register(body).subscribe(data => {
       if (Boolean(data)) {
