@@ -39,29 +39,29 @@
     <div id="profile-bg"></div>
     <div id="content">
         <div id="profile-info">
-            <img id="profile-image" src="../../assets/profile.png">
+            <img class='profile_image_common_style' id="profile-image" *ngIf='!proimage' src="../../assets/profile.png" imageViewer>
+            <img class='profile_image_common_style' id="profile-image" *ngIf='proimage' [src]='proimage' imageViewer>
             <h3 id="profile-name">{{username|uppercase}}</h3>
-            <span id="profile-description">Developer</span>
         </div>
     </div>
 
     <ion-card *ngFor='let i of post,let j=index'>
         <ion-item-divider>
             <ion-item>
-                <!-- <ion-avatar item-start>
-        <img src="img/marty-avatar.png">
-    </ion-avatar> -->
+                <ion-avatar item-start>
+                    <img class='profile_image_common_style' *ngIf='proimage' [src]="proimage" imageViewer>
+                    <img class='profile_image_common_style' *ngIf='!proimage' src='../../assets/profile.png' imageViewer>
+                </ion-avatar>
                 <h2 style="color:mediumblue;">{{i.username}}</h2>
                 <div class="dcicon" *ngIf='loggeduserid==i.userid' (click)='deletepost(i._id)'>
-
-
                 </div>
             </ion-item>
 
             <!-- <img src="img/advance-card-bttf.png"> -->
 
             <ion-card-content>
-                <p>{{i.post}}</p>
+                <p *ngIf="i.post">{{i.post}}</p>
+                <img *ngIf="i.postimg" [src]='i.postimg' imageViewer />
                 <div class='currentdate'>{{i.time|date:'dd MMM,yy'}}</div>
             </ion-card-content>
         </ion-item-divider>
@@ -77,7 +77,7 @@
             <ion-col>
                 <button ion-button icon-start clear small>
     <ion-icon name="text"></ion-icon>
-    <div (click)='showcommenttoggle(j)'> View Comments</div>
+    <div (click)='showcommenttoggle(j)'>Comments</div>
   </button>
             </ion-col>
 
@@ -106,7 +106,7 @@
             </div>
         </ion-row>
         <ion-row>
-            <div class='comment'>
+            <div class='comment' *ngIf='showcommenttoggle1[j]'>
                 <ion-item>
                     <ion-textarea rows="4" [(ngModel)]='comments[j]' type="text" placeholder="Comment .... "></ion-textarea>
                 </ion-item>

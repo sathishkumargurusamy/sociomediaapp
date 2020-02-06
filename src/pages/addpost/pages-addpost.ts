@@ -6,7 +6,9 @@ import { MenuController, App } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { MyApp } from '../../app/app.component';
 import { Camera } from '@ionic-native/camera';
-import * as jwt_decode from 'jwt-decode';
+import { Location } from "@angular/common";
+
+// import * as jwt_decode from 'jwt-decode';
 
 @IonicPage()
 @Component({
@@ -14,15 +16,15 @@ import * as jwt_decode from 'jwt-decode';
   templateUrl: 'pages-addpost.html',
 })
 export class PagesAddpostPage {
-  username: any;
-  userid: any;
-  mypost: any;
+  public username: any;
+  public userid: any;
+  public mypost: any;
   public base64Image;
   public picture;
   public imgopt_toggle = false;
   user;
   constructor(public navCtrl: NavController, public app: App,
-    public auth: AuthenticationProvider,
+    public auth: AuthenticationProvider,public location:Location,
     private menu: MenuController, public navParams: NavParams,
     public toastController: ToastController, public postserv: PostProvider,
     public camera: Camera) {
@@ -43,6 +45,7 @@ export class PagesAddpostPage {
       this.userid = i._id;
     }
   }
+  
   ionViewDidLoad() {
   }
   async presentToast() {
@@ -57,20 +60,24 @@ export class PagesAddpostPage {
     let body = {
       userid: this.userid,
       username: this.username,
-      post: this.mypost,
+      post: this.mypost || '',
+      postimg: this.base64Image || '',
       likes: 0
     };
-    this.mypost = '';
+
     this.postserv.createpost(body).subscribe(data => {
       this.presentToast();
+      this.mypost = '';
+      this.base64Image = '';
+      this.navCtrl.pop();
     });
   }
   opencamera() {
     this.camera.getPicture({
 
-      targetWidth: 512,
+      targetWidth: 1200,
 
-      targetHeight: 512,
+      targetHeight: 1800,
 
       correctOrientation: true,
 
@@ -95,9 +102,9 @@ export class PagesAddpostPage {
 
     this.camera.getPicture({
 
-      targetWidth: 512,
+      targetWidth: 1200,
 
-      targetHeight: 512,
+      targetHeight: 1800,
 
       correctOrientation: true,
 
@@ -117,6 +124,10 @@ export class PagesAddpostPage {
       console.log(err);
 
     });
+  }
+  removeimage() {
+    this.base64Image = '';
+    this.imgopt_toggle = !this.imgopt_toggle;
   }
   imgopttoggle() {
     this.imgopt_toggle = !this.imgopt_toggle;

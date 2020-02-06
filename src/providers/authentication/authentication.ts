@@ -21,7 +21,6 @@ export class AuthenticationProvider {
   login(username: string, password: string) {
     return this.http.post<any>(this.apiurl+`/user`, { username:username, password:password })
         .pipe(map(user => {
-            // login successful if there's a jwt token in the response
             if (!user) {
              localStorage.setItem('state', '');
             }
@@ -31,7 +30,6 @@ export class AuthenticationProvider {
               localStorage.setItem('state', '1');
               this.currentUserSubject.next(user);
             }
-
             return user;
         }));
 }

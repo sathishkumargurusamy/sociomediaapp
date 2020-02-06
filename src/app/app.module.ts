@@ -23,7 +23,10 @@ import {PagesEditprofilePage} from '../pages/pages-editprofile/pages-editprofile
 import { PagesPersonalchatbubblePage } from '../pages/pages-personalchatbubble/pages-personalchatbubble';
 import { Camera } from '@ionic-native/camera';
 const config: SocketIoConfig = { url: 'https://sociomediaapp-server.herokuapp.com', options: {} };
+import { IonicImageViewerModule } from 'ionic-img-viewer';
 import { DatePipe } from '@angular/common';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -46,7 +49,8 @@ import { DatePipe } from '@angular/common';
       tabsHideOnSubPages: true
     }),
     SocketIoModule.forRoot(config),
-    HttpClientModule],
+    HttpClientModule,
+    IonicImageViewerModule],
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
@@ -67,6 +71,7 @@ import { DatePipe } from '@angular/common';
     StatusBar,
     DatePipe,
     Camera,
+    PhotoViewer,
     ChatProvider,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },

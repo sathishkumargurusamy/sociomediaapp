@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Socket } from 'ng-socket-io';
 import { ChatProvider } from '../../providers/chat/chat';
 import { PostProvider } from '../../providers/post/post';
-import * as jwt_decode from 'jwt-decode';
+// import * as jwt_decode from 'jwt-decode';
 @IonicPage()
 @Component({
   selector: 'page-pages-chatbubble',
@@ -19,9 +19,9 @@ export class PagesChatbubblePage {
   public messageArray: Array<{ user: String, message: String }> = [];
   constructor(public navCtrl: NavController, public postserv: PostProvider, public navParams: NavParams,
      private socket: Socket, public _chatService: ChatProvider) {
-    const jwt = JSON.parse(localStorage.getItem('currentUser'));
-    const jwtData = jwt_decode(jwt);
-    this.user = jwtData.user;
+    // const jwt = JSON.parse(localStorage.getItem('currentUser'));
+    // const jwtData = jwt_decode(jwt);
+    this.user = JSON.parse(localStorage.getItem('currentUser'));
     this._chatService.newUserJoined()
       .subscribe(data => this.messageArray.push(data));
     this._chatService.userLeftRoom()

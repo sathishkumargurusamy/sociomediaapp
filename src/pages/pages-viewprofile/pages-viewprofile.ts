@@ -5,7 +5,7 @@ import { ToastController, App } from 'ionic-angular';
 import { MenuController } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { MyApp } from '../../app/app.component';
-import * as jwt_decode from 'jwt-decode';
+// import * as jwt_decode from 'jwt-decode';
 
 @IonicPage()
 @Component({
@@ -28,11 +28,13 @@ export class PagesViewprofilePage {
   public interval;
   public liketoggle = [];
   public thispost: any = '';
+  public proimage;
+  public all_users;
   public showcommenttoggle1: any = [];
   constructor(public navCtrl: NavController, public app: App, public auth: AuthenticationProvider, private menu: MenuController, public toastController: ToastController, public navParams: NavParams, public postserv: PostProvider) {
-    const jwt = JSON.parse(localStorage.getItem('currentUser'));
-    const jwtData = jwt_decode(jwt);
-    this.user = jwtData.user;
+    // const jwt = JSON.parse(localStorage.getItem('currentUser'));
+    // const jwtData = jwt_decode(jwt);
+    this.user = JSON.parse(localStorage.getItem('currentUser'));;
   }
   menutoggle() {
     this.menu.enable(false, 'home');
@@ -49,12 +51,24 @@ export class PagesViewprofilePage {
       this.getmypost(this.userid);
       this.getcomment();
       this.alllikes(this.userid);
+      this.allusers();
     }, 8000);
+  }
+  allusers(){
+    this.postserv.allusers().subscribe(data=>{
+  this.all_users=data;
+  for(const all_user of this.all_users){
+    if(all_user._id==this.userid){
+      this.proimage=all_user.profileimage;
+    }
+  }
+    });
   }
   ionViewWillEnter() {
     this.getmypost(this.userid);
     this.getcomment();
     this.alllikes(this.userid);
+    this.allusers();
   }
   addlikes(j, uid, pid) {
     this.postserv.getthispost(pid).subscribe(data => {

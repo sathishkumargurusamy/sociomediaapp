@@ -15,12 +15,30 @@
     <ion-item>
         <div class="imgcontent">
             <div class="profileimage">
-                <img class='image' src="../../assets/profile.png" *ngIf='!base64Image' />
-                <img class='image' [src]="base64Image" *ngIf='base64Image' />
-                <div class='toggleicon' (tap)='imgopttoggle()'>
+                <img class='image profile_image_common_style' src="../../assets/profile.png" *ngIf='!base64Image' />
+                <img class='image profile_image_common_style' [src]="base64Image" *ngIf='base64Image' />
+
+                <div class='toggleicon' (click)='imgopttoggle()'>
                     <ion-icon name='camera'></ion-icon>
                 </div>
+                <div class='imagepopup' *ngIf='imgopt_toggle'>
+                    <ion-col>
+                        <div class='popupicons'> <button ion-button ion-button small icon-only (tap)='opencamera()'>
+                                <ion-icon name='camera'>Camera</ion-icon>
+                 </button>
+                        </div>
 
+                    </ion-col>
+                    <ion-col>
+
+                        <div class='popupicons'> <button ion-button small icon-only (click)='AccessGallery()'>
+                
+                  <ion-icon  name='image'>Gallery</ion-icon>
+                
+                 </button></div>
+
+                    </ion-col>
+                </div>
             </div>
 
 
@@ -39,6 +57,7 @@
             <ion-icon *ngIf='isreadonly' name="create"></ion-icon>
             <ion-icon *ngIf='!isreadonly' name="checkmark"></ion-icon>
         </div>
+
     </div>
     <div class="input">
         <div>
@@ -54,7 +73,7 @@
             <ion-icon *ngIf='!isreadonly' name="checkmark"></ion-icon>
         </div>
     </div>
-    <div class="input">
+    <!-- <div class="input">
         <div>
             <ion-label>
                 Username
@@ -67,7 +86,7 @@
             <ion-icon *ngIf='isreadonly' name="create"></ion-icon>
             <ion-icon *ngIf='!isreadonly' name="checkmark"></ion-icon>
         </div>
-    </div>
+    </div> -->
     <div class="button">
         <ion-item>
             <button ion-button (tap)='updateprofile()'>Update</button>

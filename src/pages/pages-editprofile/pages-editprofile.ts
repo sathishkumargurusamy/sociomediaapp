@@ -25,8 +25,6 @@ export class PagesEditprofilePage {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
   }
   ngOnInit() {
-
-
     for (const u of this.user) {
       this.userid = u._id;
       this.firstname = u.firstname;
@@ -35,7 +33,6 @@ export class PagesEditprofilePage {
       this.base64Image = u.profileimage;
     }
     this.getuserdetails();
-
   }
   getuserdetails() {
     this.postservice.allusers().subscribe(data => {
@@ -54,9 +51,9 @@ export class PagesEditprofilePage {
   opencamera() {
     this.camera.getPicture({
 
-      targetWidth: 512,
+      targetWidth: 1200,
 
-      targetHeight: 512,
+      targetHeight: 1800,
 
       correctOrientation: true,
 
@@ -81,9 +78,9 @@ export class PagesEditprofilePage {
 
     this.camera.getPicture({
 
-      targetWidth: 512,
+      targetWidth: 1200,
 
-      targetHeight: 512,
+      targetHeight: 1800,
 
       correctOrientation: true,
 
@@ -120,14 +117,13 @@ export class PagesEditprofilePage {
       "_id": this.userid,
       "firstname": this.firstname,
       "lastname": this.lastname,
-      "username": this.username,
       "profileimage": this.base64Image
     };
     this.postservice.updateprofile(body).subscribe(data => {
       this.toaster('Profile Updated Successfully!!');
     });
   }
-  ionViewDidLoad() { 
+  ionViewDidLoad() {
     this.getuserdetails();
   }
 }

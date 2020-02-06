@@ -25,11 +25,10 @@ export class MyApp {
   public cpass: any;
   public userid;
   public user;
-  valid = true;
+  public valid = true;
   constructor(platform: Platform, public loadingcontroller: LoadingController,
     statusBar: StatusBar, splashScreen: SplashScreen, public auth: AuthenticationProvider,
-    public toastController: ToastController) 
-  {
+    public toastController: ToastController) {
     platform.ready().then(() => {
       statusBar.styleDefault();
       splashScreen.hide();
@@ -46,7 +45,7 @@ export class MyApp {
     this.auth.login(this.username, this.password).pipe(first()).subscribe(
       data => {
         if (!data) {
-          this.crederror();
+          this.toaster("Please check your Credintials!");
         }
         else {
           this.user = data;
@@ -66,15 +65,7 @@ export class MyApp {
         console.log(error);
       });
   }
-  async crederror() {
-    const toast = await this.toastController.create({
-      message: 'Please check your Credintials!',
-      duration: 2000,
-      position: 'top'
-    });
-    toast.present();
-  }
-  async reg(msg) {
+  async toaster(msg) {
     const toast = await this.toastController.create({
       message: msg,
       duration: 2000,
@@ -104,11 +95,11 @@ export class MyApp {
     this.auth.register(body).subscribe(data => {
       if (Boolean(data)) {
         console.log(data);
-        this.reg("Username added successfully!!");
+        this.toaster("User added successfully!!");
       }
       else {
         console.log(data);
-        this.reg("Username already used!!");
+        this.toaster("Username already used!!");
       }
     });
   }

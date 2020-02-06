@@ -3,12 +3,13 @@ import { NavController, App } from 'ionic-angular';
 import { PostProvider } from '../../providers/post/post';
 import { ModalController } from 'ionic-angular';
 import { PagesAddpostPage } from '../addpost/pages-addpost';
-import {PagesEditprofilePage} from '../pages-editprofile/pages-editprofile';
+import { PagesEditprofilePage } from '../pages-editprofile/pages-editprofile';
 import { ToastController } from 'ionic-angular';
 import { MenuController } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { MyApp } from '../../app/app.component';
 import { PagesViewpostPage } from '../pages-viewpost/pages-viewpost';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 import { DatePipe } from '@angular/common';
 // import * as jwt_decode from 'jwt-decode';
 // import{AboutPage} from '../about/about';
@@ -28,22 +29,22 @@ export class HomePage {
   public var: any = [];
   public interval;
   public allikes;
-  public profileimage=[];
+  public profileimage = [];
   public likes: any = '';
   public userid: any = '';
   public liketoggle = [];
   public popuptoggle = [];
   public thispost: any = '';
-  public now=new Date();
+  public now = new Date();
   public allusers;
-  public currenttime=this.datePipe.transform(this.now, 'h');
+  public currenttime = this.datePipe.transform(this.now, 'h');
   public showcommenttoggle1: any = [];
-  constructor(public navCtrl: NavController, public app: App, public auth: AuthenticationProvider, 
-    private menu: MenuController, public postserv: PostProvider, public modalController: ModalController, 
-    public toastController: ToastController,private datePipe: DatePipe) {
+  constructor(public navCtrl: NavController, public app: App, public auth: AuthenticationProvider,
+    private menu: MenuController, public postserv: PostProvider, public modalController: ModalController,
+    public toastController: ToastController,private photoViewer: PhotoViewer, private datePipe: DatePipe,) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
-    this.user=JSON.parse(localStorage.getItem('currentUser'));
+    this.user = JSON.parse(localStorage.getItem('currentUser'));
 
   }
   menutoggle() {
@@ -67,15 +68,18 @@ export class HomePage {
       this.alllikes(this.userid);
     }, 8000);
   }
-alluser(){
-  this.postserv.allusers().subscribe(data=>{
-    this.allusers=data;
-    for(const all_users of this.allusers){
-      this.profileimage[all_users._id]=all_users.profileimage;
-    }
+  alluser() {
+    this.postserv.allusers().subscribe(data => {
+      this.allusers = data;
+      for (const all_users of this.allusers) {
+        this.profileimage[all_users._id] = all_users.profileimage;
+      }
 
-  })
-}
+    })
+  }
+  viewimage(){
+    // this.photoViewer.show('https://mysite.com/path/to/image.jpg');
+  }
   ionViewWillEnter() {
     this.getlikes();
     this.getpost();
@@ -90,6 +94,9 @@ alluser(){
       this.post = data;
     });
 
+  }
+  addpost(){
+    this.navCtrl.push(PagesAddpostPage);
   }
   gotoprofile(id) {
     this.navCtrl.push(PagesViewpostPage, {
@@ -168,7 +175,7 @@ alluser(){
           postid: pid,
           status: true
         };
-        this.postserv.postlikes(body1).subscribe(data1 => {});
+        this.postserv.postlikes(body1).subscribe(data1 => { });
       }
       else {
         if (this.likecount[pid] > 0) {
@@ -181,7 +188,7 @@ alluser(){
             likes: this.likecount[pid]
           };
           this.postserv.updatepost(body).subscribe(data => { this.getpost(); });
-          this.postserv.deletelikes(this.userid).subscribe(data1 => {});
+          this.postserv.deletelikes(this.userid).subscribe(data1 => { });
         }
       }
     });
@@ -226,7 +233,7 @@ alluser(){
     this.auth.setstatus(body).subscribe(data => { });
     this.app.getRootNav().setRoot(MyApp);
   }
-  gotoeditprofile(){
+  gotoeditprofile() {
     this.navCtrl.push(PagesEditprofilePage);
   }
 }

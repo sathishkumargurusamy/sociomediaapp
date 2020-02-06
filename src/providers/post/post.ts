@@ -1,81 +1,79 @@
 import { Injectable } from '@angular/core';
-import{HttpClient}from '@angular/common/http';
-import{map} from 'rxjs/operators';
-
-
+import { HttpClient } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 @Injectable()
 export class PostProvider {
 
-  apiurl='https://sociomediaapp-server.herokuapp.com/api';
-  constructor(public http:HttpClient) { }
+  apiurl = 'https://sociomediaapp-server.herokuapp.com/api';
+  constructor(public http: HttpClient) { }
 
-allusers(){
-  return this.http.get(this.apiurl+`/allusers`);
-}
-  createpost(newpost){
-    return this.http.post(this.apiurl+`/post`,newpost);
-  
+  allusers() {
+    return this.http.get(this.apiurl + `/allusers`);
   }
-  updateprofile(body){
-    return this.http.put(this.apiurl+`/updateuser/`+body._id,body);
+  createpost(newpost) {
+    return this.http.post(this.apiurl + `/post`, newpost);
+
   }
-  getuser(id){
-    return this.http.get(this.apiurl+`/user/`+id);
+  updateprofile(body) {
+    return this.http.put(this.apiurl + `/updateuser/` + body._id, body);
   }
-  getpost(){
-    return this.http.get(this.apiurl+`/post`);
+  getuser(id) {
+    return this.http.get(this.apiurl + `/user/` + id);
   }
-  getthispost(pid){
-    return this.http.get(this.apiurl+`/posts/`+pid);
+  getpost() {
+    return this.http.get(this.apiurl + `/post`);
   }
-  updatepost(body){
-    return this.http.put(this.apiurl+`/post/`+body._id,body);
+  getthispost(pid) {
+    return this.http.get(this.apiurl + `/posts/` + pid);
   }
-  getmypost(userid){
-    return this.http.get(this.apiurl+`/mypost/`+userid);
+  updatepost(body) {
+    return this.http.put(this.apiurl + `/post/` + body._id, body);
   }
-  deletepost(id){
-     return this.http.delete(this.apiurl+`/post/`+id).pipe(map(res=>{
+  getmypost(userid) {
+    return this.http.get(this.apiurl + `/mypost/` + userid);
+  }
+  deletepost(id) {
+    return this.http.delete(this.apiurl + `/post/` + id).pipe(map(res => {
       this.deletepostcomment(id);
-     }));
+    }));
   }
-  deletepostcomment(id){
-   return this.http.delete(this.apiurl+`/comment/`+id);
-  }
-
-  addcomment(userid,postid,username,comment){
-    return this.http.post(this.apiurl+`/comments`,{userid,postid,username,comment});
-
-  }
-  getgrpdetail(id){
-    return this.http.get(this.apiurl+`/groups/`+id);
-  }
-  getgroups(){
-    return this.http.get(this.apiurl+`/groups`);
-  }
-  getallusers(){
-    return this.http.get(this.apiurl+`/allusers`);
-  }
-  creategroup(body){
-    return this.http.post(this.apiurl+`/groups`,body);
+  deletepostcomment(id) {
+    return this.http.delete(this.apiurl + `/comment/` + id);
   }
 
-  getcomment(){
-    return this.http.get(this.apiurl+`/comments`);
+  addcomment(userid, postid, username, comment) {
+    return this.http.post(this.apiurl + `/comments`, { userid, postid, username, comment });
+
   }
-  deletecomment(id){
-    return this.http.delete(this.apiurl+`/comments/`+id);
+  getgrpdetail(id) {
+    return this.http.get(this.apiurl + `/groups/` + id);
+  }
+  getgroups() {
+    return this.http.get(this.apiurl + `/groups`);
+  }
+  getallusers() {
+    return this.http.get(this.apiurl + `/allusers`);
+  }
+  creategroup(body) {
+    return this.http.post(this.apiurl + `/groups`, body);
   }
 
-  getlikes(uid){
-    return this.http.get(this.apiurl+`/likes/`+uid);
+  getcomment() {
+    return this.http.get(this.apiurl + `/comments`);
   }
-  postlikes(body){
-    return this.http.post(this.apiurl+`/likes`,body);
+  deletecomment(id) {
+    return this.http.delete(this.apiurl + `/comments/` + id);
   }
-  deletelikes(id){
 
- return this.http.delete(this.apiurl+`/likes/`+id);
+  getlikes(uid) {
+    return this.http.get(this.apiurl + `/likes/` + uid);
+  }
+  postlikes(body) {
+    return this.http.post(this.apiurl + `/likes`, body);
+  }
+  deletelikes(id) {
+
+    return this.http.delete(this.apiurl + `/likes/` + id);
   }
 
 }

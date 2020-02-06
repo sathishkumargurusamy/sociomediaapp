@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PostProvider } from '../../providers/post/post';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
-import * as jwt_decode from 'jwt-decode';
+// import * as jwt_decode from 'jwt-decode';
 
 @IonicPage()
 @Component({
@@ -28,13 +28,15 @@ export class PagesViewpostPage {
   public loggeduser;
   public loggeduserid;
   public loggedusername;
+  public all_users;
+  public proimage;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public auth: AuthenticationProvider, public postserv: PostProvider) {
   }
   ngOnInit() {
-    const jwt = JSON.parse(localStorage.getItem('currentUser'));
-    const jwtData = jwt_decode(jwt);
-    this.loggeduser = jwtData.user;
+    // const jwt = JSON.parse(localStorage.getItem('currentUser'));
+    // const jwtData = jwt_decode(jwt);
+    this.loggeduser = JSON.parse(localStorage.getItem('currentUser'));
     for (const i of this.loggeduser) {
       this.loggeduserid = i._id;
       this.loggedusername = i.username;
@@ -42,6 +44,7 @@ export class PagesViewpostPage {
     this.userid = this.navParams.get('id');
     this.getprofile(this.userid);
     this.getuser(this.userid);
+    this.allusers();
     this.interval = setInterval(() => {
       this.getcomment();
       this.alllikes(this.loggeduserid);
@@ -52,9 +55,19 @@ export class PagesViewpostPage {
     this.getprofile(this.userid);
     this.getuser(this.userid);
     this.getcomment();
+    this.allusers();
     this.alllikes(this.loggeduserid);
   }
-
+allusers(){
+  this.postserv.allusers().subscribe(data=>{
+this.all_users=data;
+for(const all_user of this.all_users){
+  if(all_user._id==this.userid){
+    this.proimage=all_user.profileimage;
+  }
+}
+  });
+}
   getuser(id) {
     this.postserv.getuser(id).subscribe(data => {
       this.user = data;

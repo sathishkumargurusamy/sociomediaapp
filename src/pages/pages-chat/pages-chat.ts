@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Socket } from 'ng-socket-io';
 import { ChatProvider } from '../../providers/chat/chat';
 import { PagesChatbubblePage } from '../../pages/pages-chatbubble/pages-chatbubble';
 import { PostProvider } from '../../providers/post/post';
 import { PagesPersonalchatbubblePage } from '../../pages/pages-personalchatbubble/pages-personalchatbubble';
-import * as jwt_decode from 'jwt-decode';
+// import * as jwt_decode from 'jwt-decode';
 @IonicPage()
 @Component({
   selector: 'page-pages-chat',
@@ -29,10 +28,10 @@ export class PagesChatPage {
   public room: String;
   public messageText: String;
   public messageArray: Array<{ user: String, message: String }> = [];
-  constructor(public navCtrl: NavController, public postserv: PostProvider, public navParams: NavParams, private socket: Socket, public _chatService: ChatProvider) {
-    const jwt = JSON.parse(localStorage.getItem('currentUser'));
-    const jwtData = jwt_decode(jwt);
-    this.user = jwtData.user;
+  constructor(public navCtrl: NavController, public postserv: PostProvider, public navParams: NavParams, public _chatService: ChatProvider) {
+    // const jwt = JSON.parse(localStorage.getItem('currentUser'));
+    // const jwtData = jwt_decode(jwt);
+    this.user = JSON.parse(localStorage.getItem('currentUser'));
     this._chatService.newUserJoined()
       .subscribe(data => {
         this.messageArray.push(data);
