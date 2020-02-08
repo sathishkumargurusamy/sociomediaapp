@@ -1,7 +1,7 @@
 <ion-header>
     <ion-navbar>
         <ion-title>
-            {{this.navParams.get('room')}}
+            {{this.navParams.get('friend_name')}}
         </ion-title>
     </ion-navbar>
 </ion-header>
@@ -9,21 +9,17 @@
 <ion-content>
     <ion-grid>
 
-        <div class='defaultmessage' *ngFor="let item1 of defaultmessage">{{this.navParams.get('room')}} is waiting for your message....</div>
-        <div class='defaultmessage1' *ngFor="let item2 of defaultmessage1">{{this.navParams.get('room')}} is idle and cant see your message....</div>
+
         <ion-row *ngFor="let item of messageArray">
 
-            <ion-col col-9 *ngIf="item.user !== username" class="message" [ngClass]="{'my_message': item.user === username, 'other_message': item.user !== username}">
-                <span class="user_name">{{ item.user }}:</span><br>
+            <ion-col col-9 *ngIf="item.sendername === username" class="message" [ngClass]="{'my_message': item.sendername === username, 'other_message': item.sendername !== username}">
+                <span class="my_user_name">{{ item.sendername }}:</span><br>
                 <span>{{ item.message }} </span>
-
             </ion-col>
-
-            <ion-col offset-3 col-9 *ngIf="item.user === username" class="message" [ngClass]="{'my_message': item.user === username, 'other_message': item.user !== username}">
-                <span class="user_name">{{ item.user }}:</span><br>
-                <span>{{ item.message }}</span>
+            <ion-col col-9 *ngIf="item.sendername !== username" class="message" [ngClass]="{'my_message': item.sendername === username, 'other_message': item.sendername !== username}">
+                <span class="friend_user_name">{{ item.sendername }}:</span><br>
+                <span>{{ item.message }} </span>
             </ion-col>
-
         </ion-row>
     </ion-grid>
 
@@ -48,9 +44,10 @@
         </ion-row>
         <ion-row>
             <ion-col col-12>
-                <button full ion-button (click)="sendMessage()">
-      Send
+                <button full round ion-button (click)="sendmessage()">
+                   Send <ion-icon class='send_icon' name="send"></ion-icon>
     </button>
+
             </ion-col>
         </ion-row>
 

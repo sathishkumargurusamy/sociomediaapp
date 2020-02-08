@@ -36,7 +36,7 @@ export class PagesChatPage {
       .subscribe(data => {
         this.messageArray.push(data);
         if (data == this.username) {
-          this.gotouser(this.username);
+          // this.gotouser(this.username);
         }
       });
     this._chatService.userLeftRoom()
@@ -51,9 +51,10 @@ export class PagesChatPage {
       this.getallusers();
     }, 2000);
   }
-  gotouser(friend) {
+  gotouser(friend_id, friend_name) {
     this.navCtrl.push(PagesPersonalchatbubblePage, {
-      room: friend
+      friend_id: friend_id,
+      friend_name: friend_name
     });
   }
   gotochat() {

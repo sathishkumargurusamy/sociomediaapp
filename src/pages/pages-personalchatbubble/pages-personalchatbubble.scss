@@ -1,6 +1,9 @@
 page-pages-personalchatbubble {
-    .user_name {
-        color: #afafaf;
+    .my_user_name {
+        color: white;
+    }
+    .friend_user_name {
+        color: blue;
     }
     .message {
         padding: 10px !important;
@@ -9,8 +12,13 @@ page-pages-personalchatbubble {
         margin-bottom: 4px !important;
     }
     .my_message {
+        left: 25%;
         background: color($colors, primary) !important;
         color: #000 !important;
+    }
+    .send_icon {
+        font-size: 30px;
+        margin-left: 5px;
     }
     .other_message {
         background: #dcdcdc !important;
@@ -23,13 +31,5 @@ page-pages-personalchatbubble {
     }
     .message_row {
         background-color: #fff;
-    }
-    .defaultmessage {
-        font-size: 16px;
-        color: green;
-    }
-    .defaultmessage1 {
-        font-size: 16px;
-        color: red;
     }
 }

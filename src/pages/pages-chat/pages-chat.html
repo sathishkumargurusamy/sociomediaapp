@@ -25,7 +25,7 @@
             <ion-card-content>
                 <div *ngFor='let f of friends'>
                     <div *ngIf='f.username!=username'>
-                        <ion-item *ngIf='f.status==="1"' (click)='gotouser(f.username)'>
+                        <ion-item *ngIf='f.status==="1"' (click)='gotouser(f._id,f.username)'>
 
                             <ion-avatar item-start>
                                 <img src="../../assets/profile.png">

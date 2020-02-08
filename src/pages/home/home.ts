@@ -11,6 +11,7 @@ import { MyApp } from '../../app/app.component';
 import { PagesViewpostPage } from '../pages-viewpost/pages-viewpost';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 import { DatePipe } from '@angular/common';
+import Pusher from 'pusher-js'
 // import * as jwt_decode from 'jwt-decode';
 // import{AboutPage} from '../about/about';
 @Component({
@@ -27,7 +28,6 @@ export class HomePage {
   public likecount: any = [];
   public username: any = '';
   public var: any = [];
-  public interval;
   public allikes;
   public profileimage = [];
   public likes: any = '';
@@ -37,13 +37,49 @@ export class HomePage {
   public thispost: any = '';
   public now = new Date();
   public allusers;
+  public pusher;
   public currenttime = this.datePipe.transform(this.now, 'h');
   public showcommenttoggle1: any = [];
   constructor(public navCtrl: NavController, public app: App, public auth: AuthenticationProvider,
     private menu: MenuController, public postserv: PostProvider, public modalController: ModalController,
-    public toastController: ToastController,private photoViewer: PhotoViewer, private datePipe: DatePipe,) {
+    public toastController: ToastController, private photoViewer: PhotoViewer,
+    private datePipe: DatePipe) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
+    this.pusher = new Pusher('74df637180c0aa9440a4', { cluster: 'ap2', forceTLS: true });
+    const post_channel = this.pusher.subscribe('posts');
+    const comments_channel = this.pusher.subscribe('comments');
+    const likes_channel = this.pusher.subscribe('likes');
+    post_channel.bind('post-created', (data) => {
+      if (data) {
+        this.getpost();
+      }
+    });
+    post_channel.bind('post-deleted', (data) => {
+      if (data) {
+        this.getpost();
+      }
+    });
+    comments_channel.bind('comment-created', (data) => {
+      if (data) {
+        this.getcomment();
+      }
+    });
+    comments_channel.bind('comment-deleted', (data) => {
+      if (data) {
+        this.getcomment();
+      }
+    });
+    likes_channel.bind('likes-added', (data) => {
+      if (data) {
+        this.getpost();
+      }
+    });
+    likes_channel.bind('likes-removed', (data) => {
+      if (data) {
+        this.getpost();
+      }
+    });
     this.user = JSON.parse(localStorage.getItem('currentUser'));
 
   }
@@ -59,14 +95,11 @@ export class HomePage {
       this.username = i.username;
       this.userid = i._id;
     }
-
-    this.interval = setInterval(() => {
-      this.getlikes();
-      this.getpost();
-      this.getcomment();
-      this.alluser();
-      this.alllikes(this.userid);
-    }, 8000);
+    this.getlikes();
+    this.getpost();
+    this.getcomment();
+    this.alluser();
+    this.alllikes(this.userid);
   }
   alluser() {
     this.postserv.allusers().subscribe(data => {
@@ -74,16 +107,16 @@ export class HomePage {
       for (const all_users of this.allusers) {
         this.profileimage[all_users._id] = all_users.profileimage;
       }
-
-    })
+    });
   }
-  viewimage(){
+  viewimage() {
     // this.photoViewer.show('https://mysite.com/path/to/image.jpg');
   }
   ionViewWillEnter() {
     this.getlikes();
     this.getpost();
     this.getcomment();
+    this.alluser();
     this.alllikes(this.userid);
   }
   popuptoggle1(j) {
@@ -93,9 +126,8 @@ export class HomePage {
     this.postserv.getpost().subscribe(data => {
       this.post = data;
     });
-
   }
-  addpost(){
+  addpost() {
     this.navCtrl.push(PagesAddpostPage);
   }
   gotoprofile(id) {

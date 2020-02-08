@@ -19,13 +19,14 @@ import { PagesChatPage } from '../pages/pages-chat/pages-chat';
 import { SocketIoModule, SocketIoConfig } from 'ng-socket-io';
 import { ChatProvider } from '../providers/chat/chat';
 import { PagesChatbubblePage } from '../pages/pages-chatbubble/pages-chatbubble';
-import {PagesEditprofilePage} from '../pages/pages-editprofile/pages-editprofile'
+import { PagesEditprofilePage } from '../pages/pages-editprofile/pages-editprofile'
 import { PagesPersonalchatbubblePage } from '../pages/pages-personalchatbubble/pages-personalchatbubble';
 import { Camera } from '@ionic-native/camera';
 const config: SocketIoConfig = { url: 'https://sociomediaapp-server.herokuapp.com', options: {} };
 import { IonicImageViewerModule } from 'ionic-img-viewer';
 import { DatePipe } from '@angular/common';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+import { MessageProvider } from '../providers/message/message';
 
 @NgModule({
   declarations: [
@@ -76,10 +77,11 @@ import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     PostProvider,
-    AuthenticationProvider
+    AuthenticationProvider,
+    MessageProvider
 
   ],
   exports: [PagesAddpostPage]
 })
-export class AppModule {}
+export class AppModule { }
 

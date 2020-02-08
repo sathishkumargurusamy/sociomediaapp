@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 import { PostProvider } from '../../providers/post/post';
 import { ToastController } from 'ionic-angular';
+import Pusher from 'pusher-js'
 @IonicPage()
 @Component({
   selector: 'page-pages-editprofile',
@@ -18,19 +19,17 @@ export class PagesEditprofilePage {
   public imgopt_toggle = false;
   public picture;
   public allusers;
+  public pusher;
   public userid;
   public interval;
   constructor(public navCtrl: NavController, public navParams: NavParams,
     public camera: Camera, public postservice: PostProvider, public toastController: ToastController) {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
+
   }
   ngOnInit() {
     for (const u of this.user) {
       this.userid = u._id;
-      this.firstname = u.firstname;
-      this.lastname = u.lastname;
-      this.username = u.username;
-      this.base64Image = u.profileimage;
     }
     this.getuserdetails();
   }
@@ -39,6 +38,10 @@ export class PagesEditprofilePage {
       this.allusers = data;
       for (const all_users of this.allusers) {
         if (all_users._id == this.userid) {
+          this.userid = all_users._id;
+          this.firstname = all_users.firstname;
+          this.lastname = all_users.lastname;
+          this.username = all_users.username;
           this.base64Image = all_users.profileimage;
         }
       }
@@ -122,6 +125,10 @@ export class PagesEditprofilePage {
     this.postservice.updateprofile(body).subscribe(data => {
       this.toaster('Profile Updated Successfully!!');
     });
+  }
+  removephoto() {
+    this.imgopt_toggle = !this.imgopt_toggle;
+    this.base64Image = '';
   }
   ionViewDidLoad() {
     this.getuserdetails();

@@ -24,7 +24,7 @@ export class PagesAddpostPage {
   public imgopt_toggle = false;
   user;
   constructor(public navCtrl: NavController, public app: App,
-    public auth: AuthenticationProvider,public location:Location,
+    public auth: AuthenticationProvider, public location: Location,
     private menu: MenuController, public navParams: NavParams,
     public toastController: ToastController, public postserv: PostProvider,
     public camera: Camera) {
@@ -45,7 +45,7 @@ export class PagesAddpostPage {
       this.userid = i._id;
     }
   }
-  
+
   ionViewDidLoad() {
   }
   async presentToast() {

@@ -18,7 +18,7 @@ export class PagesChatbubblePage {
   public messageText: String = '';
   public messageArray: Array<{ user: String, message: String }> = [];
   constructor(public navCtrl: NavController, public postserv: PostProvider, public navParams: NavParams,
-     private socket: Socket, public _chatService: ChatProvider) {
+    private socket: Socket, public _chatService: ChatProvider) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
     this.user = JSON.parse(localStorage.getItem('currentUser'));
@@ -31,7 +31,7 @@ export class PagesChatbubblePage {
         this.messageArray.push(data);
       });
   }
-  ionViewDidLoad() {}
+  ionViewDidLoad() { }
   ngOnInit() {
     for (const i of this.user) {
       this.username = i.username;
