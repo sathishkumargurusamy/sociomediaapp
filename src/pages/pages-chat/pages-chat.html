@@ -12,9 +12,6 @@
         <ion-segment-button value="chat">
             Chat
         </ion-segment-button>
-        <ion-segment-button value="group">
-            Groups
-        </ion-segment-button>
 
     </ion-segment>
     <div [ngSwitch]="segment">
@@ -28,7 +25,8 @@
                         <ion-item *ngIf='f.status==="1"' (click)='gotouser(f._id,f.username)'>
 
                             <ion-avatar item-start>
-                                <img src="../../assets/profile.png">
+                                <img class='profile_image_common_style profileAvatar' [src]='f.profileimage' imageViewer>
+                                <div class='unreadMessage'>{{unreadMessage[f._id]}}</div>
                             </ion-avatar>
                             <ion-label>
                                 <h2>{{f.username}}</h2>
@@ -43,7 +41,7 @@
                         <ion-item *ngIf='f.username!=username'>
 
                             <ion-avatar item-start>
-                                <img src="../../assets/profile.png">
+                                <img class='profile_image_common_style' [src]='f.profileimage' imageViewer>
                             </ion-avatar>
                             <ion-label>
                                 <h2>{{f.username}}</h2>
@@ -56,7 +54,7 @@
             </ion-card-content>
         </ion-card>
 
-        <ion-card *ngSwitchCase="'group'">
+        <!-- <ion-card *ngSwitchCase="'group'">
             <ion-card-content>
                 <ion-grid>
                     <ion-label>Create group....</ion-label>
@@ -74,7 +72,7 @@
                     </ion-row>
                 </ion-grid>
             </ion-card-content>
-        </ion-card>
+        </ion-card> -->
     </div>
 
 

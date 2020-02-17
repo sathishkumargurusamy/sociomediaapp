@@ -4,6 +4,7 @@ import { PostProvider } from '../../providers/post/post';
 import { ToastController, App } from 'ionic-angular';
 import { MenuController } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
+import { PagesEditprofilePage } from '../pages-editprofile/pages-editprofile';
 import { MyApp } from '../../app/app.component';
 // import * as jwt_decode from 'jwt-decode';
 
@@ -20,12 +21,13 @@ export class PagesViewprofilePage {
   public comment;
   public errcomment: any = '';
   public user;
+  public dateOfBirth;
   public likecount: any = [];
   public username: any = '';
   public allikes;
+  public gender;
   public likes: any = '';
   public userid: any = '';
-  public interval;
   public liketoggle = [];
   public thispost: any = '';
   public proimage;
@@ -47,12 +49,10 @@ export class PagesViewprofilePage {
       this.username = i.username;
       this.userid = i._id;
     }
-    this.interval = setInterval(() => {
       this.getmypost(this.userid);
       this.getcomment();
       this.alllikes(this.userid);
       this.allusers();
-    }, 8000);
   }
   allusers(){
     this.postserv.allusers().subscribe(data=>{
@@ -60,6 +60,8 @@ export class PagesViewprofilePage {
   for(const all_user of this.all_users){
     if(all_user._id==this.userid){
       this.proimage=all_user.profileimage;
+      this.dateOfBirth=all_user.dob;
+      this.gender=all_user.gender;
     }
   }
     });
@@ -97,13 +99,11 @@ export class PagesViewprofilePage {
           this.likecount[pid] = this.likecount[pid] - 1;
           let body = {
             _id: pid,
-            userid: this.post.userid,
-            username: this.post.username,
-            post: this.post.post,
+            userid: this.userid,
             likes: this.likecount[pid]
           };
           this.postserv.updatepost(body).subscribe(data => { this.getmypost(this.userid); });
-          this.postserv.deletelikes(this.userid).subscribe(data1 => { });
+          this.postserv.deletelikes(body).subscribe(data1 => { });
         }
       }
     });
@@ -134,8 +134,16 @@ export class PagesViewprofilePage {
   deletepost(id) {
     this.postserv.deletepost(id).subscribe(data => {
       this.getmypost(this.userid);
+      this.deletePostComment(id);
+      this.deletePostlike(id);
       this.presentToast('Post deleted successfully!!..');
     });
+  }
+  deletePostlike(id){
+    this.postserv.deletepostlike(id).subscribe();
+  }
+  deletePostComment(id){
+    this.postserv.deletepostcomment(id).subscribe();
   }
   alllikes(uid) {
     this.postserv.getlikes(uid).subscribe(data => {
@@ -165,5 +173,8 @@ export class PagesViewprofilePage {
   logout() {
     this.auth.logout();
     this.app.getRootNav().setRoot(MyApp);
+  }
+  gotoeditprofile() {
+    this.navCtrl.push(PagesEditprofilePage);
   }
 }

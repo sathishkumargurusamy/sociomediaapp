@@ -7,12 +7,14 @@ import { ToastController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
 import { TabsPage } from '../pages/tabs/tabs';
 import { first } from 'rxjs/operators';
+import { ISubscription } from "rxjs/Subscription";
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   rootPage: any = TabsPage;
+  subscriptionList: ISubscription[];
   public disp: boolean;
   public username: any;
   public password: any;
@@ -30,7 +32,7 @@ export class MyApp {
     statusBar: StatusBar, splashScreen: SplashScreen, public auth: AuthenticationProvider,
     public toastController: ToastController) {
     platform.ready().then(() => {
-      statusBar.styleDefault();
+      statusBar.backgroundColorByName('black');
       splashScreen.hide();
     });
   }
@@ -42,7 +44,7 @@ export class MyApp {
   }
 
   login() {
-    this.auth.login(this.username, this.password).pipe(first()).subscribe(
+    this.subscriptionList.push(this.auth.login(this.username, this.password).pipe(first()).subscribe(
       data => {
         if (!data) {
           this.toaster("Please check your Credintials!");
@@ -63,7 +65,7 @@ export class MyApp {
       },
       error => {
         console.log(error);
-      });
+      }));
   }
   async toaster(msg) {
     const toast = await this.toastController.create({
@@ -92,19 +94,22 @@ export class MyApp {
       "lastname": this.lname,
       "password": this.pass
     }
-    this.auth.register(body).subscribe(data => {
+    this.subscriptionList.push(this.auth.register(body).subscribe(data => {
       if (Boolean(data)) {
-        console.log(data);
         this.toaster("User added successfully!!");
       }
       else {
-        console.log(data);
         this.toaster("Username already used!!");
       }
-    });
+    }));
   }
   logintoggle() {
     this.displogin = !this.displogin;
     this.dispreg = !this.dispreg;
+  }
+  ngOnDestroy() {
+    for (const subscribedMethod of this.subscriptionList) {
+      subscribedMethod.unsubscribe();
+    }
   }
 }

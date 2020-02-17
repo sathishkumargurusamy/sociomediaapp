@@ -11,12 +11,39 @@
         background: darkslateblue;
     }
     
+    .side_menu {
+        background: linear-gradient(to top, slateblue 0%, violet 100%);
+        filter: blur(0.3px);
+    }
+    
+    .side_menu_details {
+        width: 100%;
+        height: 200px;
+        background-color: inherit;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 5px 3px 18px #888888;
+    }
+    
     .toolbar-title-md {
         padding: 0 12px;
         font-size: 2rem;
         font-weight: 500;
         color: white;
         font-family: 'Special Elite', cursive;
+    }
+    
+    .welcome_text {
+        padding: 5px;
+        font-size: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        @media only screen and(max-width: 380px) {
+            font-size: 16px;
+        }
     }
     
     .dicon {
@@ -180,10 +207,48 @@
         font-family: 'Righteous', cursive;
     }
     
+    .sidemenu_logout_icon {
+        background-image: url('../../assets/logout.png');
+        background-size: cover;
+        width: 30px;
+        height: 28px;
+    }
+    
+    .sidemenu_edit_icon {
+        background-image: url('../../assets/edit_icon.png');
+        background-size: cover;
+        width: 30px;
+        height: 29px;
+        ;
+    }
+    
     .logo {
         height: 73px;
         width: 74px;
         background-position: center;
         background-size: cover;
         background-image: url('../../assets/logo.gif');
+    }
+    
+    .sidemenu_text {
+        font-family: Impact, Charcoal, sans-serif;
+        font-size: 24px;
+        letter-spacing: 1.8px;
+        color: #000000;
+        display: flex;
+        justify-content: space-between;
+        font-weight: 400;
+        font-style: normal;
+        font-variant: small-caps;
+        text-transform: none;
+    }
+    
+    #profile-image {
+        display: block;
+        border-radius: 100px;
+        border: 1px solid #fff;
+        width: 128px;
+        height: 128px;
+        margin: 30px auto 0;
+        box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.7);
     }

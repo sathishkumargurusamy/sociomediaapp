@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { ChatProvider } from '../../providers/chat/chat';
+import { MessageProvider } from '../../providers/message/message';
 import { PagesChatbubblePage } from '../../pages/pages-chatbubble/pages-chatbubble';
 import { PostProvider } from '../../providers/post/post';
 import { PagesPersonalchatbubblePage } from '../../pages/pages-personalchatbubble/pages-personalchatbubble';
+import { User } from '../../models/user';
+import { Message } from '../../models/message';
 // import * as jwt_decode from 'jwt-decode';
 @IonicPage()
 @Component({
@@ -12,10 +15,12 @@ import { PagesPersonalchatbubblePage } from '../../pages/pages-personalchatbubbl
 })
 export class PagesChatPage {
   public username;
+  public unreadMessages;
   public userid;
+  public all_messages: Message[];
   public count = 0;
-  public user;
-  public friends;
+  public user: User[];
+  public friends: User[];
   public offcountno; oncountno;
   public offcount: any;
   public oncount: any;
@@ -24,11 +29,11 @@ export class PagesChatPage {
   public segment = 'chat';
   public groupid;
   public groups;
-  public interval;
   public room: String;
   public messageText: String;
   public messageArray: Array<{ user: String, message: String }> = [];
-  constructor(public navCtrl: NavController, public postserv: PostProvider, public navParams: NavParams, public _chatService: ChatProvider) {
+  constructor(public navCtrl: NavController, public postserv: PostProvider,
+    public navParams: NavParams, public _chatService: ChatProvider, private messageService: MessageProvider) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
     this.user = JSON.parse(localStorage.getItem('currentUser'));
@@ -46,10 +51,9 @@ export class PagesChatPage {
       .subscribe(data => this.messageArray.push(data));
   }
   ionViewDidLoad() {
-    this.interval = setInterval(() => {
-      this.getgroups();
-      this.getallusers();
-    }, 2000);
+    this.getgroups();
+    this.getallusers();
+    this.getUnreadmessages();
   }
   gotouser(friend_id, friend_name) {
     this.navCtrl.push(PagesPersonalchatbubblePage, {
@@ -81,6 +85,25 @@ export class PagesChatPage {
       this.friends = data;
     });
   }
+  getUnreadmessages() {
+    this.postserv.getallusers().subscribe(data => {
+      this.friends = data;
+    console.log(this.friends);
+    for (const friend of this.friends) {
+      this.unreadMessages[friend._id]=0;
+      this.messageService.getallmessage().subscribe(data => {
+        this.all_messages = data;
+        for (const allmessage of this.all_messages) {
+          if(allmessage.senderid==friend._id){
+            if(allmessage.read==false)
+            this.unreadMessages[friend._id]=this.unreadMessages[friend._id]+1;
+          }
+        }
+      });
+    }
+    });
+    
+  }
   creategroup() {
     let body = {
       username: this.username,
@@ -99,19 +122,15 @@ export class PagesChatPage {
     this.getgroups();
     this.getallusers();
     this.join();
-    this.interval = setInterval(() => {
-      this.getgroups();
-      this.getallusers();
-    }, 2000);
+    this.getgroups();
+    this.getallusers();
+    this.getUnreadmessages();
   }
   setroom(name, groupid) {
     this.room = name;
     this.groupid = groupid;
   }
   ionViewDidLeave() {
-    if (this.interval) {
-      clearInterval(this.interval);
-    }
     this.segment = 'chat';
   }
 }

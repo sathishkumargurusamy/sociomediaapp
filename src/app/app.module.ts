@@ -25,8 +25,11 @@ import { Camera } from '@ionic-native/camera';
 const config: SocketIoConfig = { url: 'https://sociomediaapp-server.herokuapp.com', options: {} };
 import { IonicImageViewerModule } from 'ionic-img-viewer';
 import { DatePipe } from '@angular/common';
-import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+import { PhotoViewer } from '@ionic-native/photo-viewer';
 import { MessageProvider } from '../providers/message/message';
+import { LocalNotifications } from '@ionic-native/local-notifications';
+import { EmojiPickerModule } from 'ionic-emoji-picker';
+import { DatePicker } from '@ionic-native/date-picker';
 
 @NgModule({
   declarations: [
@@ -51,6 +54,7 @@ import { MessageProvider } from '../providers/message/message';
     }),
     SocketIoModule.forRoot(config),
     HttpClientModule,
+    EmojiPickerModule.forRoot(),
     IonicImageViewerModule],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -72,8 +76,10 @@ import { MessageProvider } from '../providers/message/message';
     StatusBar,
     DatePipe,
     Camera,
+    DatePicker,
     PhotoViewer,
     ChatProvider,
+    LocalNotifications,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     PostProvider,

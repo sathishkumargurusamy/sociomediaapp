@@ -2,6 +2,11 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { PostProvider } from '../../providers/post/post';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
+import { User } from '../../models/user';
+import { Post } from '../../models/post';
+import { Comments } from "../../models/comments";
+import { Likes } from '../../models/likes';
+import { Message } from '../../models/message';
 // import * as jwt_decode from 'jwt-decode';
 
 @IonicPage()
@@ -10,20 +15,19 @@ import { AuthenticationProvider } from '../../providers/authentication/authentic
   templateUrl: 'pages-viewpost.html',
 })
 export class PagesViewpostPage {
-  public post: any;
+  public post: Post;
   public comments: any = [];
-  public dispcomment: any = '';
+  public dispcomment: Comments;
   public comment;
   public errcomment: any = '';
-  public user;
+  public user:User[];
   public likecount: any = [];
   public username: any = '';
-  public allikes;
+  public allikes:Likes[];
   public likes: any = '';
   public userid: any = '';
   public liketoggle = [];
   public thispost: any = '';
-  public interval;
   public showcommenttoggle1: any = [];
   public loggeduser;
   public loggeduserid;
@@ -45,10 +49,8 @@ export class PagesViewpostPage {
     this.getprofile(this.userid);
     this.getuser(this.userid);
     this.allusers();
-    this.interval = setInterval(() => {
       this.getcomment();
       this.alllikes(this.loggeduserid);
-    }, 8000);
   }
   ionViewWillEnter() {
     this.userid = this.navParams.get('id');
@@ -104,16 +106,20 @@ for(const all_user of this.all_users){
           this.likecount[pid] = this.likecount[pid] - 1;
           let body = {
             _id: pid,
-            userid: this.post.userid,
-            username: this.post.username,
-            post: this.post.post,
+            userid: this.userid,
             likes: this.likecount[pid]
           };
           this.postserv.updatepost(body).subscribe(data => { this.getprofile(this.userid); });
-          this.postserv.deletelikes(this.userid).subscribe(data1 => { });
+          this.postserv.deletelikes(body).subscribe(data1 => { });
         }
       }
     });
+  }
+  deletePostlike(id){
+    this.postserv.deletepostlike(id).subscribe();
+  }
+  deletePostComment(id){
+    this.postserv.deletepostcomment(id).subscribe();
   }
   alllikes(uid) {
     this.postserv.getlikes(uid).subscribe(data => {
@@ -146,6 +152,8 @@ for(const all_user of this.all_users){
   deletepost(id) {
     this.postserv.deletepost(id).subscribe(data => {
       this.getprofile(this.userid);
+      this.deletePostComment(id);
+      this.deletePostlike(id);
     });
   }
   deletecomment(id) {

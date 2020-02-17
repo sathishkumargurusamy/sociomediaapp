@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { Post } from '../../models/post';
+import { Comments } from '../../models/comments';
+import { Likes } from '../../models/likes';
+import { User } from '../../models/user';
 @Injectable()
 export class PostProvider {
 
@@ -8,29 +12,28 @@ export class PostProvider {
   constructor(public http: HttpClient) { }
 
   allusers() {
-    return this.http.get(this.apiurl + `/allusers`);
+    return this.http.get<User[]>(this.apiurl + `/allusers`);
   }
   createpost(newpost) {
     return this.http.post(this.apiurl + `/post`, newpost);
-
   }
   updateprofile(body) {
     return this.http.put(this.apiurl + `/updateuser/` + body._id, body);
   }
   getuser(id) {
-    return this.http.get(this.apiurl + `/user/` + id);
+    return this.http.get<User[]>(this.apiurl + `/user/` + id);
   }
   getpost() {
-    return this.http.get(this.apiurl + `/post`);
+    return this.http.get<Post>(this.apiurl + `/post`);
   }
   getthispost(pid) {
-    return this.http.get(this.apiurl + `/posts/` + pid);
+    return this.http.get<Post[]>(this.apiurl + `/posts/` + pid);
   }
   updatepost(body) {
     return this.http.put(this.apiurl + `/post/` + body._id, body);
   }
   getmypost(userid) {
-    return this.http.get(this.apiurl + `/mypost/` + userid);
+    return this.http.get<Post>(this.apiurl + `/mypost/` + userid);
   }
   deletepost(id) {
     return this.http.delete(this.apiurl + `/post/` + id).pipe(map(res => {
@@ -39,6 +42,9 @@ export class PostProvider {
   }
   deletepostcomment(id) {
     return this.http.delete(this.apiurl + `/comment/` + id);
+  }
+  deletepostlike(id) {
+    return this.http.delete(this.apiurl + `/like/` + id);
   }
 
   addcomment(userid, postid, username, comment) {
@@ -52,28 +58,26 @@ export class PostProvider {
     return this.http.get(this.apiurl + `/groups`);
   }
   getallusers() {
-    return this.http.get(this.apiurl + `/allusers`);
+    return this.http.get<User[]>(this.apiurl + `/allusers`);
   }
   creategroup(body) {
     return this.http.post(this.apiurl + `/groups`, body);
   }
 
   getcomment() {
-    return this.http.get(this.apiurl + `/comments`);
+    return this.http.get<Comments>(this.apiurl + `/comments`);
   }
   deletecomment(id) {
     return this.http.delete(this.apiurl + `/comments/` + id);
   }
 
   getlikes(uid) {
-    return this.http.get(this.apiurl + `/likes/` + uid);
+    return this.http.get<Likes[]>(this.apiurl + `/likes/` + uid);
   }
   postlikes(body) {
     return this.http.post(this.apiurl + `/likes`, body);
   }
-  deletelikes(id) {
-
-    return this.http.delete(this.apiurl + `/likes/` + id);
+  deletelikes(body) {
+    return this.http.delete(this.apiurl + `/likes/` + body.userid+`&`+body._id);
   }
-
 }

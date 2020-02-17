@@ -1,55 +1,59 @@
 <ion-header>
+
     <ion-navbar>
-        <ion-title>
-            {{this.navParams.get('friend_name')}}
-        </ion-title>
+        <ion-title><img class="display_pic" [src]="friendprofile_pic" alt="" imageViewer>{{this.navParams.get('friend_name')}}</ion-title>
     </ion-navbar>
+
 </ion-header>
 
-<ion-content>
-    <ion-grid>
+<ion-content class="wallpaper">
 
+    <div class="message-wrap">
+        <div *ngFor="let item of messageArray, let i of index">
+            <div class="message" *ngIf=' item.sendername === username' [class.left]=" item.sendername != username " [class.right]=" item.sendername === username ">
+                <img class="user-img" [src]="item.sendername === username?myprofile_pic:friendprofile_pic" alt="">
+                <!-- <ion-spinner name="dots" *ngIf="pending[i]!=''"></ion-spinner> -->
+                <div class="msg-detail">
+                    <div class="msg-info">
+                        <p>
+                            {{item.sendername}}&nbsp;&nbsp;&nbsp;{{item.time|date:'HH:mm'}}</p>
+                    </div>
+                    <div class="msg-content">
+                        <span class="triangle"></span>
+                        <p class="line-breaker ">{{item.message}}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="message" *ngIf=' item.sendername != username' [class.left]=" item.sendername != username " [class.right]=" item.sendername === username ">
+                <img class="user-img" [src]="item.sendername === username?myprofile_pic:friendprofile_pic" alt="">
+                <!-- <ion-spinner name="dots" *ngIf="pending[i]!=''"></ion-spinner> -->
+                <div class="msg-detail">
+                    <div class="msg-info">
+                        <p>
+                            {{item.sendername}}&nbsp;&nbsp;&nbsp;{{item.time|date:'HH:mm'}}</p>
+                    </div>
+                    <div class="msg-content">
+                        <span class="triangle"></span>
+                        <p class="line-breaker ">{{item.message}}</p>
+                    </div>
+                </div>
+            </div>
 
-        <ion-row *ngFor="let item of messageArray">
+        </div>
 
-            <ion-col col-9 *ngIf="item.sendername === username" class="message" [ngClass]="{'my_message': item.sendername === username, 'other_message': item.sendername !== username}">
-                <span class="my_user_name">{{ item.sendername }}:</span><br>
-                <span>{{ item.message }} </span>
-            </ion-col>
-            <ion-col col-9 *ngIf="item.sendername !== username" class="message" [ngClass]="{'my_message': item.sendername === username, 'other_message': item.sendername !== username}">
-                <span class="friend_user_name">{{ item.sendername }}:</span><br>
-                <span>{{ item.message }} </span>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    </div>
 
 </ion-content>
 
-
-<ion-footer>
-    <ion-toolbar>
-
-        <ion-row class="message_row">
-            <ion-col col-10>
-                <ion-item no-lines>
-                    <ion-input type="text" placeholder="Message" [(ngModel)]="messageText"></ion-input>
-
-                </ion-item>
-
-            </ion-col>
-            <ion-col col-2>
-
-
-            </ion-col>
-        </ion-row>
-        <ion-row>
-            <ion-col col-12>
-                <button full round ion-button (click)="sendmessage()">
-                   Send <ion-icon class='send_icon' name="send"></ion-icon>
-    </button>
-
-            </ion-col>
-        </ion-row>
-
-    </ion-toolbar>
+<ion-footer no-border [style.height]="simply ? '255px' : '55px'">
+    <div class="input-wrap">
+        <button ion-button clear icon-only (click)="toggle = !toggle" [(emojiPickerIf)]="toggle" [emojiPickerDirection]="'top'" (emojiPickerSelect)="handleSelection($event)">
+        <ion-icon name="md-happy"></ion-icon>
+        </button>
+        <textarea #chat_input placeholder="Text Input" [(ngModel)]="messageText" (keyup.enter)="sendmessage()" (focusin)="onFocus()">
+      </textarea>
+        <button ion-button clear icon-only item-right [disabled]='!messageText' (click)="sendmessage()">
+        <ion-icon name="ios-send" ios="ios-send" md="md-send"></ion-icon>
+      </button>
+    </div>
 </ion-footer>

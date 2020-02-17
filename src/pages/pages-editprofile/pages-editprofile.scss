@@ -2,7 +2,7 @@ page-pages-editprofile {
     .input {
         display: flex;
         width: 100%;
-        justify-content: center;
+        justify-content: space-evenly;
         position: relative;
         align-items: flex-end;
     }
@@ -15,6 +15,17 @@ page-pages-editprofile {
     }
     .imgcontent {
         position: relative;
+    }
+    .gender_div {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .gender {
+        display: flex;
+        width: 60%;
+        align-items: center;
+        justify-content: center;
     }
     .button {
         display: flex;

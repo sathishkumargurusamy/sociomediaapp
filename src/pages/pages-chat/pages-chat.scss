@@ -12,6 +12,28 @@ page-pages-chat {
         background: color($colors, primary) !important;
         color: #000 !important;
     }
+    .profileAvatar {
+        width: 55px !important;
+        height: 55px !important;
+        position: relative;
+    }
+    .unreadMessage {
+        padding: 10px;
+        width: auto;
+        height: 20px;
+        background-color: firebrick;
+        position: absolute;
+        color: floralwhite;
+        left: 59px;
+        font-size: 15px;
+        align-items: center;
+        font-weight: bolder;
+        top: 2px;
+        display: flex;
+        justify-content: center;
+        border-radius: 50%;
+        border: 1px black solid;
+    }
     .other_message {
         background: #dcdcdc !important;
         color: #000 !important;

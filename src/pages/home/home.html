@@ -1,18 +1,25 @@
 <ion-menu [content]="mycontent" id='home' type='overlay'>
-    <ion-content #mycontent>
+    <ion-content class='side_menu' #mycontent>
+        <div class='side_menu_details'>
+            <img class='profile_image_common_style' id="profile-image" *ngIf='!profileimage[userid]' src="../../assets/profile.png" imageViewer>
+            <img class='profile_image_common_style' id="profile-image" *ngIf='profileimage[userid]' [src]='profileimage[userid]' imageViewer>
+            <p class='sidemenu_text'>{{username}}</p>
+
+        </div>
         <ion-list>
-            <ion-item menuClose detail-none>
-                <ion-icon name="close"></ion-icon>
-            </ion-item>
             <ion-item>
+
                 <ion-label>
-                    <div style="display: flex; justify-content: flex-start; align-items: center;" (tap)='logout()'>
-                        <p style='color:blue; font-size: 22px; margin-right:5px;padding:5px;cursor: pointer;'>Logout</p>
-                        <ion-icon name="power"></ion-icon>
+                    <div class='sidemenu_text' (tap)='logout()'>
+                        <div class='sidemenu_text'>Logout</div>
+                        <div class='sidemenu_logout_icon'>
+                        </div>
                     </div>
-                    <div style="display: flex; justify-content: flex-start; align-items: center;" (tap)='gotoeditprofile()'>
-                        <p style='color:blue; font-size: 22px; margin-right:5px;padding:5px;cursor: pointer;'>Edit</p>
-                        <ion-icon name="pencil"></ion-icon>
+                    <hr>
+                    <div class='sidemenu_text' (tap)='gotoeditprofile()'>
+                        <div class='sidemenu_text'>Edit</div>
+                        <div class='sidemenu_edit_icon'>
+                        </div>
                     </div>
                 </ion-label>
 
@@ -21,11 +28,9 @@
         </ion-list>
     </ion-content>
 </ion-menu>
+
 <ion-header>
-
     <ion-navbar>
-
-
         <ion-title>
             <div class=linemain>
                 <div style='cursor: pointer;' (tap)='menutoggle()'>
@@ -35,7 +40,6 @@
                 </div>
                 <div class="logo"> </div>
                 <div class='heading'>News Feed</div>
-
             </div>
         </ion-title>
     </ion-navbar>
@@ -48,7 +52,7 @@
     <div class='username_style'>Hallo!
         <div class='hand'></div> {{username}}..</div>
     <br>
-    <div style='padding:5px;font-size:20px;display: flex; justify-content: center; align-items: center;'>Check what's happening around you!.</div>
+    <div class='welcome_text '>Check what's happening around you!.</div>
     <!-- <div class='but'>
         <div class='writeicon'></div>
         <div class='but1' (click)='gotoaddpost()'>Add New Post</div>
@@ -72,7 +76,7 @@
             <hr>
             <ion-card-content>
                 <p *ngIf="i.post">{{i.post}}</p>
-                <img *ngIf="i.postimg" [src]='i.postimg' (click)='viewimage()' imageViewer />
+                <img *ngIf="i.postimg" [src]='i.postimg' (click)='viewimage()' />
                 <!-- <div class='currentdate1'>{{i.time|date:'h'}}</div> -->
                 <div class='currentdate'>{{i.time|date:'dd MMM,yy'}}</div>
             </ion-card-content>

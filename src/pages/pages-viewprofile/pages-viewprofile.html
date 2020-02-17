@@ -1,15 +1,25 @@
 <ion-menu [content]="mycontent" id='myprofile' type='overlay'>
-    <ion-content #mycontent>
-        <ion-list>
-            <ion-item menuClose detail-none>
-                <ion-icon name="close"></ion-icon>
-            </ion-item>
+    <ion-content class='side_menu' #mycontent>
+        <div class='side_menu_details'>
+            <img class='profile_image_common_style' id="profile-image" *ngIf='!proimage' src="../../assets/profile.png" imageViewer>
+            <img class='profile_image_common_style' id="profile-image" *ngIf='proimage' [src]='proimage' imageViewer>
+            <p class='sidemenu_text'>{{username}}</p>
 
+        </div>
+        <ion-list>
             <ion-item>
+
                 <ion-label>
-                    <div style="display: flex; justify-content: flex-start; align-items: center;" (tap)='logout()'>
-                        <p style='color:blue; font-size: 22px; margin-right:5px;padding:5px;cursor: pointer;'>Logout</p>
-                        <ion-icon name="power"></ion-icon>
+                    <div class='sidemenu_text' (tap)='logout()'>
+                        <div class='sidemenu_text'>Logout</div>
+                        <div class='sidemenu_logout_icon'>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class='sidemenu_text' (tap)='gotoeditprofile()'>
+                        <div class='sidemenu_text'>Edit</div>
+                        <div class='sidemenu_edit_icon'>
+                        </div>
                     </div>
                 </ion-label>
 
@@ -42,7 +52,17 @@
             <img class='profile_image_common_style' id="profile-image" *ngIf='!proimage' src="../../assets/profile.png" imageViewer>
             <img class='profile_image_common_style' id="profile-image" *ngIf='proimage' [src]='proimage' imageViewer>
             <h3 id="profile-name">{{username|uppercase}}</h3>
-            <span id="profile-description">Developer</span>
+            <div class="personalInfo">
+                <div class="personalInfo2">
+                    <ion-icon name="calendar" *ngIf='dateOfBirth'></ion-icon>
+                    <span id="profile-description" *ngIf='dateOfBirth'>{{dateOfBirth}}</span>
+                </div>
+                <div class="personalInfo1">
+                    <ion-icon [style.color]="gender=='male'?'blue':''" *ngIf="gender=='male'" name="male"></ion-icon>
+                    <ion-icon [style.color]="gender=='female'?'deeppink':''" *ngIf="gender=='female'" name="female"></ion-icon>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -70,7 +90,7 @@
 
             <ion-col>
                 <button ion-button icon-start clear small>
-                    <ion-icon *ngIf='!liketoggle[i._id] ' name="thumbs-down"></ion-icon>
+                    <ion-icon *ngIf='!liketoggle[i._id] ' name="ios-thumbs-up-outline"></ion-icon>
                     <ion-icon *ngIf='liketoggle[i._id] ' name="thumbs-up"></ion-icon>
       <div (click)="addlikes(j,userid,i._id)"><span style="color:black; ">{{i.likes}}</span> Like</div>
     </button>

@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { PostProvider } from '../../providers/post/post';
 import { MenuController, App } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { MyApp } from '../../app/app.component';
 import { Camera } from '@ionic-native/camera';
-import { Location } from "@angular/common";
-
+import { User } from '../../models/user';
+import { ISubscription } from "rxjs/Subscription";
 // import * as jwt_decode from 'jwt-decode';
 
 @IonicPage()
@@ -16,18 +16,18 @@ import { Location } from "@angular/common";
   templateUrl: 'pages-addpost.html',
 })
 export class PagesAddpostPage {
+  subscriptionList: ISubscription[];
   public username: any;
   public userid: any;
   public mypost: any;
-  public base64Image;
+  public postImage;
   public picture;
-  public imgopt_toggle = false;
-  user;
-  constructor(public navCtrl: NavController, public app: App,
-    public auth: AuthenticationProvider, public location: Location,
-    private menu: MenuController, public navParams: NavParams,
-    public toastController: ToastController, public postserv: PostProvider,
-    public camera: Camera) {
+  public imageOptionToggle = false;
+  public user: User[];
+  constructor(private navCtrl: NavController, private app: App, private auth: AuthenticationProvider,
+    private menu: MenuController, private toastController: ToastController,
+    public postserv: PostProvider, private camera: Camera,
+  ) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
     // this.user = jwtData.user;
@@ -45,7 +45,6 @@ export class PagesAddpostPage {
       this.userid = i._id;
     }
   }
-
   ionViewDidLoad() {
   }
   async presentToast() {
@@ -61,79 +60,59 @@ export class PagesAddpostPage {
       userid: this.userid,
       username: this.username,
       post: this.mypost || '',
-      postimg: this.base64Image || '',
+      postimg: this.postImage || '',
       likes: 0
     };
-
-    this.postserv.createpost(body).subscribe(data => {
+    this.subscriptionList.push(this.postserv.createpost(body).subscribe(data => {
       this.presentToast();
       this.mypost = '';
-      this.base64Image = '';
+      this.postImage = '';
       this.navCtrl.pop();
-    });
+    }));
   }
   opencamera() {
     this.camera.getPicture({
-
       targetWidth: 1200,
-
       targetHeight: 1800,
-
       correctOrientation: true,
-
       sourceType: this.camera.PictureSourceType.CAMERA,
-
       destinationType: this.camera.DestinationType.DATA_URL
-
     }).then((imageData) => {
-
-      this.base64Image = 'data:image/jpeg;base64,' + imageData;
-
+      this.postImage = 'data:image/jpeg;base64,' + imageData;
       this.picture = imageData;
-      this.imgopt_toggle = !this.imgopt_toggle;
+      this.imageOptionToggle = !this.imageOptionToggle;
 
     }, (err) => {
-
       console.log(err);
-
     });
   }
   AccessGallery() {
-
     this.camera.getPicture({
-
       targetWidth: 1200,
-
       targetHeight: 1800,
-
       correctOrientation: true,
-
       sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
-
       destinationType: this.camera.DestinationType.DATA_URL
-
     }).then((imageData) => {
-
-      this.base64Image = 'data:image/jpeg;base64,' + imageData;
-
+      this.postImage = 'data:image/jpeg;base64,' + imageData;
       this.picture = imageData;
-      this.imgopt_toggle = !this.imgopt_toggle;
-
+      this.imageOptionToggle = !this.imageOptionToggle;
     }, (err) => {
-
       console.log(err);
-
     });
   }
   removeimage() {
-    this.base64Image = '';
-    this.imgopt_toggle = !this.imgopt_toggle;
+    this.postImage = '';
+    this.imageOptionToggle = !this.imageOptionToggle;
   }
-  imgopttoggle() {
-    this.imgopt_toggle = !this.imgopt_toggle;
+  ImageOptionToggle() {
+    this.imageOptionToggle = !this.imageOptionToggle;
   }
   logout() {
     this.auth.logout();
     this.app.getRootNav().setRoot(MyApp);
+  }
+  ngOnDesstroy(){
+    
   }
 }

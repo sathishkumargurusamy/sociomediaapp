@@ -82,6 +82,45 @@
             <ion-icon *ngIf='!isreadonly' name="checkmark"></ion-icon>
         </div>
     </div>
+    <div class="input">
+        <div>
+            <ion-label>
+                Birth date
+            </ion-label>
+        </div>
+        <ion-item>
+            <ion-input [(ngModel)]='date_of_birth' [readonly]='isreadonly'></ion-input>
+        </ion-item>
+        <div class='editico' (tap)='toggleedit()'>
+            <ion-icon *ngIf='isreadonly' name="create"></ion-icon>
+            <ion-icon *ngIf='!isreadonly' name="checkmark" (click)='showDatePicker()'></ion-icon>
+        </div>
+    </div>
+    <div class="input">
+        <div class='gender_div'>
+            <ion-label>
+                Gender
+            </ion-label>
+            <ion-list radio-group class='gender'>
+                <ion-label>
+                    <ion-radio [checked]='gender==="male"?true:false' value="male" (click)='selectGender("male")'>
+                    </ion-radio>
+                    <ion-icon style="color:blue;font-size:30px;margin-left:8px" name="male"></ion-icon>
+
+                </ion-label>
+
+                <ion-label>
+                    <ion-radio [checked]='gender==="female"?true:false' value="female" (click)='selectGender("female")'>
+                    </ion-radio>
+                    <ion-icon style="color:deeppink;font-size:30px;margin-left:8px" name="female"></ion-icon>
+                </ion-label>
+
+            </ion-list>
+        </div>
+    </div>
+
+
+
     <!-- <div class="input">
         <div>
             <ion-label>

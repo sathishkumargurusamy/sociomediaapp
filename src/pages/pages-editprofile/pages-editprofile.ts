@@ -3,7 +3,11 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 import { PostProvider } from '../../providers/post/post';
 import { ToastController } from 'ionic-angular';
-import Pusher from 'pusher-js'
+import { DatePicker } from '@ionic-native/date-picker';
+import { DatePipe } from '@angular/common';
+import { User } from '../../models/user';
+
+
 @IonicPage()
 @Component({
   selector: 'page-pages-editprofile',
@@ -11,19 +15,22 @@ import Pusher from 'pusher-js'
 })
 export class PagesEditprofilePage {
   public isreadonly = true;
-  public user;
+  public user:User[];
   public firstname;
   public lastname;
   public username;
+  checked="checked";
+  public gender='';
   public base64Image;
   public imgopt_toggle = false;
   public picture;
-  public allusers;
+  public allusers:User[];
   public pusher;
   public userid;
-  public interval;
-  constructor(public navCtrl: NavController, public navParams: NavParams,
-    public camera: Camera, public postservice: PostProvider, public toastController: ToastController) {
+  date_of_birth: any;
+  constructor(public navCtrl: NavController, public navParams: NavParams,private datePicker:DatePicker,
+    public camera: Camera, public postservice: PostProvider, public toastController: ToastController
+    ,private date:DatePipe) {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
 
   }
@@ -43,6 +50,8 @@ export class PagesEditprofilePage {
           this.lastname = all_users.lastname;
           this.username = all_users.username;
           this.base64Image = all_users.profileimage;
+          this.date_of_birth=all_users.dob;
+          this.gender=all_users.gender;
         }
       }
     });
@@ -120,7 +129,9 @@ export class PagesEditprofilePage {
       "_id": this.userid,
       "firstname": this.firstname,
       "lastname": this.lastname,
-      "profileimage": this.base64Image
+      "profileimage": this.base64Image,
+      "dateofbirth":this.date_of_birth,
+      "gender":this.gender
     };
     this.postservice.updateprofile(body).subscribe(data => {
       this.toaster('Profile Updated Successfully!!');
@@ -133,4 +144,18 @@ export class PagesEditprofilePage {
   ionViewDidLoad() {
     this.getuserdetails();
   }
+  showDatePicker(){
+    this.datePicker.show({
+      date: new Date(),
+      mode: 'date',
+      androidTheme: this.datePicker.ANDROID_THEMES.THEME_HOLO_LIGHT
+    }).then(
+      date => this.date_of_birth=this.date.transform(date,"dd-MMM-yyyy"),
+      err => console.log('Error occurred while getting date: ', err)
+    );
+  }
+ selectGender(value){
+   this.gender=value;
+ }
+
 }

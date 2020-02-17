@@ -14,7 +14,6 @@ export class PagesChatbubblePage {
   public userid;
   public user;
   public groupdetail;
-  public interval;
   public messageText: String = '';
   public messageArray: Array<{ user: String, message: String }> = [];
   constructor(public navCtrl: NavController, public postserv: PostProvider, public navParams: NavParams,
