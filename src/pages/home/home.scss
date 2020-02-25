@@ -12,7 +12,7 @@
     }
     
     .side_menu {
-        background: linear-gradient(to top, slateblue 0%, violet 100%);
+        background: linear-gradient(45deg, slateblue, transparent);
         filter: blur(0.3px);
     }
     
@@ -44,6 +44,51 @@
         @media only screen and(max-width: 380px) {
             font-size: 16px;
         }
+    }
+    
+    .story-thumbnail {
+        margin: 0 auto;
+        width: 65px;
+        height: 65px;
+        border: 2px solid black;
+        border-radius: 50%;
+    }
+    
+    .story-thumbnail-image {
+        border-radius: 50% !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+    
+    .add_icon {
+        position: absolute;
+        bottom: 0;
+    }
+    
+    .story-thumbnail-font {
+        font-size: 10px;
+    }
+    
+    .plus {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    }
+    
+    .add_icon {
+        position: absolute;
+        width: 25px;
+        height: 25px;
+        top: 0;
+        right: 14px;
+        box-shadow: 7px 2px 6px -1px black;
+        border-radius: 50%;
+        font-size: 22px;
+        color: honeydew;
+        background-color: blueviolet;
+        display: flex;
+        justify-content: center;
+        align-content: center;
     }
     
     .dicon {
@@ -225,9 +270,24 @@
     .logo {
         height: 73px;
         width: 74px;
-        background-position: center;
-        background-size: cover;
-        background-image: url('../../assets/logo.gif');
+        // background-position: center;
+        // background-size: cover;
+        // background-image: url('../../assets/icon.png');
+    }
+    
+    .post_profile_info {
+        padding-left: 0 !important;
+    }
+    
+    .post_profile_avatar {
+        margin: 0 10px 0 0 !important;
+    }
+    
+    .post_profile_name {
+        text-transform: capitalize;
+        color: black;
+        font-size: 15px;
+        text-shadow: 0.5px 0.5px black;
     }
     
     .sidemenu_text {

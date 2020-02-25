@@ -7,6 +7,9 @@
 </ion-header>
 
 <ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pull></ion-refresher-content>
+    </ion-refresher>
     <ion-segment [(ngModel)]="segment">
 
         <ion-segment-button value="chat">
@@ -26,7 +29,7 @@
 
                             <ion-avatar item-start>
                                 <img class='profile_image_common_style profileAvatar' [src]='f.profileimage' imageViewer>
-                                <div class='unreadMessage'>{{unreadMessage[f._id]}}</div>
+                                <div *ngIf='unreadMessages[f._id]' class='unreadMessage'>{{unreadMessages[f._id]}}</div>
                             </ion-avatar>
                             <ion-label>
                                 <h2>{{f.username}}</h2>

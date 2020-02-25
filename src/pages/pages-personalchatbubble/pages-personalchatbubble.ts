@@ -30,7 +30,7 @@ export class PagesPersonalchatbubblePage {
   public messageText: String = '';
   public pusher;
   public all_users;
-  public unreadMessages=0;
+  public unreadMessages = 0;
   public myprofile_pic;
   public friendprofile_pic;
   public messageArray: Array<{ user: String, message: String, time: any }> = [];
@@ -69,19 +69,18 @@ export class PagesPersonalchatbubblePage {
       if (data) {
         this.receivedmsg = data;
         if (this.receivedmsg.senderid === this.userid && this.receivedmsg.friendid === this.friend_id) {
-
-         this.receivedmsg.message= CryptoJS.AES.decrypt(this.receivedmsg.message.trim(), this.friend_id.trim()).toString(CryptoJS.enc.Utf8);
+          this.receivedmsg.message = CryptoJS.AES.decrypt(this.receivedmsg.message.trim(), this.friend_id.trim()).toString(CryptoJS.enc.Utf8);
           this.messageArray.push(this.receivedmsg);
           this.scrolldown();
         }
         if (this.receivedmsg.senderid === this.friend_id && this.receivedmsg.friendid === this.userid) {
-          this.receivedmsg.message= CryptoJS.AES.decrypt(this.receivedmsg.message.trim(), this.userid.trim()).toString(CryptoJS.enc.Utf8);
-          if(this.receivedmsg.read==false){
-            let body={
-              _id:this.receivedmsg._id,
-              read:!this.receivedmsg.read
+          this.receivedmsg.message = CryptoJS.AES.decrypt(this.receivedmsg.message.trim(), this.userid.trim()).toString(CryptoJS.enc.Utf8);
+          if (this.receivedmsg.read == false) {
+            let body = {
+              _id: this.receivedmsg._id,
+              read: !this.receivedmsg.read
             };
-            this.msgsrv.setreadstatus(body).subscribe(data=>{console.log(data)});
+            this.msgsrv.setreadstatus(body).subscribe(data => { this.getmessage() });
           }
           this.messageArray.push(this.receivedmsg);
           this.scrolldown();
@@ -115,8 +114,8 @@ export class PagesPersonalchatbubblePage {
   }
   ionViewDidLeave() {
     // this.leave();
-    this.friend_id='';
-    this.userid='';
+    this.friend_id = '';
+    this.userid = '';
   }
   handleSelection(event) {
     this.messageText += event.char;
@@ -132,7 +131,12 @@ export class PagesPersonalchatbubblePage {
           this.friendprofile_pic = alluser.profileimage;
         }
       }
-    });
+    },
+      error => {
+        if (error) {
+          console.log('Error displaying profile picture', error);
+        }
+      });
   }
   scrolldown() {
     if (this.content._scroll) {
@@ -154,53 +158,57 @@ export class PagesPersonalchatbubblePage {
     this.getmessage();
   }
   sendmessage() {
-    this.messageText=CryptoJS.AES.encrypt(this.messageText.trim(), this.friend_id.trim()).toString(); 
+    this.messageText = CryptoJS.AES.encrypt(this.messageText.trim(), this.friend_id.trim()).toString();
     let body = {
       senderid: this.userid,
       sendername: this.username,
       message: this.messageText,
       friendid: this.friend_id,
       friendname: this.friend_name,
-      read:false
+      read: false
     };
     this.msgsrv.sendmessasge(body).subscribe(data => {
     });
     this.messageText = '';
+    this.getmessage();
   }
   onFocus() {
     this.content.resize();
     this.scrolldown();
   }
   getmessage() {
-    this.msgsrv.getallmessage().subscribe(data => { 
+    this.msgsrv.getallmessage().subscribe(data => {
       if (data) {
         this.allmessage = data;
         this.messageArray = [];
         for (const all_message of this.allmessage) {
           if (all_message.senderid === this.userid && all_message.friendid === this.friend_id) {
-            all_message.message= CryptoJS.AES.decrypt(all_message.message.trim(), this.friend_id.trim()).toString(CryptoJS.enc.Utf8);
+            all_message.message = CryptoJS.AES.decrypt(all_message.message.trim(), this.friend_id.trim()).toString(CryptoJS.enc.Utf8);
             this.messageArray.push(all_message);
             this.scrolldown();
           }
           if (all_message.senderid === this.friend_id && all_message.friendid === this.userid) {
-            all_message.message= CryptoJS.AES.decrypt(all_message.message.trim(), this.userid.trim()).toString(CryptoJS.enc.Utf8);
-            if(all_message.read==false){
-            let body={
-              _id:all_message._id,
-              read:!all_message.read
-            };
-            this.msgsrv.setreadstatus(body).subscribe(data=>{console.log(data)});
-          } 
+            all_message.message = CryptoJS.AES.decrypt(all_message.message.trim(), this.userid.trim()).toString(CryptoJS.enc.Utf8);
+            if (all_message.read == false) {
+              let body = {
+                _id: all_message._id,
+                read: !all_message.read
+              };
+              this.msgsrv.setreadstatus(body).subscribe(data => { console.log(data) });
+            }
             this.messageArray.push(all_message);
             this.scrolldown();
           }
         }
       }
-    });
+    },
+      error => {
+        if (error) {
+          console.log("Error finding messages", error);
+        }
+      });
   }
   ionViewWillEnter() {
     this.getprofilepic();
   }
-
-
 }

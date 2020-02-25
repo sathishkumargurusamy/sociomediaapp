@@ -37,7 +37,7 @@
                     <div class='line'></div>
                     <div class='line'></div>
                 </div>
-                <div class="logo"> </div>
+                <!-- <div class="logo"> </div> -->
                 <div class='heading'>My Profile</div>
 
             </div>
@@ -46,6 +46,9 @@
 </ion-header>
 
 <ion-content has-header="true">
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pull></ion-refresher-content>
+    </ion-refresher>
     <div id="profile-bg"></div>
     <div id="content">
         <div id="profile-info">
@@ -68,22 +71,23 @@
 
     <ion-card *ngFor='let i of post,let j=index '>
         <ion-item-divider>
-            <ion-item>
-                <ion-avatar item-start>
+            <ion-item class='post_profile_info'>
+                <ion-avatar class='post_profile_avatar' item-start>
                     <img class='profile_image_common_style ' *ngIf='proimage ' [src]="proimage" imageViewer>
                     <img class='profile_image_common_style ' *ngIf='!proimage ' src='../../assets/profile.png ' imageViewer>
                 </ion-avatar>
-                <h2 style="color:mediumblue;">{{i.username}}</h2>
+                <div class='post_profile_name'>{{i.username}}</div>
                 <div class="dcicon" *ngIf='userid==i.userid ' (click)='deletepost(i._id) '>
                 </div>
             </ion-item>
+            <hr>
 
             <!-- <img src="img/advance-card-bttf.png"> -->
 
             <ion-card-content>
                 <p *ngIf="i.post">{{i.post}}</p>
                 <img *ngIf="i.postimg" [src]='i.postimg' imageViewer />
-                <div class='currentdate '>{{i.time|date:'dd MMM,yy '}}</div>
+                <div class='currentdate '>{{i.time|timeAgo}}</div>
             </ion-card-content>
         </ion-item-divider>
         <ion-row>

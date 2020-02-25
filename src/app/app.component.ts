@@ -14,7 +14,8 @@ import { ISubscription } from "rxjs/Subscription";
 })
 export class MyApp {
   rootPage: any = TabsPage;
-  subscriptionList: ISubscription[];
+  bannerImageheight = 0;
+  subscriptionList: ISubscription[] = [];
   public disp: boolean;
   public username: any;
   public password: any;
@@ -34,15 +35,14 @@ export class MyApp {
     platform.ready().then(() => {
       statusBar.backgroundColorByName('black');
       splashScreen.hide();
+      platform.setLang('ta', true);
     });
   }
-
   ngOnInit() {
     this.presentLoadingWithOptions();
     this.disp = Boolean(localStorage.getItem('state'));
     this.displogin = Boolean(localStorage.getItem('state'));
   }
-
   login() {
     this.subscriptionList.push(this.auth.login(this.username, this.password).pipe(first()).subscribe(
       data => {

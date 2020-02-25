@@ -1,10 +1,14 @@
 <ion-content class='login' *ngIf="!disp && !displogin">
+
     <div class="maincontent">
+
         <div class="card1">
+            <!-- <div class='bannerImage'></div> -->
+            <br>
             <h1 align='center'>LOGIN</h1>
             <br>
             <ion-item>
-                <ion-input placeholder='Username' [(ngModel)]="username" type="text"></ion-input>
+                <ion-input placeholder='Username' [(ngModel)]="username" type="text" autocapitalize="none"></ion-input>
             </ion-item>
             <br>
             <ion-item>

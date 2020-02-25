@@ -19,6 +19,11 @@ page-pages-personalchatbubble {
         box-shadow: 0 0 2px rgba(0, 0, 0, 0.36);
         object-fit: cover;
     }
+    .seen_icon {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+    }
     .line-breaker {
         white-space: pre-line;
     }

@@ -21,7 +21,9 @@
                     <div class="msg-content">
                         <span class="triangle"></span>
                         <p class="line-breaker ">{{item.message}}</p>
+
                     </div>
+                    <!-- <ion-icon [style.color]='item.read==true?"blue":"grey"' name="done-all" class='seen_icon'></ion-icon> -->
                 </div>
             </div>
             <div class="message" *ngIf=' item.sendername != username' [class.left]=" item.sendername != username " [class.right]=" item.sendername === username ">

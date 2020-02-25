@@ -16,7 +16,7 @@ import { ISubscription } from "rxjs/Subscription";
   templateUrl: 'pages-addpost.html',
 })
 export class PagesAddpostPage {
-  subscriptionList: ISubscription[];
+  subscriptionList: ISubscription[] = [];
   public username: any;
   public userid: any;
   public mypost: any;
@@ -112,7 +112,9 @@ export class PagesAddpostPage {
     this.auth.logout();
     this.app.getRootNav().setRoot(MyApp);
   }
-  ngOnDesstroy(){
-    
+  ionViewDidLeave() {
+    for (const subscribemethods of this.subscriptionList) {
+      subscribemethods.unsubscribe();
+    }
   }
 }

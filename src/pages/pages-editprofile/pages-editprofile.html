@@ -5,7 +5,7 @@
     </button>
 
         <ion-title>
-            Client Profile
+            Edit Profile
         </ion-title>
 
     </ion-navbar>
@@ -54,53 +54,34 @@
         </div>
     </ion-item>
     <div class="input">
-        <div>
-            <ion-label>
-                Firstname
-            </ion-label>
-        </div>
-        <ion-item>
-            <ion-input [(ngModel)]='firstname' [readonly]='isreadonly'></ion-input>
-        </ion-item>
-        <div class='editico' (tap)='toggleedit()'>
-            <ion-icon *ngIf='isreadonly' name="create"></ion-icon>
-            <ion-icon *ngIf='!isreadonly' name="checkmark"></ion-icon>
+        <ion-input class='input_box' [(ngModel)]='firstname' [readonly]='readonly==1?!isreadonly:isreadonly'></ion-input>
+        <div class='editico' (tap)='toggleedit(1)'>
+            <ion-icon *ngIf='readonly!=1' name="create"></ion-icon>
+            <ion-icon *ngIf='readonly==1' name="checkmark"></ion-icon>
         </div>
 
     </div>
+    <br>
     <div class="input">
-        <div>
-            <ion-label>
-                Lastname
-            </ion-label>
-        </div>
-        <ion-item>
-            <ion-input [(ngModel)]='lastname' [readonly]='isreadonly'></ion-input>
-        </ion-item>
-        <div class='editico' (tap)='toggleedit()'>
-            <ion-icon *ngIf='isreadonly' name="create"></ion-icon>
-            <ion-icon *ngIf='!isreadonly' name="checkmark"></ion-icon>
+        <ion-input class='input_box' [(ngModel)]='lastname' [readonly]='readonly==2?!isreadonly:isreadonly'></ion-input>
+
+        <div class='editico' (tap)='toggleedit(2)'>
+            <ion-icon *ngIf='readonly!=2' name="create"></ion-icon>
+            <ion-icon *ngIf='readonly==2' name="checkmark"></ion-icon>
         </div>
     </div>
+    <br>
     <div class="input">
-        <div>
-            <ion-label>
-                Birth date
-            </ion-label>
-        </div>
-        <ion-item>
-            <ion-input [(ngModel)]='date_of_birth' [readonly]='isreadonly'></ion-input>
-        </ion-item>
-        <div class='editico' (tap)='toggleedit()'>
-            <ion-icon *ngIf='isreadonly' name="create"></ion-icon>
-            <ion-icon *ngIf='!isreadonly' name="checkmark" (click)='showDatePicker()'></ion-icon>
+        <ion-input class='input_box' [(ngModel)]='date_of_birth' [readonly]='readonly==3?!isreadonly:isreadonly'></ion-input>
+
+        <div class='editico' (tap)='showDatePicker()'>
+            <ion-icon *ngIf='readonly!=3' name="create"></ion-icon>
+            <ion-icon *ngIf='readonly==3' name="checkmark" (click)='showDatePicker()'></ion-icon>
         </div>
     </div>
+    <br>
     <div class="input">
         <div class='gender_div'>
-            <ion-label>
-                Gender
-            </ion-label>
             <ion-list radio-group class='gender'>
                 <ion-label>
                     <ion-radio [checked]='gender==="male"?true:false' value="male" (click)='selectGender("male")'>
@@ -118,9 +99,6 @@
             </ion-list>
         </div>
     </div>
-
-
-
     <!-- <div class="input">
         <div>
             <ion-label>

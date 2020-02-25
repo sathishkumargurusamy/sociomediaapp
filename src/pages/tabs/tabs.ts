@@ -20,7 +20,6 @@ export class TabsPage {
   viewprofile = PagesViewprofilePage;
   chat = PagesChatPage;
   constructor(public auth: AuthenticationProvider, public nav: NavController) {
-
   }
   logout() {
     this.auth.logout();

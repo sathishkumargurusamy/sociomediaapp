@@ -4,11 +4,9 @@
             <img class='profile_image_common_style' id="profile-image" *ngIf='!profileimage[userid]' src="../../assets/profile.png" imageViewer>
             <img class='profile_image_common_style' id="profile-image" *ngIf='profileimage[userid]' [src]='profileimage[userid]' imageViewer>
             <p class='sidemenu_text'>{{username}}</p>
-
         </div>
         <ion-list>
             <ion-item>
-
                 <ion-label>
                     <div class='sidemenu_text' (tap)='logout()'>
                         <div class='sidemenu_text'>Logout</div>
@@ -22,9 +20,7 @@
                         </div>
                     </div>
                 </ion-label>
-
             </ion-item>
-
         </ion-list>
     </ion-content>
 </ion-menu>
@@ -38,7 +34,7 @@
                     <div class='line'></div>
                     <div class='line'></div>
                 </div>
-                <div class="logo"> </div>
+                <!-- <div class="logo"> </div> -->
                 <div class='heading'>News Feed</div>
             </div>
         </ion-title>
@@ -46,27 +42,61 @@
 </ion-header>
 
 <ion-content>
+    <ion-refresher slot="fixed" (disabled)='disabled' (ionRefresh)="doRefresh($event)">
+        <ion-refresher-content pull></ion-refresher-content>
+    </ion-refresher>
     <ion-fab right bottom>
         <button ion-fab color="primary" (click)='addpost()'><ion-icon name="add"></ion-icon></button>
     </ion-fab>
-    <div class='username_style'>Hallo!
-        <div class='hand'></div> {{username}}..</div>
-    <br>
-    <div class='welcome_text '>Check what's happening around you!.</div>
+    <BR>
+
     <!-- <div class='but'>
         <div class='writeicon'></div>
         <div class='but1' (click)='gotoaddpost()'>Add New Post</div>
     </div> -->
+    <ion-slides style="height:auto;" spaceBetween="0" slidesPerView="auto">
+        <ion-slide style="padding:5px; padding-bottom:0px; max-width:95px;" *ngIf='!myStoryImage'>
+            <div>
+
+                <div class='story-thumbnail'>
+                    <div class='add_icon'>
+                        <div class='plus'>+</div>
+                    </div>
+                    <img [src]="profileimage[userid] || '../../assets/profile.png'" class='story-thumbnail-image profile_image_common_style' (click)='openActionSheet()' />
+                </div>
+                <p text-center class='story-thumbnail-font'>Post Story</p>
+            </div>
+        </ion-slide>
+        <ion-slide style="padding:5px; padding-bottom:0px; max-width:95px;" *ngIf='myStoryImage'>
+            <div>
+                <div class='story-thumbnail'>
+                    <img [src]='myStoryImage' class='story-thumbnail-image profile_image_common_style' (click)='showStory(myStoryId)' />
+                </div>
+                <p text-center class='story-thumbnail-font'>See my Story</p>
+            </div>
+        </ion-slide>
+        <div *ngFor="let stories of story">
+            <ion-slide style="padding:5px; padding-bottom:0px; max-width:95px;" *ngIf='stories.userid!=userid'>
+                <div>
+
+                    <div class='story-thumbnail'>
+                        <img [src]="stories.story" class='story-thumbnail-image profile_image_common_style' (click)='showStory(stories._id)' />
+                    </div>
+                    <p text-center class='story-thumbnail-font'>{{stories.username}}</p>
+                </div>
+            </ion-slide>
+        </div>
+    </ion-slides>
     <ion-card *ngFor='let i of post,let j=index'>
         <ion-item-divider>
-            <ion-item>
+            <ion-item class='post_profile_info'>
 
-                <ion-avatar item-start>
+                <ion-avatar class='post_profile_avatar' item-start>
                     <img class='profile_image_common_style' *ngIf='profileimage[i.userid]' [src]="profileimage[i.userid]" imageViewer>
                     <img class='profile_image_common_style' *ngIf='!profileimage[i.userid]' src='../../assets/profile.png' imageViewer>
 
                 </ion-avatar>
-                <h2 style="color:mediumblue;" (click)='gotoprofile(i.userid)'>{{i.username}}</h2>
+                <div class='post_profile_name' (click)='gotoprofile(i.userid)'>{{i.username}}</div>
                 <div class="dots" *ngIf='userid==i.userid' (click)='popuptoggle1(j)'>
                     <div class="dot"></div>
                     <div class="dot"></div>
@@ -76,9 +106,9 @@
             <hr>
             <ion-card-content>
                 <p *ngIf="i.post">{{i.post}}</p>
-                <img *ngIf="i.postimg" [src]='i.postimg' (click)='viewimage()' />
+                <img *ngIf="i.postimg" [src]='i.postimg' imageViewer />
                 <!-- <div class='currentdate1'>{{i.time|date:'h'}}</div> -->
-                <div class='currentdate'>{{i.time|date:'dd MMM,yy'}}</div>
+                <div class='currentdate'>{{i.time|timeAgo}}</div>
             </ion-card-content>
         </ion-item-divider>
         <div class='popup' *ngIf='popuptoggle[j]'>

@@ -21,6 +21,7 @@ import { ChatProvider } from '../providers/chat/chat';
 import { PagesChatbubblePage } from '../pages/pages-chatbubble/pages-chatbubble';
 import { PagesEditprofilePage } from '../pages/pages-editprofile/pages-editprofile'
 import { PagesPersonalchatbubblePage } from '../pages/pages-personalchatbubble/pages-personalchatbubble';
+import { PagesStoryViewerPage } from '../pages/pages-story-viewer/pages-story-viewer';
 import { Camera } from '@ionic-native/camera';
 const config: SocketIoConfig = { url: 'https://sociomediaapp-server.herokuapp.com', options: {} };
 import { IonicImageViewerModule } from 'ionic-img-viewer';
@@ -30,7 +31,11 @@ import { MessageProvider } from '../providers/message/message';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { EmojiPickerModule } from 'ionic-emoji-picker';
 import { DatePicker } from '@ionic-native/date-picker';
-
+import { ModalController } from 'ionic-angular';
+import {TimeAgoPipe} from 'time-ago-pipe';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
+import { IonicSwipeAllModule } from 'ionic-swipe-all';
+import { LongPressModule } from 'ionic-long-press';
 @NgModule({
   declarations: [
     MyApp,
@@ -44,6 +49,8 @@ import { DatePicker } from '@ionic-native/date-picker';
     PagesEditprofilePage,
     PagesViewprofilePage,
     PagesChatPage,
+    PagesStoryViewerPage,
+    TimeAgoPipe,
     PagesChatbubblePage,
     PagesPersonalchatbubblePage
   ],
@@ -54,6 +61,8 @@ import { DatePicker } from '@ionic-native/date-picker';
     }),
     SocketIoModule.forRoot(config),
     HttpClientModule,
+    IonicSwipeAllModule,
+    LongPressModule,
     EmojiPickerModule.forRoot(),
     IonicImageViewerModule],
   bootstrap: [IonicApp],
@@ -61,6 +70,7 @@ import { DatePicker } from '@ionic-native/date-picker';
     MyApp,
     AboutPage,
     ContactPage,
+    PagesStoryViewerPage,
     HomePage,
     TabsPage,
     PagesChatPage,
@@ -75,7 +85,9 @@ import { DatePicker } from '@ionic-native/date-picker';
   providers: [
     StatusBar,
     DatePipe,
+    FingerprintAIO,
     Camera,
+    ModalController,
     DatePicker,
     PhotoViewer,
     ChatProvider,
@@ -87,7 +99,7 @@ import { DatePicker } from '@ionic-native/date-picker';
     MessageProvider
 
   ],
-  exports: [PagesAddpostPage]
+  exports: [PagesAddpostPage,PagesStoryViewerPage]
 })
 export class AppModule { }
 

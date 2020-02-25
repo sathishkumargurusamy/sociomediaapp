@@ -6,6 +6,7 @@ import { MenuController } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { PagesEditprofilePage } from '../pages-editprofile/pages-editprofile';
 import { MyApp } from '../../app/app.component';
+import { ISubscription } from "rxjs/Subscription";
 // import * as jwt_decode from 'jwt-decode';
 
 @IonicPage()
@@ -14,7 +15,7 @@ import { MyApp } from '../../app/app.component';
   templateUrl: 'pages-viewprofile.html',
 })
 export class PagesViewprofilePage {
-
+  subscriptionList: ISubscription[] = [];
   public post: any;
   public comments: any = [];
   public dispcomment: any = '';
@@ -33,6 +34,7 @@ export class PagesViewprofilePage {
   public proimage;
   public all_users;
   public showcommenttoggle1: any = [];
+
   constructor(public navCtrl: NavController, public app: App, public auth: AuthenticationProvider, private menu: MenuController, public toastController: ToastController, public navParams: NavParams, public postserv: PostProvider) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
@@ -49,22 +51,22 @@ export class PagesViewprofilePage {
       this.username = i.username;
       this.userid = i._id;
     }
-      this.getmypost(this.userid);
-      this.getcomment();
-      this.alllikes(this.userid);
-      this.allusers();
+    this.getmypost(this.userid);
+    this.getcomment();
+    this.alllikes(this.userid);
+    this.allusers();
   }
-  allusers(){
-    this.postserv.allusers().subscribe(data=>{
-  this.all_users=data;
-  for(const all_user of this.all_users){
-    if(all_user._id==this.userid){
-      this.proimage=all_user.profileimage;
-      this.dateOfBirth=all_user.dob;
-      this.gender=all_user.gender;
-    }
-  }
-    });
+  allusers() {
+    this.subscriptionList.push(this.postserv.allusers().subscribe(data => {
+      this.all_users = data;
+      for (const all_user of this.all_users) {
+        if (all_user._id == this.userid) {
+          this.proimage = all_user.profileimage;
+          this.dateOfBirth = all_user.dob;
+          this.gender = all_user.gender;
+        }
+      }
+    }));
   }
   ionViewWillEnter() {
     this.getmypost(this.userid);
@@ -73,7 +75,7 @@ export class PagesViewprofilePage {
     this.allusers();
   }
   addlikes(j, uid, pid) {
-    this.postserv.getthispost(pid).subscribe(data => {
+    this.subscriptionList.push(this.postserv.getthispost(pid).subscribe(data => {
       this.thispost = data;
       for (const p of this.thispost) {
         this.likecount[pid] = p.likes;
@@ -106,25 +108,25 @@ export class PagesViewprofilePage {
           this.postserv.deletelikes(body).subscribe(data1 => { });
         }
       }
-    });
+    }));
   }
   getmypost(userid) {
-    this.postserv.getmypost(userid).subscribe(data => {
+    this.subscriptionList.push(this.postserv.getmypost(userid).subscribe(data => {
       this.post = data;
-    });
+    }));
   }
   getcomment() {
-    this.postserv.getcomment().subscribe(data => {
+    this.subscriptionList.push(this.postserv.getcomment().subscribe(data => {
       if (data) {
         this.dispcomment = data;
       }
-    });
+    }));
   }
   addcomment(id, userid, j, username) {
-    this.postserv.addcomment(userid, id, username, this.comments[j]).subscribe(data => {
+    this.subscriptionList.push(this.postserv.addcomment(userid, id, username, this.comments[j]).subscribe(data => {
       this.getcomment();
       this.presentToast('Comment Added Successfully!!');
-    });
+    }));
     this.comments[j] = '';
   }
   // gotoprofile(id){
@@ -132,32 +134,32 @@ export class PagesViewprofilePage {
 
   // }
   deletepost(id) {
-    this.postserv.deletepost(id).subscribe(data => {
+    this.subscriptionList.push(this.postserv.deletepost(id).subscribe(data => {
       this.getmypost(this.userid);
       this.deletePostComment(id);
       this.deletePostlike(id);
       this.presentToast('Post deleted successfully!!..');
-    });
+    }));
   }
-  deletePostlike(id){
-    this.postserv.deletepostlike(id).subscribe();
+  deletePostlike(id) {
+    this.subscriptionList.push(this.postserv.deletepostlike(id).subscribe());
   }
-  deletePostComment(id){
-    this.postserv.deletepostcomment(id).subscribe();
+  deletePostComment(id) {
+    this.subscriptionList.push(this.postserv.deletepostcomment(id).subscribe());
   }
   alllikes(uid) {
-    this.postserv.getlikes(uid).subscribe(data => {
-    this.allikes = data;
+    this.subscriptionList.push(this.postserv.getlikes(uid).subscribe(data => {
+      this.allikes = data;
       for (let l of this.allikes) {
         this.liketoggle[l.postid] = l.status;
       }
-    });
+    }));
   }
   deletecomment(id) {
-    this.postserv.deletecomment(id).subscribe(data => {
+    this.subscriptionList.push(this.postserv.deletecomment(id).subscribe(data => {
       this.getcomment();
       this.presentToast('Comment deleted successfully!!..')
-    });
+    }));
   }
   showcommenttoggle(j) {
     this.showcommenttoggle1[j] = !this.showcommenttoggle1[j];
@@ -173,6 +175,15 @@ export class PagesViewprofilePage {
   logout() {
     this.auth.logout();
     this.app.getRootNav().setRoot(MyApp);
+  }
+  doRefresh(event) {
+    setTimeout(() => {
+      this.getmypost(this.userid);
+      this.getcomment();
+      this.alllikes(this.userid);
+      this.allusers();
+      event.complete();
+    }, 2000);
   }
   gotoeditprofile() {
     this.navCtrl.push(PagesEditprofilePage);

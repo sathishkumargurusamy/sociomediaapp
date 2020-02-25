@@ -1,0 +1,14 @@
+<ion-slides style="height:100%; background-color: black;" autoplay="2000" loop="false" speed="500" slidesPerView="1">
+    <div class='poster_name'>{{storyUsername}}
+        <div class='poster_time'>{{storyTime|timeAgo}}</div>
+    </div>
+
+    <div class='story_content'>
+        <ion-slide class='story' [style.backgroundImage]="'url('+ storyImage +')'">
+        </ion-slide>
+    </div>
+</ion-slides>
+<div class=" progress-outer ">
+    <div class="progress-inner " [style.width]="progress + '%' ">
+    </div>
+</div>

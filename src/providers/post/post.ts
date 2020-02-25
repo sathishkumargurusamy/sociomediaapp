@@ -5,6 +5,7 @@ import { Post } from '../../models/post';
 import { Comments } from '../../models/comments';
 import { Likes } from '../../models/likes';
 import { User } from '../../models/user';
+import { Story } from '../../models/story';
 @Injectable()
 export class PostProvider {
 
@@ -78,6 +79,15 @@ export class PostProvider {
     return this.http.post(this.apiurl + `/likes`, body);
   }
   deletelikes(body) {
-    return this.http.delete(this.apiurl + `/likes/` + body.userid+`&`+body._id);
+    return this.http.delete(this.apiurl + `/likes/` + body.userid + `&` + body._id);
+  }
+  addStory(body) {
+    return this.http.post(this.apiurl + `/story`, body);
+  }
+  getAllStory() {
+    return this.http.get<Story[]>(this.apiurl + `/story`);
+  }
+  getStory(id) {
+    return this.http.get<Story>(this.apiurl + `/story/` + id);
   }
 }

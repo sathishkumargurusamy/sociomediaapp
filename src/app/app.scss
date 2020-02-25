@@ -41,7 +41,14 @@
     background: inherit;
     justify-content: center;
     flex-direction: column;
-    margin-top: 50%
+    margin-top: 40%;
+}
+
+.bannerImage {
+    background: url("../../assets/banner_image.png");
+    background-size: cover;
+    width: 100%;
+    transition: 0.5s;
 }
 
 .card2 {

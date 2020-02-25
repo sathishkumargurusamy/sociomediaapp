@@ -52,8 +52,9 @@
 }
 
 .side_menu {
-    background: linear-gradient(to top, slateblue 0%, rgb(182, 193, 223) 100%);
+    background: linear-gradient(to left, white 0%, rgb(194, 235, 248) 106%);
     filter: blur(0.3px);
+    color: white;
 }
 
 .personalInfo {
@@ -94,10 +95,7 @@
     color: #000000;
     display: flex;
     justify-content: space-between;
-    font-weight: 400;
-    font-style: normal;
-    font-variant: small-caps;
-    text-transform: none;
+    text-transform: capitalize;
 }
 
 .sidemenu_logout_icon {
@@ -105,6 +103,21 @@
     background-size: cover;
     width: 30px;
     height: 28px;
+}
+
+.post_profile_info {
+    padding-left: 0 !important;
+}
+
+.post_profile_avatar {
+    margin: 0 10px 0 0 !important;
+}
+
+.post_profile_name {
+    text-transform: capitalize;
+    color: black;
+    font-size: 15px;
+    text-shadow: 0.5px 0.5px black;
 }
 
 .sidemenu_edit_icon {
