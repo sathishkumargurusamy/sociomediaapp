@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../../pages/user';
+import { biometricdata } from '../../models/biometricdata';
 
 @Injectable()
 export class AuthenticationProvider {
@@ -35,11 +36,27 @@ export class AuthenticationProvider {
   setstatus(body) {
     return this.http.put(this.apiurl + `/user/` + body.id, body);
   }
-
-
+  checkusername(body) {
+    return this.http.post(this.apiurl + `/checkusername`, body);
+  }
+  checkemail(body) {
+    return this.http.post(this.apiurl + `/checkemail`, body);
+  }
+ confirmationMail(body)
+ {
+  return this.http.post(this.apiurl + `/sendconfirmmail`, body);
+ }
   register(body) {
     return this.http.post(this.apiurl + `/newuser`, body);
-
+  }
+  getbiometricData(senderid,friendid){
+    return this.http.get<biometricdata[]>(this.apiurl + `/secure/`+senderid+'&'+friendid);
+  }
+  putbiometricData(body){
+    return this.http.put(this.apiurl + `/secure`,body);
+  }
+  setbiometricData(body){
+    return this.http.post(this.apiurl + `/secure`, body);
   }
   logout() {
     localStorage.removeItem('currentUser');

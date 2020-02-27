@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { ChatProvider } from '../../providers/chat/chat';
 import { MessageProvider } from '../../providers/message/message';
-import { PagesChatbubblePage } from '../../pages/pages-chatbubble/pages-chatbubble';
 import { PostProvider } from '../../providers/post/post';
 import { PagesPersonalchatbubblePage } from '../../pages/pages-personalchatbubble/pages-personalchatbubble';
 import { User } from '../../models/user';
@@ -93,18 +92,17 @@ export class PagesChatPage {
       localizedFallbackTitle: 'Use Pin', //Only for iOS
       localizedReason: 'Please authenticate' //Only for iOS
     })
-      .then((result: any) => { this.navCtrl.push(PagesPersonalchatbubblePage); })
+      .then((result: any) => {
+        this.navCtrl.push(PagesPersonalchatbubblePage, {
+          friend_id: friend_id,
+          friend_name: friend_name
+        });
+      })
       .catch((error: any) => {
         if (error) {
           this.presentToast("FingerPrint: " + error.message);
         }
       });
-  }
-  gotochat() {
-    this.navCtrl.push(PagesChatbubblePage, {
-      room: this.room, groupid: this.groupid
-    });
-
   }
   toggleoffline() {
     this.toggleoffline1 = !this.toggleoffline1;

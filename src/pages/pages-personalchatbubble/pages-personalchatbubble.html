@@ -1,7 +1,18 @@
+<ion-menu id='chat' [content]="mycontent" direction='right'>
+    <ion-content #mycontent>
+        <div class="menu">
+            <ion-toggle ([ngModel])='biometricToggle' (change)='biometrictoggle()' color="danger"></ion-toggle>
+            <p>Enable Fingerprint security </p>
+        </div>
+
+    </ion-content>
+</ion-menu>
+
 <ion-header>
 
     <ion-navbar>
-        <ion-title><img class="display_pic" [src]="friendprofile_pic" alt="" imageViewer>{{this.navParams.get('friend_name')}}</ion-title>
+        <ion-title>
+            <div class="display_pic" (tap)='openMenu()'>. . .</div>{{this.navParams.get('friend_name')}}</ion-title>
     </ion-navbar>
 
 </ion-header>

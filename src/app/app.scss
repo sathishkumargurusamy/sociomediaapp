@@ -58,7 +58,7 @@
     background: inherit;
     justify-content: center;
     flex-direction: column;
-    margin-top: 40%
+    margin-top: 10%
 }
 
 ion-item:first-child {
@@ -79,6 +79,34 @@ ion-item.item {
         width: 10%;
         color: black;
         font-size: 1.2em;
+    }
+}
+
+.alert-wrapper {
+    transform: translateY(14rem) !important;
+    .alert-title {
+        text-align: center;
+    }
+    .alert-sub-title {
+        text-align: center;
+    }
+    .alert-message {
+        text-align: center;
+        color: black;
+    }
+    .alert-button-group {
+        display: flex !important;
+        -webkit-box-pack: center !important;
+        -ms-flex-pack: center !important;
+        justify-content: center !important;
+    }
+    .alert-button {
+        display: flex !important;
+        -webkit-box-pack: center !important;
+        -ms-flex-pack: center !important;
+        justify-content: center !important;
+        background-color: blueviolet;
+        color: white;
     }
 }
 

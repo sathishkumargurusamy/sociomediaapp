@@ -1,8 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
 import { ChatProvider } from '../../providers/chat/chat';
 import { PostProvider } from '../../providers/post/post';
 import { MessageProvider } from '../../providers/message/message';
+import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import Pusher from 'pusher-js';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Content } from 'ionic-angular';
@@ -21,6 +22,7 @@ export class PagesPersonalchatbubblePage {
   public userid;
   public user;
   public smessages;
+  public biometricToggle;
   public fmessages;
   public count = 0;
   public friend_id;
@@ -39,8 +41,13 @@ export class PagesPersonalchatbubblePage {
   public allmessage;
   public toggle: boolean = false;
 
-  constructor(public navCtrl: NavController, public postserv: PostProvider, public navParams: NavParams,
-    public _chatService: ChatProvider, public notification: LocalNotifications,
+  constructor(public navCtrl: NavController,
+    public postserv: PostProvider,
+    public authServ: AuthenticationProvider,
+    public navParams: NavParams,
+    public _chatService: ChatProvider,
+    public notification: LocalNotifications,
+    public menuCtrl: MenuController,
     public msgsrv: MessageProvider) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
@@ -148,6 +155,7 @@ export class PagesPersonalchatbubblePage {
     }
   }
   ngOnInit() {
+    // this.biometricToggle=this.getbiometrictoggle();
     for (const i of this.user) {
       this.username = i.username;
       this.userid = i._id;
@@ -207,6 +215,47 @@ export class PagesPersonalchatbubblePage {
           console.log("Error finding messages", error);
         }
       });
+  }
+  // getbiometrictoggle(): boolean {
+  //   this.authServ.getbiometricData(this.userid, this.friend_id).subscribe(data => {
+  //     this.biometricData = data;
+  //     for (const biodata of this.biometricData) {
+  //       this.biometricToggle = biodata.toggle;
+  //     }
+  //   });
+  //   console.log(this.biometricToggle);
+  //   return this.biometricToggle;
+  // }
+  // getbiometricData(): boolean {
+  //   this.authServ.getbiometricData(this.userid, this.friend_id).subscribe(data => {
+  //     this.biometricData = data;
+  //   });
+  //   console.log(this.biometricData);
+  //   if (this.biometricData) {
+  //     return true;
+  //   }
+  //   else {
+  //     return false;
+  //   }
+  // }
+  // biometrictoggle() {
+  //   let body={
+  //     senderid:this.userid,
+  //     friend_id:this.friend_id,
+  //     sendername:this.username,
+  //     friendid:this.friend_id,
+  //     toggle:this.biometricToggle
+  //   }
+  //   if (this.getbiometricData()) {
+  //     this.authServ.setbiometricData(body).subscribe();
+  //   }
+  //   else{
+  //     this.authServ.putbiometricData(body).subscribe();
+  //   }
+  // }
+  openMenu() {
+    this.menuCtrl.enable(true, 'chat');
+    this.menuCtrl.toggle('chat');
   }
   ionViewWillEnter() {
     this.getprofilepic();
