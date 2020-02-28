@@ -8,6 +8,13 @@ page-pages-chat {
         border-radius: 10px !important;
         margin-bottom: 4px !important;
     }
+    .menu {
+        padding: 50px 0px 0px 20px;
+        display: flex;
+        font-size: 16px;
+        align-items: center;
+        justify-content: end;
+    }
     .my_message {
         background: color($colors, primary) !important;
         color: #000 !important;

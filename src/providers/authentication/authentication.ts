@@ -3,11 +3,10 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '../../pages/user';
-import { biometricdata } from '../../models/biometricdata';
+import { BiometricData } from '../../models/biometric';
 
 @Injectable()
 export class AuthenticationProvider {
-
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
   apiurl = 'https://sociomediaapp-server.herokuapp.com/api';
@@ -49,8 +48,8 @@ export class AuthenticationProvider {
   register(body) {
     return this.http.post(this.apiurl + `/newuser`, body);
   }
-  getbiometricData(senderid,friendid){
-    return this.http.get<biometricdata[]>(this.apiurl + `/secure/`+senderid+'&'+friendid);
+  getbiometricData(userid){
+    return this.http.get<BiometricData[]>(this.apiurl + `/secure/`+userid);
   }
   putbiometricData(body){
     return this.http.put(this.apiurl + `/secure`,body);

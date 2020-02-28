@@ -8,7 +8,6 @@ import Pusher from 'pusher-js';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Content } from 'ionic-angular';
 import * as CryptoJS from 'crypto-js';
-
 // import * as jwt_decode from 'jwt-decode';
 @IonicPage()
 @Component({
@@ -164,6 +163,7 @@ export class PagesPersonalchatbubblePage {
     this.friend_name = this.navParams.get('friend_name');
     this.getprofilepic();
     this.getmessage();
+    this.scrolldown()
   }
   sendmessage() {
     this.messageText = CryptoJS.AES.encrypt(this.messageText.trim(), this.friend_id.trim()).toString();
@@ -215,47 +215,6 @@ export class PagesPersonalchatbubblePage {
           console.log("Error finding messages", error);
         }
       });
-  }
-  // getbiometrictoggle(): boolean {
-  //   this.authServ.getbiometricData(this.userid, this.friend_id).subscribe(data => {
-  //     this.biometricData = data;
-  //     for (const biodata of this.biometricData) {
-  //       this.biometricToggle = biodata.toggle;
-  //     }
-  //   });
-  //   console.log(this.biometricToggle);
-  //   return this.biometricToggle;
-  // }
-  // getbiometricData(): boolean {
-  //   this.authServ.getbiometricData(this.userid, this.friend_id).subscribe(data => {
-  //     this.biometricData = data;
-  //   });
-  //   console.log(this.biometricData);
-  //   if (this.biometricData) {
-  //     return true;
-  //   }
-  //   else {
-  //     return false;
-  //   }
-  // }
-  // biometrictoggle() {
-  //   let body={
-  //     senderid:this.userid,
-  //     friend_id:this.friend_id,
-  //     sendername:this.username,
-  //     friendid:this.friend_id,
-  //     toggle:this.biometricToggle
-  //   }
-  //   if (this.getbiometricData()) {
-  //     this.authServ.setbiometricData(body).subscribe();
-  //   }
-  //   else{
-  //     this.authServ.putbiometricData(body).subscribe();
-  //   }
-  // }
-  openMenu() {
-    this.menuCtrl.enable(true, 'chat');
-    this.menuCtrl.toggle('chat');
   }
   ionViewWillEnter() {
     this.getprofilepic();

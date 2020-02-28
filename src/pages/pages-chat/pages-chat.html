@@ -1,7 +1,26 @@
+<ion-menu id='chat' type='overlay' [content]="mycontent" direction='right'>
+    <ion-content #mycontent>
+        <div class="menu">
+            <div>
+                <ion-toggle [(ngModel)]='biometricToggle' (ionChange)='setBiometricData()' color="danger"></ion-toggle>
+            </div>
+            <p>Enable Fingerprint security </p>
+        </div>
+
+    </ion-content>
+</ion-menu>
 <ion-header>
     <ion-navbar>
         <ion-title>
-            Chat
+            <div class=linemain>
+                <div style='cursor: pointer;' (tap)='openSideMenu()'>
+                    <div class='line'></div>
+                    <div class='line'></div>
+                    <div class='line'></div>
+                </div>
+                <!-- <div class="logo"> </div> -->
+                <div class='heading'>Chat</div>
+            </div>
         </ion-title>
     </ion-navbar>
 </ion-header>
@@ -28,7 +47,8 @@
                         <ion-item *ngIf='f.status==="1"' (click)='gotouser(f._id,f.username)'>
 
                             <ion-avatar item-start>
-                                <img class='profile_image_common_style profileAvatar' [src]='f.profileimage' imageViewer>
+                                <img class='profile_image_common_style profileAvatar' *ngIf='f.profileimage' [src]='f.profileimage' imageViewer>
+                                <img class='profile_image_common_style profileAvatar' *ngIf='!f.profileimage' src='../../assets/profile.png' imageViewer>
                                 <div *ngIf='unreadMessages[f._id]' class='unreadMessage'>{{unreadMessages[f._id]}}</div>
                             </ion-avatar>
                             <ion-label>
@@ -40,11 +60,12 @@
                 </div>
 
                 <div *ngFor='let f of friends'>
-                    <div *ngIf='f.status==="0"'>
+                    <div *ngIf='f.status==="0"' (click)='gotouser(f._id,f.username)'>
                         <ion-item *ngIf='f.username!=username'>
 
                             <ion-avatar item-start>
-                                <img class='profile_image_common_style' [src]='f.profileimage' imageViewer>
+                                <img class='profile_image_common_style profileAvatar' *ngIf='f.profileimage' [src]='f.profileimage' imageViewer>
+                                <img class='profile_image_common_style profileAvatar' *ngIf='!f.profileimage' src='../../assets/profile.png' imageViewer>
                             </ion-avatar>
                             <ion-label>
                                 <h2>{{f.username}}</h2>

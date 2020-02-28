@@ -25,6 +25,7 @@ import * as jwt_decode from 'jwt-decode';
 import { PagesStoryViewerPage } from '../../pages/pages-story-viewer/pages-story-viewer';
 import { ActionSheetController } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
+import { SocialSharing } from '@ionic-native/social-sharing';
 // import{AboutPage} from '../about/about';
 @Component({
   selector: 'page-home',
@@ -61,11 +62,16 @@ export class HomePage {
   likedPost: any;
   receivedmsg: Message;
   liked_post: Post[];
-  constructor(public navCtrl: NavController, public app: App, public auth: AuthenticationProvider,
-    private menu: MenuController, public postserv: PostProvider, public modalController: ModalController,
-    public toastController: ToastController, private platform: Platform,
-    public notification: LocalNotifications, statusBar: StatusBar, splashScreen: SplashScreen,
-    public actionSheetCtrl: ActionSheetController, public camera: Camera) {
+  constructor(public navCtrl: NavController, public app: App,
+     public auth: AuthenticationProvider,
+    private menu: MenuController, public postserv: PostProvider, 
+    public modalController: ModalController,
+    public toastController: ToastController, 
+    private platform: Platform,
+    public notification: LocalNotifications, 
+    statusBar: StatusBar, splashScreen: SplashScreen,
+    public actionSheetCtrl: ActionSheetController, 
+    public camera: Camera,private socialSharing: SocialSharing) {
     this.platform.ready().then(() => {
       statusBar.backgroundColorByHexString('#483d8b');
       splashScreen.hide();
@@ -464,5 +470,13 @@ export class HomePage {
     for (const subscribedmethods of this.subscriptionList) {
       subscribedmethods.unsubscribe();
     }
+  }
+  shareImg(image,j){
+    console.log('cliked');
+    this.socialSharing.share('','',image).then(() => {
+      this.popuptoggle[j]=false;
+    }).catch(() => {
+      this.popuptoggle[j]=false;
+        });
   }
 }

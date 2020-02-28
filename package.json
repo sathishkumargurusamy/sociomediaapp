@@ -24,6 +24,7 @@
         "@auth0/angular-jwt": "^3.0.1",
         "@ionic-native/android-fingerprint-auth": "^4.20.0",
         "@ionic-native/camera": "^4.20.0",
+        "@ionic-native/camera-preview": "^4.20.0",
         "@ionic-native/core": "4.20.0",
         "@ionic-native/date-picker": "^4.20.0",
         "@ionic-native/fingerprint-aio": "^4.20.0",
@@ -33,6 +34,7 @@
         "@ionic-native/native-geocoder": "^5.20.0",
         "@ionic-native/network": "^4.20.0",
         "@ionic-native/photo-viewer": "^4.20.0",
+        "@ionic-native/social-sharing": "^4.20.0",
         "@ionic-native/splash-screen": "4.20.0",
         "@ionic-native/status-bar": "4.20.0",
         "@ionic-tools/emoji-picker": "^1.4.0",
@@ -45,15 +47,18 @@
         "cordova-plugin-android-fingerprint-auth": "^1.5.0",
         "cordova-plugin-badge": "^0.8.8",
         "cordova-plugin-camera": "^4.1.0",
+        "cordova-plugin-camera-preview": "^0.11.2",
         "cordova-plugin-datepicker": "^0.9.3",
         "cordova-plugin-fingerprint-aio": "^3.0.1",
         "cordova-plugin-geolocation": "^4.0.2",
         "cordova-plugin-local-notification": "^0.9.0-beta.2",
         "cordova-plugin-nativegeocoder": "^3.2.2",
         "cordova-plugin-network-information": "^2.0.2",
+        "cordova-plugin-x-socialsharing": "^5.6.4",
         "crypto-js": "^4.0.0",
         "dateformat": "^3.0.3",
         "es.keensoft.fullscreenimage": "^0.2.10",
+        "es6-promise-plugin": "^4.2.2",
         "hammerjs": "^2.0.8",
         "ion-bottom-drawer": "^2.0.0",
         "ion-bottom-nav-drawer": "^1.0.3",
@@ -108,7 +113,13 @@
             "cordova-plugin-datepicker": {},
             "cordova-plugin-android-fingerprint-auth": {},
             "cordova-plugin-fingerprint-aio": {},
-            "es.keensoft.fullscreenimage": {}
+            "es.keensoft.fullscreenimage": {},
+            "cordova-plugin-camera-preview": {
+                "ANDROID_SUPPORT_LIBRARY_VERSION": "26+"
+            },
+            "cordova-plugin-x-socialsharing": {
+                "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
+            }
         },
         "platforms": [
             "android"

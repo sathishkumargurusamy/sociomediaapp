@@ -51,14 +51,14 @@
         <ion-row>
 
             <ion-col>
-                <button ion-button icon-start clear small>
+                <button ion-button icon-start clear small style="color:darkslateblue">
                     <ion-icon *ngIf='!liketoggle[i._id]' name="ios-thumbs-up-outline"></ion-icon>
                     <ion-icon *ngIf='liketoggle[i._id]' name="thumbs-up"></ion-icon>
     <div (click)="addlikes(j,userid,i._id)"><span style="color:black; ">{{i.likes}}</span> Like</div>
   </button>
             </ion-col>
             <ion-col>
-                <button ion-button icon-start clear small>
+                <button ion-button icon-start clear small style="color:darkslateblue">
     <ion-icon name="text"></ion-icon>
     <div (click)='showcommenttoggle(j)'>Comments</div>
   </button>

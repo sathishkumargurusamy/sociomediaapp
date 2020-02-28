@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { HomePage } from '../home/home';
+import { PagesCameratestPage } from '../pages-cameratest/pages-cameratest'
 import { PagesAddpostPage } from '../addpost/pages-addpost';
 import { PagesChatPage } from '../pages-chat/pages-chat';
 import { PagesViewprofilePage } from '../pages-viewprofile/pages-viewprofile';
@@ -10,7 +11,7 @@ import { AuthenticationProvider } from '../../providers/authentication/authentic
   templateUrl: 'tabs.html'
 })
 export class TabsPage {
-
+  testcamera=PagesCameratestPage;
   tab1Root = HomePage;
   addpost = PagesAddpostPage;
   viewprofile = PagesViewprofilePage;

@@ -1,0 +1,25 @@
+page-pages-cameratest {
+    .bg {
+        background: transparent !important;
+    }
+    .but {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 40px;
+        height: 40px;
+        z-index: 100000;
+    }
+    ion-app,
+    ion-content {
+        background-color: transparent !important;
+    }
+}
+
+.ionTabs {
+    background-color: transparent !important;
+}
+
+ion-app.md {
+    background-color: transparent !important;
+}

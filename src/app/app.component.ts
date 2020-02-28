@@ -103,6 +103,15 @@ export class MyApp {
     });
     return await loading.present();
   }
+  async subscribeLoad() {
+    const loading = await this.loadingcontroller.create({
+      spinner: 'hide',
+      duration: 3000,
+      content: `<img src="../assets/story_loader.gif" />`,
+      cssClass: 'custom-class custom-loading'
+    });
+    return await loading.present();
+  }
   checkuser() {
     let body = {
       "username": this.uname,
@@ -111,9 +120,9 @@ export class MyApp {
     }
     this.checkusername(body);
     this.checkemail(body);
-    
+    this.subscribeLoad();
     setTimeout(() => {
-      console.log(this.validUsername,this.validEmail);
+      
       if (this.validUsername && this.validEmail) {
         this.subscriptionList.push(this.auth.confirmationMail(body).subscribe(data=>console.log(data)));
         const prompt = this.alertCtrl.create({
@@ -140,7 +149,7 @@ export class MyApp {
       else {
         this.toaster("Username or Email id already used!!");
       }
-    }, 3000);
+    }, 4000);
   }
   checkusername(body){
     this.subscriptionList.push(this.auth.checkusername(body).subscribe(data => {

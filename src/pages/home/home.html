@@ -24,7 +24,6 @@
         </ion-list>
     </ion-content>
 </ion-menu>
-
 <ion-header>
     <ion-navbar>
         <ion-title>
@@ -46,7 +45,7 @@
         <ion-refresher-content pull></ion-refresher-content>
     </ion-refresher>
     <ion-fab right bottom>
-        <button ion-fab color="primary" (click)='addpost()'><ion-icon name="add"></ion-icon></button>
+        <button ion-fab style='background: darkslateblue;' (click)='addpost()'><ion-icon name="add"></ion-icon></button>
     </ion-fab>
     <BR>
 
@@ -114,18 +113,25 @@
         <div class='popup' *ngIf='popuptoggle[j]'>
             <!-- <img src="img/advance-card-bttf.png"> -->
             <div class='popuptext' (click)='deletepost(i._id,j)'>
-                <div class="dicon"></div>Delete</div>
+                <b style='color:red'>Delete  <ion-icon name="trash"></ion-icon></b>
+
+            </div>
+            <br>
+            <div *ngIf="i.postimg" class='popuptext' (click)='shareImg(i.postimg,j)'>
+                <b style='color:slateblue'>Share <ion-icon name="ios-share-alt"></ion-icon></b>
+
+            </div>
         </div>
         <ion-row>
             <ion-col>
-                <button ion-button icon-start clear small>
+                <button style="color:darkslateblue" ion-button icon-start clear small>
         <ion-icon *ngIf='!liketoggle[i._id]' name="ios-thumbs-up-outline"></ion-icon>
         <ion-icon *ngIf='liketoggle[i._id]' name="ios-thumbs-up"></ion-icon>
                 <div (click)="addlikes(j,userid,i._id,username)"><span style="color:black; ">{{i.likes}}</span> Like</div>
                 </button>
             </ion-col>
             <ion-col>
-                <button ion-button icon-start clear small>
+                <button style="color:darkslateblue" ion-button icon-start clear small>
         <ion-icon name="text"></ion-icon>
         <div (click)='showcommenttoggle(j,i._id)'>  Comments</div>
       </button>

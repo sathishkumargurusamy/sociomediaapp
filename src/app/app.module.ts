@@ -28,10 +28,14 @@ import { LocalNotifications } from '@ionic-native/local-notifications';
 import { EmojiPickerModule } from 'ionic-emoji-picker';
 import { DatePicker } from '@ionic-native/date-picker';
 import { ModalController } from 'ionic-angular';
-import {TimeAgoPipe} from 'time-ago-pipe';
+import { TimeAgoPipe } from 'time-ago-pipe';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 import { IonicSwipeAllModule } from 'ionic-swipe-all';
 import { LongPressModule } from 'ionic-long-press';
+import { CameraPreview } from '@ionic-native/camera-preview';
+import { PagesCameratestPage } from '../pages/pages-cameratest/pages-cameratest'
+import { SocialSharing } from '@ionic-native/social-sharing';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -44,7 +48,8 @@ import { LongPressModule } from 'ionic-long-press';
     PagesChatPage,
     PagesStoryViewerPage,
     TimeAgoPipe,
-    PagesPersonalchatbubblePage
+    PagesPersonalchatbubblePage,
+    PagesCameratestPage
   ],
   imports: [
     BrowserModule,
@@ -68,10 +73,13 @@ import { LongPressModule } from 'ionic-long-press';
     PagesAddpostPage,
     PagesViewprofilePage,
     PagesViewpostPage,
-    PagesPersonalchatbubblePage
+    PagesPersonalchatbubblePage,
+    PagesCameratestPage
   ],
   providers: [
     StatusBar,
+    SocialSharing,
+    CameraPreview,
     DatePipe,
     FingerprintAIO,
     Camera,
@@ -87,7 +95,7 @@ import { LongPressModule } from 'ionic-long-press';
     MessageProvider
 
   ],
-  exports: [PagesAddpostPage,PagesStoryViewerPage]
+  exports: [PagesAddpostPage, PagesStoryViewerPage, PagesCameratestPage]
 })
 export class AppModule { }
 

@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ToastController, MenuController } from 'ionic-angular';
 import { ChatProvider } from '../../providers/chat/chat';
 import { MessageProvider } from '../../providers/message/message';
+import { AuthenticationProvider } from '../../providers/authentication/authentication';
 import { PostProvider } from '../../providers/post/post';
 import { PagesPersonalchatbubblePage } from '../../pages/pages-personalchatbubble/pages-personalchatbubble';
 import { User } from '../../models/user';
 import { Message } from '../../models/message';
+import { BiometricData } from '../../models/biometric';
 import { ISubscription } from "rxjs/Subscription";
 import Pusher from 'pusher-js';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
@@ -25,6 +27,8 @@ export class PagesChatPage {
   public all_messages: Message[];
   public count = 0;
   public pusher;
+  public biometricToggle;
+  public biometricdata: BiometricData[];
   public user: User[];
   public friends: User[];
   public offcountno; oncountno;
@@ -38,9 +42,15 @@ export class PagesChatPage {
   public room: String;
   public messageText: String;
   public messageArray: Array<{ user: String, message: String }> = [];
-  constructor(public navCtrl: NavController, public postserv: PostProvider,
-    public navParams: NavParams, public _chatService: ChatProvider, private toastController: ToastController,
-    private messageService: MessageProvider, private fingeraio: FingerprintAIO) {
+  constructor(public navCtrl: NavController,
+    public postserv: PostProvider,
+    public navParams: NavParams,
+    public _chatService: ChatProvider,
+    public authServ: AuthenticationProvider,
+    public menuCtrl: MenuController,
+    private toastController: ToastController,
+    private messageService: MessageProvider,
+    private fingeraio: FingerprintAIO) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
     this.user = JSON.parse(localStorage.getItem('currentUser'));
@@ -63,46 +73,37 @@ export class PagesChatPage {
     this.getUnreadmessages();
   }
   gotouser(friend_id, friend_name) {
-    // if (this.fingerPrintValidity <= 5) {
-    //   if (this.fingeraio.isAvailable()) {
-    //     this.fingeraio.show({
-    //       clientId: "Validation!",
-    //       clientSecret: "o7aoOMYUbyxaD23oFAnJ"
-    //     }).then(result => {
-    //       console.log(result);
-    //       if (result) {
-    //         this.navCtrl.push(PagesPersonalchatbubblePage, {
-    //           friend_id: friend_id,
-    //           friend_name: friend_name
-    //         });
-    //       }
-    //     }).catch(error => {
-    //       console.log(this.fingerPrintValidity);
-    //       this.fingerPrintValidity = this.fingerPrintValidity + 1;
-    //       if(this.fingerPrintValidity>5){
-    //         this.presentToast("Too many Attempts please try again later!!");
-    //       }
-    //     });
-    //   }
-    // }
-    this.fingeraio.show({
-      clientId: 'Fingerprint-Demo', //Android: Used for encryption. iOS: used for dialogue if no `localizedReason` is given.
-      clientSecret: 'o7aoOMYUbyxaD23oFAnJ', //Necessary for Android encrpytion of keys. Use random secret key.
-      disableBackup: true,  //Only for Android(optional)
-      localizedFallbackTitle: 'Use Pin', //Only for iOS
-      localizedReason: 'Please authenticate' //Only for iOS
-    })
-      .then((result: any) => {
-        this.navCtrl.push(PagesPersonalchatbubblePage, {
-          friend_id: friend_id,
-          friend_name: friend_name
-        });
+    if (this.biometricToggle) {
+      this.fingeraio.show({
+        clientId: 'Fingerprint-Demo', //Android: Used for encryption. iOS: used for dialogue if no `localizedReason` is given.
+        clientSecret: 'o7aoOMYUbyxaD23oFAnJ', //Necessary for Android encrpytion of keys. Use random secret key.
+        disableBackup: true,  //Only for Android(optional)
+        localizedFallbackTitle: 'Use Pin', //Only for iOS
+        localizedReason: 'Please authenticate' //Only for iOS
       })
-      .catch((error: any) => {
-        if (error) {
-          this.presentToast("FingerPrint: " + error.message);
-        }
+        .then((result: any) => {
+          this.navCtrl.push(PagesPersonalchatbubblePage, {
+            friend_id: friend_id,
+            friend_name: friend_name
+          });
+        })
+        .catch((error: any) => {
+          if (error) {
+            if (error.message == 'BIOMETRIC_DISMISSED') {
+              this.presentToast("FingerPrint Sensor Closed!");
+            }
+            else {
+              this.presentToast("FingerPrint: " + error.message);
+            }
+          }
+        });
+    }
+    else {
+      this.navCtrl.push(PagesPersonalchatbubblePage, {
+        friend_id: friend_id,
+        friend_name: friend_name
       });
+    }
   }
   toggleoffline() {
     this.toggleoffline1 = !this.toggleoffline1;
@@ -148,10 +149,9 @@ export class PagesChatPage {
     this.getallusers();
     this.getallusers();
     this.getUnreadmessages();
+    this.getBiometricData();
   }
   doRefresh(event) {
-
-
     setTimeout(() => {
       this.getallusers();
       this.getallusers();
@@ -172,5 +172,73 @@ export class PagesChatPage {
       position: 'top'
     });
     toast.present();
+  }
+  getBiometricData() {
+    this.authServ.getbiometricData(this.userid).subscribe(data => {
+      this.biometricdata = data;
+
+      if (this.biometricdata.length != 0) {
+        for (const bdata of this.biometricdata) {
+          this.biometricToggle = bdata.secure;
+        }
+      }
+      else {
+        this.biometricToggle = false;
+      }
+    })
+  }
+  setBiometricData() {
+    this.authServ.getbiometricData(this.userid).subscribe(data => {
+      this.biometricdata = data;
+      if (this.biometricdata.length == 0) {
+        let postbody = {
+          userid: this.userid,
+          username: this.username,
+          secure: this.biometricToggle
+        };
+        console.log(postbody);
+        this.authServ.setbiometricData(postbody).subscribe(data => {
+          if (data) {
+            this.getBiometricData();
+          }
+        });
+      }
+      else {
+        this.fingeraio.show({
+          clientId: 'Fingerprint-Demo', //Android: Used for encryption. iOS: used for dialogue if no `localizedReason` is given.
+          clientSecret: 'o7aoOMYUbyxaD23oFAnJ', //Necessary for Android encrpytion of keys. Use random secret key.
+          disableBackup: true,  //Only for Android(optional)
+          localizedFallbackTitle: 'Use Pin', //Only for iOS
+          localizedReason: 'Please authenticate' //Only for iOS
+        })
+          .then((result: any) => {
+            for (const bdata of this.biometricdata) {
+              let putbody = {
+                _id: bdata._id,
+                userid: this.userid,
+                username: this.username,
+                secure: this.biometricToggle
+              };
+              this.authServ.putbiometricData(putbody).subscribe(data => {
+                if (data) {
+                  this.getBiometricData();
+                }
+              });
+            }
+          })
+          .catch((error: any) => {
+            this.getBiometricData();
+            if (error) {
+              console.log(error.message);
+              if(error.message=='Too many attempts. Fingerprint sensor disabled.')
+              this.presentToast("Fingerprint : Too many attempts.Try again later");
+            }
+          });
+      }
+    });
+  }
+  openSideMenu() {
+    this.menuCtrl.enable(true, 'chat');
+    this.menuCtrl.toggle('chat');
   }
 }

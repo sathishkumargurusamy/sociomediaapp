@@ -52,7 +52,7 @@
 }
 
 .side_menu {
-    background: linear-gradient(to left, white 0%, rgb(194, 235, 248) 106%);
+    background: linear-gradient(to left, darkslateblue 0%, darkslateblue);
     filter: blur(0.3px);
     color: white;
 }
@@ -92,8 +92,9 @@
     font-family: Impact, Charcoal, sans-serif;
     font-size: 24px;
     letter-spacing: 1.8px;
-    color: #000000;
+    color: white;
     display: flex;
+    font-weight: 1000;
     justify-content: space-between;
     text-transform: capitalize;
 }

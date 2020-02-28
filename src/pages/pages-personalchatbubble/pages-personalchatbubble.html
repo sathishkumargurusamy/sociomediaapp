@@ -1,18 +1,8 @@
-<ion-menu id='chat' [content]="mycontent" direction='right'>
-    <ion-content #mycontent>
-        <div class="menu">
-            <ion-toggle ([ngModel])='biometricToggle' (change)='biometrictoggle()' color="danger"></ion-toggle>
-            <p>Enable Fingerprint security </p>
-        </div>
-
-    </ion-content>
-</ion-menu>
-
 <ion-header>
 
     <ion-navbar>
         <ion-title>
-            <div class="display_pic" (tap)='openMenu()'>. . .</div>{{this.navParams.get('friend_name')}}</ion-title>
+            {{this.navParams.get('friend_name')}}</ion-title>
     </ion-navbar>
 
 </ion-header>
@@ -60,12 +50,12 @@
 
 <ion-footer no-border [style.height]="simply ? '255px' : '55px'">
     <div class="input-wrap">
-        <button ion-button clear icon-only (click)="toggle = !toggle" [(emojiPickerIf)]="toggle" [emojiPickerDirection]="'top'" (emojiPickerSelect)="handleSelection($event)">
+        <button style="color:darkslateblue" ion-button clear icon-only (click)="toggle = !toggle" [(emojiPickerIf)]="toggle" [emojiPickerDirection]="'top'" (emojiPickerSelect)="handleSelection($event)">
         <ion-icon name="md-happy"></ion-icon>
         </button>
         <textarea #chat_input placeholder="Text Input" [(ngModel)]="messageText" (keyup.enter)="sendmessage()" (focusin)="onFocus()">
       </textarea>
-        <button ion-button clear icon-only item-right [disabled]='!messageText' (click)="sendmessage()">
+        <button style="color:darkslateblue" ion-button clear icon-only item-right [disabled]='!messageText' (click)="sendmessage()">
         <ion-icon name="ios-send" ios="ios-send" md="md-send"></ion-icon>
       </button>
     </div>
