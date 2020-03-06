@@ -59,7 +59,7 @@
 
                 <div class='story-thumbnail'>
                     <div class='add_icon'>
-                        <div class='plus'>+</div>
+                        <div class='plus' (click)='openActionSheet()'>+</div>
                     </div>
                     <img [src]="profileimage[userid] || '../../assets/profile.png'" class='story-thumbnail-image profile_image_common_style' (click)='openActionSheet()' />
                 </div>
@@ -74,6 +74,7 @@
                 <p text-center class='story-thumbnail-font'>See my Story</p>
             </div>
         </ion-slide>
+
         <div *ngFor="let stories of story">
             <ion-slide style="padding:5px; padding-bottom:0px; max-width:95px;" *ngIf='stories.userid!=userid'>
                 <div>
@@ -86,6 +87,14 @@
             </ion-slide>
         </div>
     </ion-slides>
+    <div class='loader' *ngIf='!post'>
+        <content-loader>
+            <svg:rect x="15" y="15" rx="1" ry="1" width="60" height="60" />
+            <svg:rect x="90" y="25" rx="3" ry="3" width="260" height="15" />
+            <svg:rect x="90" y="45" rx="3" ry="3" width="150" height="15" />
+        </content-loader>
+        <br>
+    </div>
     <ion-card *ngFor='let i of post,let j=index'>
         <ion-item-divider>
             <ion-item class='post_profile_info'>

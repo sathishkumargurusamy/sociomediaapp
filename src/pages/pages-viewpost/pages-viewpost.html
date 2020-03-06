@@ -27,7 +27,13 @@
             <h3 id="profile-name">{{username|uppercase}}</h3>
         </div>
     </div>
-
+    <div class='loader' *ngIf='!post'>
+        <content-loader>
+            <svg:rect x="15" y="15" rx="1" ry="1" width="60" height="60" />
+            <svg:rect x="90" y="25" rx="3" ry="3" width="260" height="15" />
+            <svg:rect x="90" y="45" rx="3" ry="3" width="150" height="15" />
+        </content-loader>
+    </div>
     <ion-card *ngFor='let i of post,let j=index'>
         <ion-item-divider>
             <ion-item class='post_profile_info'>

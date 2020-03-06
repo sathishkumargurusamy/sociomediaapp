@@ -24,9 +24,14 @@ export class PagesAddpostPage {
   public picture;
   public imageOptionToggle = false;
   public user: User[];
-  constructor(private navCtrl: NavController, private app: App, private auth: AuthenticationProvider,
-    private menu: MenuController, private toastController: ToastController,
-    public postserv: PostProvider, private camera: Camera,
+  
+  constructor(private navCtrl: NavController,
+    private app: App,
+    private auth: AuthenticationProvider,
+    private menu: MenuController,
+    private toastController: ToastController,
+    public postserv: PostProvider,
+    private camera: Camera,
   ) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);

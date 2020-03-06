@@ -35,7 +35,13 @@ export class PagesViewprofilePage {
   public all_users;
   public showcommenttoggle1: any = [];
 
-  constructor(public navCtrl: NavController, public app: App, public auth: AuthenticationProvider, private menu: MenuController, public toastController: ToastController, public navParams: NavParams, public postserv: PostProvider) {
+  constructor(
+    public navCtrl: NavController,
+    public app: App, public auth: AuthenticationProvider,
+    private menu: MenuController,
+    public toastController: ToastController,
+    public navParams: NavParams,
+    public postserv: PostProvider) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
     this.user = JSON.parse(localStorage.getItem('currentUser'));;
@@ -174,6 +180,7 @@ export class PagesViewprofilePage {
   }
   logout() {
     this.auth.logout();
+    this.menu.enable(false,'myprofile');
     this.app.getRootNav().setRoot(MyApp);
   }
   doRefresh(event) {

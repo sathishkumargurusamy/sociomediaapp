@@ -32,12 +32,18 @@ export class PagesEditprofilePage {
   public userid;
   selectedIndex: number;
   date_of_birth: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private datePicker: DatePicker,
-    public camera: Camera, public postservice: PostProvider, public toastController: ToastController
-    , private datePipe: DatePipe, public swipe: IonicSwipeAllModule) {
+
+  constructor(public navCtrl: NavController,
+    public navParams: NavParams,
+    private datePicker: DatePicker,
+    public camera: Camera,
+    public postservice: PostProvider,
+    public toastController: ToastController,
+    public swipe: IonicSwipeAllModule,
+    private datePipe: DatePipe
+  ) {
     this.user = JSON.parse(localStorage.getItem('currentUser'));
     this.readonly = -1;
-
   }
   ngOnInit() {
     for (const u of this.user) {

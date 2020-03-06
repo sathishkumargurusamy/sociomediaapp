@@ -2,9 +2,9 @@
     <div class='poster_name'>{{storyUsername}}
         <div class='poster_time'>{{storyTime|timeAgo}}</div>
     </div>
-
     <div class='story_content'>
-        <ion-slide class='story' [style.backgroundImage]="'url('+ storyImage +')'">
+        <ion-slide class='story' *ngIf='!storyImage' [style.backgroundImage]="'url(../../assets/loader.gif)'"></ion-slide>
+        <ion-slide class='story' *ngIf='storyImage' [style.backgroundImage]="'url('+ storyImage +')'">
         </ion-slide>
     </div>
 </ion-slides>

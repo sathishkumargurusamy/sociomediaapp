@@ -24,12 +24,16 @@ export class PagesStoryViewerPage {
   public storyTime;
   public progress = 0;
   public interval
-  constructor(public navCtrl: NavController, private platform: Platform, private postServ: PostProvider,
-    statusBar: StatusBar, splashScreen: SplashScreen, private navparms: NavParams) {
+  constructor(public navCtrl: NavController,
+    private platform: Platform,
+    private postServ: PostProvider,
+    public statusBar: StatusBar,
+    public splashScreen: SplashScreen,
+    private navparms: NavParams) {
     this.storyId = this.navparms.get('storyid');
   }
   ngOnInit() {
-    this.getStory(this.navparms.get('storyid'));
+    this.getStory(this.storyId);
     this.interval = setInterval(() => {
       this.progress = this.progress + 60;
       if (this.progress > 310) {
@@ -39,7 +43,7 @@ export class PagesStoryViewerPage {
     }, 500);
   }
   ionViewWillEnter() {
-    this.getStory(this.navparms.get('storyid'));
+    this.getStory(this.storyId);
   }
   getStory(id) {
     this.postServ.getStory(id).subscribe(data => {

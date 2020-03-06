@@ -27,6 +27,9 @@ page-pages-personalchatbubble {
     .line-breaker {
         white-space: pre-line;
     }
+    .wallpaper {
+        transition: 0.5s;
+    }
     .input-wrap {
         padding: 5px;
         display: flex;
@@ -35,6 +38,7 @@ page-pages-personalchatbubble {
             border: 0;
             border-bottom: 1px $userBackgroundColor;
             border-style: solid;
+            transition: 0.5s ease;
         }
     }
     .message-wrap {
@@ -137,5 +141,14 @@ page-pages-personalchatbubble {
                 }
             }
         }
+    }
+    .lastseen {
+        font-size: 10px;
+        line-height: 19px;
+    }
+    .lastseen_online {
+        font-size: 10px;
+        line-height: 19px;
+        color: chartreuse;
     }
 }

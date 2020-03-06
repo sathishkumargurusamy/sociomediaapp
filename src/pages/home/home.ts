@@ -63,15 +63,18 @@ export class HomePage {
   receivedmsg: Message;
   liked_post: Post[];
   constructor(public navCtrl: NavController, public app: App,
-     public auth: AuthenticationProvider,
-    private menu: MenuController, public postserv: PostProvider, 
+    public auth: AuthenticationProvider,
+    private menu: MenuController,
+    public postserv: PostProvider,
     public modalController: ModalController,
-    public toastController: ToastController, 
+    public toastController: ToastController,
     private platform: Platform,
-    public notification: LocalNotifications, 
-    statusBar: StatusBar, splashScreen: SplashScreen,
-    public actionSheetCtrl: ActionSheetController, 
-    public camera: Camera,private socialSharing: SocialSharing) {
+    public notification: LocalNotifications,
+    public statusBar: StatusBar,
+    public splashScreen: SplashScreen,
+    public actionSheetCtrl: ActionSheetController,
+    public camera: Camera,
+    private socialSharing: SocialSharing) {
     this.platform.ready().then(() => {
       statusBar.backgroundColorByHexString('#483d8b');
       splashScreen.hide();
@@ -113,7 +116,7 @@ export class HomePage {
         },
           error => {
             if (error) {
-              this.presentToast("Error loading post!!");
+              this.presentToast("Check Your internet connection!");
             }
           }));
       }
@@ -209,7 +212,7 @@ export class HomePage {
     },
       error => {
         if (error) {
-          this.presentToast("Error loading post!!");
+          this.presentToast("Check Your internet connection!");
         }
       });
   }
@@ -219,7 +222,7 @@ export class HomePage {
   gotoprofile(id) {
     this.navCtrl.push(PagesViewpostPage, {
       id: id
-    }, { animate: true, direction: 'left' });
+    });
 
   }
   addcomment(id, userid, j, username) {
@@ -241,7 +244,7 @@ export class HomePage {
     },
       error => {
         if (error) {
-          this.presentToast("Error loading comment!!");
+          this.presentToast("Check Your internet connection!");
         }
       }));
   }
@@ -274,7 +277,7 @@ export class HomePage {
     },
       error => {
         if (error) {
-          this.presentToast("Error loading likes for the post!!");
+          this.presentToast("Check Your internet connection!");
         }
       }));
   }
@@ -287,7 +290,7 @@ export class HomePage {
     },
       error => {
         if (error) {
-          this.presentToast("Error loading likes!!");
+          this.presentToast("Check Your internet connection!");
         }
       }));
   }
@@ -354,6 +357,7 @@ export class HomePage {
       "status": 0
     }
     this.subscriptionList.push(this.auth.setstatus(body).subscribe(data => { }));
+    this.menu.enable(false, 'home');
     this.app.getRootNav().setRoot(MyApp);
   }
   gotoeditprofile() {
@@ -466,17 +470,18 @@ export class HomePage {
       event.complete();
     }, 2000);
   }
+  shareImg(image, j) {
+    console.log('cliked');
+    this.socialSharing.share('', '', image).then(() => {
+      this.popuptoggle[j] = false;
+    }).catch(() => {
+      this.popuptoggle[j] = false;
+    });
+  }
   ionViewDidLeave() {
     for (const subscribedmethods of this.subscriptionList) {
       subscribedmethods.unsubscribe();
     }
   }
-  shareImg(image,j){
-    console.log('cliked');
-    this.socialSharing.share('','',image).then(() => {
-      this.popuptoggle[j]=false;
-    }).catch(() => {
-      this.popuptoggle[j]=false;
-        });
-  }
+
 }

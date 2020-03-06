@@ -8,7 +8,53 @@ page-pages-cameratest {
         left: 0;
         width: 40px;
         height: 40px;
-        z-index: 100000;
+    }
+    .back_icon {
+        background-color: transparent;
+        font-size: 35px;
+    }
+    .camera_icon {
+        font-size: 40px;
+        border-radius: 50%;
+        padding: 10px;
+        width: 80px;
+        height: 80px;
+        color: white;
+        background-color: darkslateblue;
+        box-shadow: 1px 1px 2px 1px black;
+    }
+    .rotate_icon {
+        font-size: 20px;
+        border-radius: 50%;
+        padding: 10px;
+        width: 60px;
+        height: 60px;
+        color: white;
+        background-color: darkslateblue;
+        box-shadow: 1px 1px 2px 1px black;
+    }
+    .send_icon {
+        font-size: 32px;
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        color: black;
+        background-color: greenyellow;
+        box-shadow: 1px 1px 2px 1px black;
+        text-shadow: 1px 1px black;
+    }
+    .image {
+        width: 100%;
+        height: 100%;
+        background-size: cover !important;
+    }
+    .icons {
+        position: absolute;
+        bottom: 50px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
     }
     ion-app,
     ion-content {

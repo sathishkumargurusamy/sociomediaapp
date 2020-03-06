@@ -42,9 +42,17 @@
                 Friends
             </ion-card-header>
             <ion-card-content>
+                <ion-item *ngIf='!friends'>
+                    <div class='loader'>
+                        <content-loader>
+                            <svg:circle cx="40" cy="40" r="40" />
+                            <svg:rect x="90" y="45" rx="3" ry="3" width="150" height="15" />
+                        </content-loader>
+                    </div>
+                </ion-item>
                 <div *ngFor='let f of friends'>
                     <div *ngIf='f.username!=username'>
-                        <ion-item *ngIf='f.status==="1"' (click)='gotouser(f._id,f.username)'>
+                        <ion-item (click)='gotouser(f._id,f.username)'>
 
                             <ion-avatar item-start>
                                 <img class='profile_image_common_style profileAvatar' *ngIf='f.profileimage' [src]='f.profileimage' imageViewer>
@@ -53,13 +61,15 @@
                             </ion-avatar>
                             <ion-label>
                                 <h2>{{f.username}}</h2>
-                                <div [ngClass]="f.status==='1'?'status':'status_off'"></div>
+                                <div *ngFor='let lastseen of allLastSeendata'>
+                                    <div *ngIf='lastseen.username==f.username' [ngClass]="lastseen.lastseen==='Online'?'status':'status_off'"></div>
+                                </div>
                             </ion-label>
                         </ion-item>
                     </div>
                 </div>
 
-                <div *ngFor='let f of friends'>
+                <!-- <div *ngFor='let f of friends'>
                     <div *ngIf='f.status==="0"' (click)='gotouser(f._id,f.username)'>
                         <ion-item *ngIf='f.username!=username'>
 
@@ -69,11 +79,13 @@
                             </ion-avatar>
                             <ion-label>
                                 <h2>{{f.username}}</h2>
-                                <div [ngClass]="f.status=='1'?'status':'status_off'"></div>
+                                <div *ngFor='let lastseen of allLastSeendata'>
+                                    <div *ngIf='lastseen.username!=f.username' [ngClass]="lastseen.lastseen=='Online'?'status':'status_off'"></div>
+                                </div>
                             </ion-label>
                         </ion-item>
                     </div>
-                </div>
+                </div> -->
 
             </ion-card-content>
         </ion-card>

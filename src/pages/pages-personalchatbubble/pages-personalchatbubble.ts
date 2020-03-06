@@ -8,6 +8,7 @@ import Pusher from 'pusher-js';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { Content } from 'ionic-angular';
 import * as CryptoJS from 'crypto-js';
+import { PagesCameratestPage } from '../../pages/pages-cameratest/pages-cameratest';
 // import * as jwt_decode from 'jwt-decode';
 @IonicPage()
 @Component({
@@ -31,6 +32,7 @@ export class PagesPersonalchatbubblePage {
   public messageText: String = '';
   public pusher;
   public all_users;
+  public lastseenstatus;
   public unreadMessages = 0;
   public myprofile_pic;
   public friendprofile_pic;
@@ -39,6 +41,7 @@ export class PagesPersonalchatbubblePage {
   public defaultmessage1: Array<{ user: String, message: String }> = [];
   public allmessage;
   public toggle: boolean = false;
+  picture: any;
 
   constructor(public navCtrl: NavController,
     public postserv: PostProvider,
@@ -53,6 +56,7 @@ export class PagesPersonalchatbubblePage {
     this.pusher = new Pusher('74df637180c0aa9440a4', { cluster: 'ap2', forceTLS: true });
     this.user = JSON.parse(localStorage.getItem('currentUser'));
     const messages_channel = this.pusher.subscribe('message');
+    const lastseen_channel=this.pusher.subscribe('lastseen');
     // messages_channel.bind('message-received', (data) => {
     //   if (data) {
     //     this.allmessage = data;
@@ -76,7 +80,7 @@ export class PagesPersonalchatbubblePage {
         this.receivedmsg = data;
         if (this.receivedmsg.senderid === this.userid && this.receivedmsg.friendid === this.friend_id) {
           this.receivedmsg.message = CryptoJS.AES.decrypt(this.receivedmsg.message.trim(), this.friend_id.trim()).toString(CryptoJS.enc.Utf8);
-          this.messageArray.push(this.receivedmsg);
+          this.getmessage();
           this.scrolldown();
         }
         if (this.receivedmsg.senderid === this.friend_id && this.receivedmsg.friendid === this.userid) {
@@ -86,9 +90,9 @@ export class PagesPersonalchatbubblePage {
               _id: this.receivedmsg._id,
               read: !this.receivedmsg.read
             };
-            this.msgsrv.setreadstatus(body).subscribe(data => { this.getmessage() });
+            this.msgsrv.setreadstatus(body).subscribe(data => { this.getmessage(); });
           }
-          this.messageArray.push(this.receivedmsg);
+          
           this.scrolldown();
           this.notification.schedule({
             id: 1,
@@ -97,6 +101,9 @@ export class PagesPersonalchatbubblePage {
           });
         }
       }
+    });
+    lastseen_channel.bind('lastseen_status',(data)=>{
+      this.getLastSeenStatus();
     });
     // this._chatService.newUserJoined()
     //   .subscribe(data => {
@@ -122,6 +129,9 @@ export class PagesPersonalchatbubblePage {
     // this.leave();
     this.friend_id = '';
     this.userid = '';
+  }
+  openCamera(){
+    this.navCtrl.push(PagesCameratestPage);
   }
   handleSelection(event) {
     this.messageText += event.char;
@@ -166,16 +176,16 @@ export class PagesPersonalchatbubblePage {
     this.scrolldown()
   }
   sendmessage() {
-    this.messageText = CryptoJS.AES.encrypt(this.messageText.trim(), this.friend_id.trim()).toString();
     let body = {
       senderid: this.userid,
       sendername: this.username,
-      message: this.messageText,
+      message: CryptoJS.AES.encrypt(this.messageText.trim(), this.friend_id.trim()).toString(),
       friendid: this.friend_id,
       friendname: this.friend_name,
       read: false
     };
     this.msgsrv.sendmessasge(body).subscribe(data => {
+      
     });
     this.messageText = '';
     this.getmessage();
@@ -187,8 +197,8 @@ export class PagesPersonalchatbubblePage {
   getmessage() {
     this.msgsrv.getallmessage().subscribe(data => {
       if (data) {
-        this.allmessage = data;
         this.messageArray = [];
+        this.allmessage = data;
         for (const all_message of this.allmessage) {
           if (all_message.senderid === this.userid && all_message.friendid === this.friend_id) {
             all_message.message = CryptoJS.AES.decrypt(all_message.message.trim(), this.friend_id.trim()).toString(CryptoJS.enc.Utf8);
@@ -202,7 +212,7 @@ export class PagesPersonalchatbubblePage {
                 _id: all_message._id,
                 read: !all_message.read
               };
-              this.msgsrv.setreadstatus(body).subscribe(data => { console.log(data) });
+              this.msgsrv.setreadstatus(body).subscribe(data => {  });
             }
             this.messageArray.push(all_message);
             this.scrolldown();
@@ -216,7 +226,20 @@ export class PagesPersonalchatbubblePage {
         }
       });
   }
+  getLastSeenStatus(){
+  this.msgsrv.getlastseen(this.friend_name).subscribe(data=>{
+      for(const lastseenData of data){
+          this.lastseenstatus=lastseenData.lastseen;
+          console.log(this.lastseenstatus);
+      }
+    });
+  }
   ionViewWillEnter() {
+    this.picture = this.navParams.get('picture');
+    if(this.picture){
+    }
     this.getprofilepic();
+    this.getmessage();
+    this.getLastSeenStatus();
   }
 }

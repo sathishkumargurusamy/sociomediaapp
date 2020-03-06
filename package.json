@@ -27,10 +27,12 @@
         "@ionic-native/camera-preview": "^4.20.0",
         "@ionic-native/core": "4.20.0",
         "@ionic-native/date-picker": "^4.20.0",
+        "@ionic-native/file-chooser": "^4.20.0",
         "@ionic-native/fingerprint-aio": "^4.20.0",
         "@ionic-native/full-screen-image": "^5.21.5",
         "@ionic-native/geolocation": "^4.20.0",
         "@ionic-native/local-notifications": "^4.20.0",
+        "@ionic-native/lottie-splash-screen": "^4.20.0",
         "@ionic-native/native-geocoder": "^5.20.0",
         "@ionic-native/network": "^4.20.0",
         "@ionic-native/photo-viewer": "^4.20.0",
@@ -40,6 +42,7 @@
         "@ionic-tools/emoji-picker": "^1.4.0",
         "@ionic/angular": "^5.0.0",
         "@ionic/storage": "^2.2.0",
+        "@netbasal/ngx-content-loader": "^3.0.0",
         "@types/hammerjs": "^2.0.36",
         "com-sarriaroman-photoviewer": "^1.1.18",
         "cordova": "^9.0.0",
@@ -49,6 +52,7 @@
         "cordova-plugin-camera": "^4.1.0",
         "cordova-plugin-camera-preview": "^0.11.2",
         "cordova-plugin-datepicker": "^0.9.3",
+        "cordova-plugin-filechooser": "^1.2.0",
         "cordova-plugin-fingerprint-aio": "^3.0.1",
         "cordova-plugin-geolocation": "^4.0.2",
         "cordova-plugin-local-notification": "^0.9.0-beta.2",
@@ -119,7 +123,8 @@
             },
             "cordova-plugin-x-socialsharing": {
                 "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
-            }
+            },
+            "cordova-plugin-filechooser": {}
         },
         "platforms": [
             "android"

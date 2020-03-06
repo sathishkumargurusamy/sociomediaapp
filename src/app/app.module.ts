@@ -35,7 +35,7 @@ import { LongPressModule } from 'ionic-long-press';
 import { CameraPreview } from '@ionic-native/camera-preview';
 import { PagesCameratestPage } from '../pages/pages-cameratest/pages-cameratest'
 import { SocialSharing } from '@ionic-native/social-sharing';
-
+import { ContentLoaderModule } from '@netbasal/ngx-content-loader';
 @NgModule({
   declarations: [
     MyApp,
@@ -58,6 +58,7 @@ import { SocialSharing } from '@ionic-native/social-sharing';
     }),
     SocketIoModule.forRoot(config),
     HttpClientModule,
+    ContentLoaderModule,
     IonicSwipeAllModule,
     LongPressModule,
     EmojiPickerModule.forRoot(),

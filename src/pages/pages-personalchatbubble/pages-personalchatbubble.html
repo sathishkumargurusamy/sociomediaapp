@@ -2,7 +2,11 @@
 
     <ion-navbar>
         <ion-title>
-            {{this.navParams.get('friend_name')}}</ion-title>
+            {{this.navParams.get('friend_name')}}
+            <br>
+            <span *ngIf='lastseenstatus!="Online"' class='lastseen'>{{lastseenstatus|timeAgo}}</span>
+            <span *ngIf='lastseenstatus=="Online"' class='lastseen_online'>Online</span>
+        </ion-title>
     </ion-navbar>
 
 </ion-header>
@@ -53,8 +57,11 @@
         <button style="color:darkslateblue" ion-button clear icon-only (click)="toggle = !toggle" [(emojiPickerIf)]="toggle" [emojiPickerDirection]="'top'" (emojiPickerSelect)="handleSelection($event)">
         <ion-icon name="md-happy"></ion-icon>
         </button>
-        <textarea #chat_input placeholder="Text Input" [(ngModel)]="messageText" (keyup.enter)="sendmessage()" (focusin)="onFocus()">
+        <textarea class='chat_input' #chat_input placeholder="Text Input" [(ngModel)]="messageText" (keyup.enter)="sendmessage()" (focusin)="onFocus()">
       </textarea>
+        <button style="color:darkslateblue" ion-button clear icon-only item-right *ngIf='!messageText' (click)="openCamera()">
+            <ion-icon  name="camera"></ion-icon>
+      </button>
         <button style="color:darkslateblue" ion-button clear icon-only item-right [disabled]='!messageText' (click)="sendmessage()">
         <ion-icon name="ios-send" ios="ios-send" md="md-send"></ion-icon>
       </button>
