@@ -2,24 +2,26 @@
 
     <div class="maincontent">
 
-        <div class="card1">
-            <!-- <div class='bannerImage'></div> -->
+        <div class="card1" [style.margin-top]='mgTop+"%"'>
+            <div class='image'>
+                <div [style.transform]="'scale('+scaleDeg+')'" [style.height]='bannerImageHt+"px"' class='bannerImage'></div>
+            </div>
             <br>
             <h1 align='center'>LOGIN</h1>
             <br>
             <ion-item>
-                <ion-input placeholder='Username' [(ngModel)]="username" type="text" autocapitalize="none"></ion-input>
+                <ion-input placeholder='Username' (focusin)='bannerImageClose()' (focusout)='bannerImageOpen()' [(ngModel)]="username" type="text" autocapitalize="none"></ion-input>
             </ion-item>
             <br>
             <ion-item>
 
-                <ion-input placeholder='Password' [(ngModel)]='password' type="password"></ion-input>
+                <ion-input placeholder='Password' (focusin)='bannerImageClose()' (focusout)='bannerImageOpen()' [(ngModel)]='password' type="password"></ion-input>
             </ion-item>
             <br>
 
             <button ion-button full (click)='login(username,password)'>Login</button>
             <br>
-
+            <span class='remember_me' style='font-size: 16px;'><b>Remember Me?..</b><ion-checkbox [(ngModel)]='rememberMe' class='remember_me_icon' color="primary"></ion-checkbox></span><br>
             <span style='font-size: 16px;'>Create an account? <span (click)='logintoggle()'><u>Register..</u></span></span>
         </div>
     </div>
@@ -48,12 +50,13 @@
             </ion-item>
             <br>
             <ion-item>
-                <ion-input type="email" [(ngModel)]='mail' placeholder="Email ID" name="email" required></ion-input>
+                <ion-input type="email" [(ngModel)]='mail' placeholder="Email ID" id='mail' name="email" type='email' required></ion-input>
             </ion-item>
             <br>
             <ion-item>
                 <ion-input type="password" [(ngModel)]='pass' placeholder="Password" name="password" required></ion-input>
             </ion-item>
+            <div style='color:darkgray; font-size:16px;' *ngIf='pass.length<=6 && pass.length!=0'>Password is too short!</div>
             <br>
 
             <ion-item>
@@ -66,7 +69,7 @@
 
             <ion-row>
                 <ion-col class="signup-col">
-                    <button ion-button color='danger' (click)='checkuser()' class="submit-btn" full [disabled]="!(fname && lname && uname && pass && mail && cpass && pass==cpass)">Register</button>
+                    <button ion-button color='danger' (click)='checkuser()' class="submit-btn" full [disabled]="!(fname && lname && uname && pass && pass.length>=6 && mail && cpass && pass==cpass)">Register</button>
                 </ion-col>
             </ion-row>
             <br>

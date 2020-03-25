@@ -53,7 +53,6 @@
                 <div *ngFor='let f of friends'>
                     <div *ngIf='f.username!=username'>
                         <ion-item (click)='gotouser(f._id,f.username)'>
-
                             <ion-avatar item-start>
                                 <img class='profile_image_common_style profileAvatar' *ngIf='f.profileimage' [src]='f.profileimage' imageViewer>
                                 <img class='profile_image_common_style profileAvatar' *ngIf='!f.profileimage' src='../../assets/profile.png' imageViewer>
@@ -62,53 +61,14 @@
                             <ion-label>
                                 <h2>{{f.username}}</h2>
                                 <div *ngFor='let lastseen of allLastSeendata'>
-                                    <div *ngIf='lastseen.username==f.username' [ngClass]="lastseen.lastseen==='Online'?'status':'status_off'"></div>
+                                    <div *ngIf='lastseen.username==f.username.trim()' [ngClass]="lastseen.lastseen==='Online'?'status':'status_off'"></div>
                                 </div>
                             </ion-label>
                         </ion-item>
                     </div>
                 </div>
-
-                <!-- <div *ngFor='let f of friends'>
-                    <div *ngIf='f.status==="0"' (click)='gotouser(f._id,f.username)'>
-                        <ion-item *ngIf='f.username!=username'>
-
-                            <ion-avatar item-start>
-                                <img class='profile_image_common_style profileAvatar' *ngIf='f.profileimage' [src]='f.profileimage' imageViewer>
-                                <img class='profile_image_common_style profileAvatar' *ngIf='!f.profileimage' src='../../assets/profile.png' imageViewer>
-                            </ion-avatar>
-                            <ion-label>
-                                <h2>{{f.username}}</h2>
-                                <div *ngFor='let lastseen of allLastSeendata'>
-                                    <div *ngIf='lastseen.username!=f.username' [ngClass]="lastseen.lastseen=='Online'?'status':'status_off'"></div>
-                                </div>
-                            </ion-label>
-                        </ion-item>
-                    </div>
-                </div> -->
-
             </ion-card-content>
         </ion-card>
-
-        <!-- <ion-card *ngSwitchCase="'group'">
-            <ion-card-content>
-                <ion-grid>
-                    <ion-label>Create group....</ion-label>
-                    <ion-input type='text' [(ngModel)]='groupname' placeholder='Enter group name....'></ion-input>
-                    <button ion-button (tap)='creategroup()'>Create</button>
-                    <br>
-                    <ion-label>Choose group....</ion-label>
-                    <button *ngFor='let g of groups' ion-button (tap)='setroom(g.groupname,g._id)'>{{g.groupname}}</button> {{room}}
-
-                    <ion-row>
-                        <ion-col>
-                            <button ion-button (click)="gotochat()">Join</button>
-
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-            </ion-card-content>
-        </ion-card> -->
     </div>
 
 

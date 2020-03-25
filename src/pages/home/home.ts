@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, trigger, transition, style, animate } from '@angular/core';
 import { NavController, App } from 'ionic-angular';
 import { Platform } from 'ionic-angular';
 import { PostProvider } from '../../providers/post/post';
@@ -6,8 +6,11 @@ import { ModalController } from 'ionic-angular';
 import { PagesAddpostPage } from '../addpost/pages-addpost';
 import { PagesEditprofilePage } from '../pages-editprofile/pages-editprofile';
 import { ToastController } from 'ionic-angular';
+import { PagesCommentModalPage } from '../pages-comment-modal/pages-comment-modal'
 import { MenuController } from 'ionic-angular';
 import { AuthenticationProvider } from '../../providers/authentication/authentication';
+import { MessageProvider } from '../../providers/message/message';
+import { FriendProvider } from '../../providers/friend/friend';
 import { MyApp } from '../../app/app.component';
 import { PagesViewpostPage } from '../pages-viewpost/pages-viewpost';
 import Pusher from 'pusher-js'
@@ -26,13 +29,13 @@ import { PagesStoryViewerPage } from '../../pages/pages-story-viewer/pages-story
 import { ActionSheetController } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 import { SocialSharing } from '@ionic-native/social-sharing';
-// import{AboutPage} from '../about/about';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
   subscriptionList: ISubscription[] = [];
+  public friendList1;
   public post: Post;
   public comments: any = [];
   public dispcomment: Comments;
@@ -46,6 +49,7 @@ export class HomePage {
   public allikes: Likes[];
   public profileimage = [];
   public likes: any = '';
+  public friendList;
   public userid: any = '';
   public liketoggle = [];
   public popuptoggle = [];
@@ -57,20 +61,23 @@ export class HomePage {
   public story: Story[];
   public actionSheet: any;
   public showcommenttoggle1: any = [];
-  commentedPost: any;
-  commented_post: Post[];
-  likedPost: any;
-  receivedmsg: Message;
-  liked_post: Post[];
+  public commentedPost: any;
+  public commented_post: Post[];
+  public likedPost: any;
+  public receivedmsg: Message;
+  public liked_post: Post[];
+  public allfriendsList = [];
   constructor(public navCtrl: NavController, public app: App,
     public auth: AuthenticationProvider,
     private menu: MenuController,
     public postserv: PostProvider,
     public modalController: ModalController,
     public toastController: ToastController,
+    public friendServ: FriendProvider,
     private platform: Platform,
     public notification: LocalNotifications,
     public statusBar: StatusBar,
+    public msgServ: MessageProvider,
     public splashScreen: SplashScreen,
     public actionSheetCtrl: ActionSheetController,
     public camera: Camera,
@@ -81,7 +88,12 @@ export class HomePage {
     });
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
-    this.user = JSON.parse(localStorage.getItem('currentUser'));
+    if (localStorage.getItem('currentUser')) {
+      this.user = JSON.parse(localStorage.getItem('currentUser'));
+    }
+    else {
+      this.user = JSON.parse(sessionStorage.getItem('currentUser'));
+    }
     this.pusher = new Pusher('74df637180c0aa9440a4', { cluster: 'ap2', forceTLS: true });
     const post_channel = this.pusher.subscribe('posts');
     const comments_channel = this.pusher.subscribe('comments');
@@ -116,7 +128,7 @@ export class HomePage {
         },
           error => {
             if (error) {
-              this.presentToast("Check Your internet connection!");
+              // this.presentToast("Check Your internet connection!");
             }
           }));
       }
@@ -179,27 +191,21 @@ export class HomePage {
       this.username = i.username;
       this.userid = i._id;
     }
-    this.getlikes();
-    this.getpost();
-    this.getcomment();
-    this.alluser();
-    this.alllikes(this.userid);
-    this.getAllStory();
   }
   alluser() {
     this.subscriptionList.push(this.postserv.allusers().subscribe(data => {
       this.allusers = data;
+      this.getAllFriends(this.allusers);
       for (const all_users of this.allusers) {
         this.profileimage[all_users._id] = all_users.profileimage;
       }
     }));
   }
-
   ionViewWillEnter() {
+    this.setFriendStatus();
     this.getlikes();
     this.getpost();
     this.getcomment();
-    this.alluser();
     this.alllikes(this.userid);
     this.getAllStory();
   }
@@ -212,7 +218,7 @@ export class HomePage {
     },
       error => {
         if (error) {
-          this.presentToast("Check Your internet connection!");
+          this.presentToast("Check Your internet connection!", 10000);
         }
       });
   }
@@ -223,14 +229,12 @@ export class HomePage {
     this.navCtrl.push(PagesViewpostPage, {
       id: id
     });
-
   }
   addcomment(id, userid, j, username) {
-
     this.subscriptionList.push(this.postserv.addcomment(userid, id, username, this.comments[j]).subscribe(data => {
       this.getcomment();
       this.comments[j] = '';
-      this.presentToast('Comment Added Successfully!');
+      this.presentToast('Comment Added Successfully!', 2000);
     }));
   }
   getcomment() {
@@ -244,43 +248,48 @@ export class HomePage {
     },
       error => {
         if (error) {
-          this.presentToast("Check Your internet connection!");
+          // this.presentToast("Check Your internet connection!");
         }
       }));
   }
-
   deletepost(id, j) {
     this.subscriptionList.push(this.postserv.deletepost(id).subscribe(data => {
       this.getpost();
-      this.presentToast('Post deleted successfully!!');
+      this.presentToast('Post deleted successfully!!', 2000);
       this.deletePostComment(id);
       this.deletePostlike(id);
       this.popuptoggle[j] = !this.popuptoggle[j];
+      this.ionViewWillEnter();
     }));
-
   }
+
   deletePostlike(id) {
     this.subscriptionList.push(this.postserv.deletepostlike(id).subscribe());
   }
+
   deletePostComment(id) {
     this.subscriptionList.push(this.postserv.deletepostcomment(id).subscribe());
   }
+
   deletecomment(id) {
     this.subscriptionList.push(this.postserv.deletecomment(id).subscribe(data => {
       this.getcomment();
-      this.presentToast("Comment deleted successfully!!");
+      this.presentToast("Comment deleted successfully!!", 2000);
+      this.ionViewWillEnter();
     }));
   }
+
   getlikes() {
     this.subscriptionList.push(this.postserv.getpost().subscribe(data => {
       this.post = data;
     },
       error => {
         if (error) {
-          this.presentToast("Check Your internet connection!");
+          // this.presentToast("Check Your internet connection!");
         }
       }));
   }
+
   alllikes(uid) {
     this.subscriptionList.push(this.postserv.getlikes(uid).subscribe(data => {
       this.allikes = data;
@@ -290,10 +299,11 @@ export class HomePage {
     },
       error => {
         if (error) {
-          this.presentToast("Check Your internet connection!");
+          // this.presentToast("Check Your internet connection!");
         }
       }));
   }
+
   addlikes(j, uid, pid, username) {
     this.subscriptionList.push(this.postserv.getthispost(pid).subscribe(data => {
       this.thispost = data;
@@ -330,38 +340,75 @@ export class HomePage {
       }
     }));
   }
-  showcommenttoggle(j) {
-    this.showcommenttoggle1[j] = !this.showcommenttoggle1[j];
+
+  showcommenttoggle(post_id) {
+    this.navCtrl.push(PagesCommentModalPage, { postid: post_id });
   }
+
   showStory(id) {
     this.navCtrl.push(PagesStoryViewerPage, {
       storyid: id
     }, { animate: true, direction: 'left' });
   }
-  async presentToast(msg) {
+  async presentToast(msg, duration) {
     const toast = await this.toastController.create({
       message: msg,
-      duration: 2000,
+      duration: duration,
       position: 'top'
     });
     toast.present();
   }
+
   gotoaddpost() {
     this.navCtrl.push(PagesAddpostPage);
-
   }
+
   logout() {
     this.auth.logout();
-    let body = {
-      "id": this.userid,
-      "status": 0
-    }
-    this.subscriptionList.push(this.auth.setstatus(body).subscribe(data => { }));
+    // let body = {
+    //   "id": this.userid,
+    //   "status": 0
+    // }
+    // this.subscriptionList.push(this.auth.setstatus(body).subscribe(data => { }));
     this.menu.enable(false, 'home');
     this.app.getRootNav().setRoot(MyApp);
   }
+
   gotoeditprofile() {
     this.navCtrl.push(PagesEditprofilePage);
+  }
+  getAllFriends(users) {
+    for (let allusers of users) {
+        const body = {
+          friend1: this.userid,
+          friend2: allusers._id
+        }
+        this.subscriptionList.push(this.friendServ.getFriendList(body).subscribe(data => {
+          let body2 = {
+            friend1: allusers._id,
+            friend2: this.userid
+          }
+          this.subscriptionList.push(this.friendServ.getFriendList(body2).subscribe(data2 => {
+            this.friendList = data;
+            this.friendList1 = data2;
+            if (this.friendList.length != 0 || this.friendList1.length != 0) {
+              console.log(this.friendList, this.friendList1)
+              if (this.friendList.length != 0) {
+                for (let f of this.friendList) {
+                  if (f.status == '1' || f.status == '2')
+                    this.allfriendsList.push(allusers)
+                }
+              }
+              else if (this.friendList1.length != 0) {
+                for (let f of this.friendList1) {
+                  if (f.status == '1' || f.status == '2')
+                    this.allfriendsList.push(allusers)
+                }
+              }
+            }
+          }))
+        }))
+    }
   }
   addStory() {
     let body = {
@@ -371,6 +418,7 @@ export class HomePage {
     };
     this.postserv.addStory(body).subscribe(data => { console.log(data) });
   }
+
   getAllStory() {
     this.postserv.getAllStory().subscribe(data => {
       this.story = data;
@@ -382,6 +430,7 @@ export class HomePage {
       }
     });
   }
+
   openActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Story',
@@ -407,56 +456,36 @@ export class HomePage {
         }
       ]
     });
-
     actionSheet.present();
   }
+
   opencamera() {
     this.camera.getPicture({
-
       targetWidth: 1200,
-
       targetHeight: 1800,
-
       correctOrientation: true,
-
       sourceType: this.camera.PictureSourceType.CAMERA,
-
       destinationType: this.camera.DestinationType.DATA_URL
-
     }).then((imageData) => {
-
       this.myStoryImage = 'data:image/jpeg;base64,' + imageData;
       this.addStory();
-
     }, (err) => {
-
       console.log(err);
-
     });
   }
+
   AccessGallery() {
-
     this.camera.getPicture({
-
       targetWidth: 1200,
-
       targetHeight: 1800,
-
       correctOrientation: true,
-
       sourceType: this.camera.PictureSourceType.SAVEDPHOTOALBUM,
-
       destinationType: this.camera.DestinationType.DATA_URL
-
     }).then((imageData) => {
-
       this.myStoryImage = 'data:image/jpeg;base64,' + imageData;
       this.addStory();
-
     }, (err) => {
-
       console.log(err);
-
     });
   }
   doRefresh(event) {
@@ -464,12 +493,12 @@ export class HomePage {
       this.getlikes();
       this.getpost();
       this.getcomment();
-      this.alluser();
       this.alllikes(this.userid);
       this.getAllStory();
       event.complete();
     }, 2000);
   }
+
   shareImg(image, j) {
     console.log('cliked');
     this.socialSharing.share('', '', image).then(() => {
@@ -478,7 +507,23 @@ export class HomePage {
       this.popuptoggle[j] = false;
     });
   }
+  setFriendStatus() {
+    const body = {
+      friend1:this.userid,
+      friend2:this.userid,
+      status:'2'
+    }
+    this.subscriptionList.push(this.friendServ.getFriendList(body).subscribe(data=>{
+      let flist
+      flist=data;
+      if(flist.length==0){
+        this.subscriptionList.push(this.friendServ.addFriend(body).subscribe());
+      }
+    }))
+    
+  }
   ionViewDidLeave() {
+    this.menu.enable(false);
     for (const subscribedmethods of this.subscriptionList) {
       subscribedmethods.unsubscribe();
     }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController } from 'ionic-angular';
+import { NavController, Platform } from 'ionic-angular';
 import { ToastController } from 'ionic-angular';
 import { PostProvider } from '../../providers/post/post';
 import { MenuController, App } from 'ionic-angular';
@@ -8,9 +8,9 @@ import { MyApp } from '../../app/app.component';
 import { Camera } from '@ionic-native/camera';
 import { User } from '../../models/user';
 import { ISubscription } from "rxjs/Subscription";
+import { Geolocation } from '@ionic-native/geolocation';
+import { NativeGeocoder, NativeGeocoderOptions } from '@ionic-native/native-geocoder';
 // import * as jwt_decode from 'jwt-decode';
-
-@IonicPage()
 @Component({
   selector: 'page-pages-addpost',
   templateUrl: 'pages-addpost.html',
@@ -24,9 +24,15 @@ export class PagesAddpostPage {
   public picture;
   public imageOptionToggle = false;
   public user: User[];
-  
+  userLocation: any;
+  userLocationPlace1: any;
+  userLocationPlace2: any;
+  userLocationPlace: any;
   constructor(private navCtrl: NavController,
     private app: App,
+    private platform: Platform,
+    public geolocation: Geolocation,
+    private nativeGeocoder: NativeGeocoder,
     private auth: AuthenticationProvider,
     private menu: MenuController,
     private toastController: ToastController,
@@ -36,7 +42,34 @@ export class PagesAddpostPage {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
     // this.user = jwtData.user;
-    this.user = JSON.parse(localStorage.getItem('currentUser'));
+    if (localStorage.getItem('currentUser')) {
+      this.user = JSON.parse(localStorage.getItem('currentUser'));
+    }
+    else {
+      this.user = JSON.parse(sessionStorage.getItem('currentUser'));
+    }
+
+  }
+  getLocation() {
+    this.geolocation.getCurrentPosition().then((resp) => {
+      if (this.platform.is('cordova')) {
+        let options: NativeGeocoderOptions = {
+          useLocale: true,
+          maxResults: 5
+        };
+        this.nativeGeocoder.reverseGeocode(resp.coords.latitude, resp.coords.longitude, options)
+          .then((result) => {
+            this.userLocation = result[0];
+            this.userLocationPlace1 = this.userLocation.subLocality;
+            this.userLocationPlace2 = this.userLocation.locality;
+            this.userLocationPlace = this.userLocationPlace1 + ' ,' + this.userLocationPlace2;
+          }
+          )
+          .catch((error: any) => console.log(error));
+      }
+    }).catch((error) => {
+      console.log('Error getting location', error);
+    });
   }
   menutoggle() {
     this.menu.enable(false, 'home');
@@ -49,6 +82,7 @@ export class PagesAddpostPage {
       this.username = i.username;
       this.userid = i._id;
     }
+    this.getLocation();
   }
   ionViewDidLoad() {
   }
@@ -66,6 +100,7 @@ export class PagesAddpostPage {
       username: this.username,
       post: this.mypost || '',
       postimg: this.postImage || '',
+      postedplace: this.userLocationPlace,
       likes: 0
     };
     this.subscriptionList.push(this.postserv.createpost(body).subscribe(data => {

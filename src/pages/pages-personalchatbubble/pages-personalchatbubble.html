@@ -14,9 +14,9 @@
 <ion-content class="wallpaper">
 
     <div class="message-wrap">
-        <div *ngFor="let item of messageArray, let i of index">
+        <div *ngFor="let item of messageArray, let i of index,let last=last">
             <div class="message" *ngIf=' item.sendername === username' [class.left]=" item.sendername != username " [class.right]=" item.sendername === username ">
-                <img class="user-img" [src]="item.sendername === username?myprofile_pic:friendprofile_pic" alt="">
+                <img class="user-img" [src]="item.sendername === username?myprofile_pic||'../../assets/profile.png':friendprofile_pic||'../../assets/profile.png'" alt="">
                 <!-- <ion-spinner name="dots" *ngIf="pending[i]!=''"></ion-spinner> -->
                 <div class="msg-detail">
                     <div class="msg-info">
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="message" *ngIf=' item.sendername != username' [class.left]=" item.sendername != username " [class.right]=" item.sendername === username ">
-                <img class="user-img" [src]="item.sendername === username?myprofile_pic:friendprofile_pic" alt="">
+                <img class="user-img" [src]="item.sendername === username?myprofile_pic||'../../assets/profile.png':friendprofile_pic||'../../assets/profile.png'" alt="">
                 <!-- <ion-spinner name="dots" *ngIf="pending[i]!=''"></ion-spinner> -->
                 <div class="msg-detail">
                     <div class="msg-info">

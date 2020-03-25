@@ -1,0 +1,66 @@
+page-pages-comment-modal {
+    .comments_content {
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
+        padding: 5px;
+        overflow-y: scroll;
+        overflow-x: auto;
+        flex-direction: column;
+    }
+    .comments_heading {
+        padding: 10px;
+        display: block;
+        font-size: 30px !important;
+        height: 50px !important;
+        color: white;
+        background-color: darkslateblue !important;
+    }
+    .comments_section {
+        padding: 10px;
+        display: flex;
+        justify-content: flex-start;
+        width: 100%;
+        position: relative;
+    }
+    .editor {
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: flex-end;
+        width: 100%;
+        padding-top: 10px;
+        padding-right: 10px;
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
+        box-shadow: 0px 0px 10px 0px;
+        background-color: white;
+    }
+    textarea.text-input {
+        background-color: white !important;
+        height: auto;
+    }
+    .del_icon {
+        display: flex !important;
+        position: absolute !important;
+        right: 41px !important;
+        top: 16px !important;
+        font-size: 18px;
+        transform: rotate(45deg);
+    }
+    .profile_image_thumbnail {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-right: 20px;
+    }
+    .comments {
+        width: 80%;
+        padding: 10px;
+        height: auto;
+        border-radius: 10px;
+        background-color: lightgrey;
+        color: black;
+    }
+}

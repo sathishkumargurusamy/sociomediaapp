@@ -1,15 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { CameraPreview, CameraPreviewPictureOptions, CameraPreviewOptions, CameraPreviewDimensions } from '@ionic-native/camera-preview';
-import { PagesPersonalchatbubblePage } from '../pages-personalchatbubble/pages-personalchatbubble';
-
-
-/**
- * Generated class for the PagesCameratestPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -23,6 +14,7 @@ export class PagesCameratestPage {
     public navParams: NavParams,
     private cameraPreview: CameraPreview) {
   }
+
   openCamera() {
     const cameraPreviewOpts: CameraPreviewOptions = {
       x: 0,
@@ -34,7 +26,7 @@ export class PagesCameratestPage {
       previewDrag: false,
       toBack: true,
       alpha: 1,
-      tapToFocus:true
+      tapToFocus: true
     }
     this.cameraPreview.startCamera(cameraPreviewOpts).then(
       (res) => {
@@ -44,9 +36,9 @@ export class PagesCameratestPage {
       (err) => {
         console.log(err)
       });
-
   }
-  takePicture(){
+
+  takePicture() {
     const pictureOpts: CameraPreviewPictureOptions = {
       width: 1280,
       height: 1280,
@@ -54,18 +46,20 @@ export class PagesCameratestPage {
     }
     this.cameraPreview.takePicture(pictureOpts).then((imageData) => {
       this.picture = 'data:image/jpeg;base64,' + imageData;
-      this.picture64=imageData;
+      this.picture64 = imageData;
     }, (err) => {
       console.log(err);
       this.picture = 'assets/img/test.jpg';
     });
   }
-  sendImage(){
+
+  sendImage() {
     this.navCtrl.getPrevious().data.picture = this.picture;
     this.navCtrl.pop();
   }
+
   ionViewDidLoad() {
-      this.openCamera();
+    this.openCamera();
     const elements = document.querySelectorAll(".tabbar");
     if (elements != null) {
       Object.keys(elements).map((key) => {
@@ -73,13 +67,15 @@ export class PagesCameratestPage {
       });
     }
   }
-  turnCamera(){
+
+  turnCamera() {
     this.cameraPreview.switchCamera();
   }
 
-  backToChat(){
+  backToChat() {
     this.navCtrl.pop();
   }
+
   ngOnDestroy() {
     const elements = document.querySelectorAll(".tabbar");
     if (elements != null) {

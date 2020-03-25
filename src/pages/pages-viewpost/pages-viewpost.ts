@@ -8,6 +8,8 @@ import { Comments } from "../../models/comments";
 import { Likes } from '../../models/likes';
 import { ToastController } from 'ionic-angular';
 import { ISubscription } from "rxjs/Subscription";
+import { PagesCommentModalPage } from '../pages-comment-modal/pages-comment-modal';
+import { FriendProvider } from '../../providers/friend/friend';
 // import * as jwt_decode from 'jwt-decode';
 @IonicPage()
 @Component({
@@ -20,6 +22,9 @@ export class PagesViewpostPage {
   public comments: any = [];
   public dispcomment: Comments;
   public comment;
+  public friendList;
+  public friendList1;
+  public allfriendsList=[];
   public errcomment: any = '';
   public user: User[];
   public likecount: any = [];
@@ -35,15 +40,24 @@ export class PagesViewpostPage {
   public loggedusername;
   public all_users;
   public proimage;
+  public dateOfBirth: any;
+  public gender: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams,
-    public auth: AuthenticationProvider, public postserv: PostProvider,
+    public auth: AuthenticationProvider, 
+    public friendServ:FriendProvider,
+    public postserv: PostProvider,
     public toastController: ToastController) {
   }
   ngOnInit() {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
-    this.loggeduser = JSON.parse(localStorage.getItem('currentUser'));
+    if(localStorage.getItem('currentUser')){
+      this.loggeduser = JSON.parse(localStorage.getItem('currentUser'));
+    }
+    else{
+      this.loggeduser = JSON.parse(sessionStorage.getItem('currentUser'));
+    }
     for (const i of this.loggeduser) {
       this.loggeduserid = i._id;
       this.loggedusername = i.username;
@@ -60,23 +74,20 @@ export class PagesViewpostPage {
     this.getprofile(this.userid);
     this.getuser(this.userid);
     this.getcomment();
-    this.allusers();
     this.alllikes(this.loggeduserid);
   }
   allusers() {
     this.subcriptionList.push(this.postserv.allusers().subscribe(data => {
       this.all_users = data;
+      this.getAllFriends(this.all_users);
       for (const all_user of this.all_users) {
         if (all_user._id == this.userid) {
           this.proimage = all_user.profileimage;
+          this.dateOfBirth = all_user.dob;
+          this.gender = all_user.gender;
         }
       }
-    },
-      error => {
-        if (error) {
-          this.presentToast("Error getting user!!");
-        }
-      }));
+    }));
   }
   getuser(id) {
     this.subcriptionList.push(this.postserv.getuser(id).subscribe(data => {
@@ -91,6 +102,42 @@ export class PagesViewpostPage {
         }
       }));
   }
+  getAllFriends(users) {
+    for (let allusers of users) {
+        const body = {
+          friend1: this.loggeduserid,
+          friend2: allusers._id
+        }
+        this.subcriptionList.push(this.friendServ.getFriendList(body).subscribe(data => {
+          let body2 = {
+            friend1: allusers._id,
+            friend2: this.loggeduserid
+          }
+          this.subcriptionList.push(this.friendServ.getFriendList(body2).subscribe(data2 => {
+            this.friendList = data;
+            this.friendList1 = data2;
+            if (this.friendList.length != 0 || this.friendList1.length != 0) {
+              console.log(this.friendList, this.friendList1)
+              if (this.friendList.length != 0) {
+                for (let f of this.friendList) {
+                  if (f.status == '1' || f.status == '2')
+                    this.allfriendsList.push(allusers)
+                }
+              }
+              else if (this.friendList1.length != 0) {
+                for (let f of this.friendList1) {
+                  if (f.status == '1' || f.status == '2')
+                    this.allfriendsList.push(allusers)
+                }
+              }
+            }
+          }))
+        }))
+    }
+  }
+  showcommenttoggle(post_id){
+    this.navCtrl.push(PagesCommentModalPage,{postid:post_id});
+    }
   addlikes(j, uid, pid) {
     this.subcriptionList.push(this.postserv.getthispost(pid).subscribe(data => {
       this.thispost = data;
@@ -193,9 +240,6 @@ export class PagesViewpostPage {
       this.getcomment();
       this.presentToast("Comment deleted successfully");
     }));
-  }
-  showcommenttoggle(j) {
-    this.showcommenttoggle1[j] = !this.showcommenttoggle1[j];
   }
   doRefresh(event) {
     setTimeout(() => {

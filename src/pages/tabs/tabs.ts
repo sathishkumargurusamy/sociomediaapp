@@ -3,6 +3,8 @@ import { HomePage } from '../home/home';
 import { PagesCameratestPage } from '../pages-cameratest/pages-cameratest'
 import { PagesAddpostPage } from '../addpost/pages-addpost';
 import { PagesChatPage } from '../pages-chat/pages-chat';
+import { PagesNotificationsPage } from '../pages-notifications/pages-notifications';
+import { PagesSearchfriendsPage } from '../pages-searchfriends/pages-searchfriends';
 import { PagesViewprofilePage } from '../pages-viewprofile/pages-viewprofile';
 import { NavController } from 'ionic-angular';
 import { MyApp } from '../../app/app.component';
@@ -16,6 +18,8 @@ export class TabsPage {
   addpost = PagesAddpostPage;
   viewprofile = PagesViewprofilePage;
   chat = PagesChatPage;
+  notification=PagesNotificationsPage;
+  search=PagesSearchfriendsPage
   constructor(public auth: AuthenticationProvider, public nav: NavController) {
   }
   logout() {

@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, trigger, transition, style, animate } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { AuthenticationProvider } from '../providers/authentication/authentication';
+import { FriendProvider } from '../providers/friend/friend';
 import { MessageProvider } from '../providers/message/message';
 import { ToastController } from 'ionic-angular';
 import { LoadingController } from 'ionic-angular';
@@ -10,7 +11,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { first } from 'rxjs/operators';
 import { ISubscription } from "rxjs/Subscription";
 import { AlertController } from 'ionic-angular';
-
+import { Network } from '@ionic-native/network';
 import Pusher from 'pusher-js'
 @Component({
   templateUrl: 'app.html'
@@ -29,10 +30,14 @@ export class MyApp {
   public displogin: boolean;
   public fname: any;
   public lname: any;
+  public bannerImageHt = 260;
+  public mgTop = 5;
   public uname: any;
-  public pass: any;
-  public cpass: any;
-  public mail: any;
+  public scaleDeg = 1;
+  public pass: any = '';
+  public cpass: any = '';
+  public mail: any = '';
+  public rememberMe;
   public userid;
   public user;
   public valid = true;
@@ -40,8 +45,10 @@ export class MyApp {
   constructor(public platform: Platform,
     public loadingcontroller: LoadingController,
     public statusBar: StatusBar,
+    public network: Network,
+    public friendServ:FriendProvider,
     public splashScreen: SplashScreen,
-    public msgServ:MessageProvider,
+    public msgServ: MessageProvider,
     public auth: AuthenticationProvider,
     public alertCtrl: AlertController,
     public toastController: ToastController) {
@@ -59,13 +66,12 @@ export class MyApp {
   }
   ngOnInit() {
     // this.presentLoadingWithOptions();
+    this.connectionCheck();
     this.disp = Boolean(localStorage.getItem('state'));
     this.displogin = Boolean(localStorage.getItem('state'));
   }
   login(username, password) {
-    username = this.username;
-    password = this.password;
-    this.subscriptionList.push(this.auth.login(username, password).pipe(first()).subscribe(
+    this.subscriptionList.push(this.auth.login(username, password, this.rememberMe).pipe(first()).subscribe(
       data => {
         if (!data) {
           this.toaster("Please check your Credintials!");
@@ -75,13 +81,26 @@ export class MyApp {
           for (const u of this.user) {
             this.userid = u._id;
           }
-          let body = {
-            "id": this.userid,
-            "status": "1"
+          // let body = {
+          //   "id": this.userid,
+          //   "status": "1"
+          // }
+          // this.auth.setstatus(body).subscribe(data => { });
+          if (localStorage.getItem('state')) {
+            if (!this.dispreg) {
+              this.dispreg = !Boolean(localStorage.getItem('state'));
+            }
+            this.disp = Boolean(localStorage.getItem('state'));
+            this.displogin = Boolean(localStorage.getItem('state'));
           }
-          this.auth.setstatus(body).subscribe(data => { });
-          this.disp = Boolean(localStorage.getItem('state'));
-          this.displogin = Boolean(localStorage.getItem('state'));
+          else {
+            if (!this.dispreg) {
+              this.dispreg = !Boolean(localStorage.getItem('state'));
+            }
+            this.disp = Boolean(sessionStorage.getItem('state'));
+            this.displogin = Boolean(sessionStorage.getItem('state'));
+          }
+
         }
       },
       error => {
@@ -96,25 +115,25 @@ export class MyApp {
     });
     toast.present();
   }
-
-  // async presentLoadingWithOptions() {
-  //   const loading = await this.loadingcontroller.create({
-  //     spinner: 'hide',
-  //     duration: 1000,
-  //     content: `<img src="../assets/loader.gif" />`,
-  //     cssClass: 'custom-class custom-loading'
-  //   });
-  //   return await loading.present();
-  // }
-  // async subscribeLoad() {
-  //   const loading = await this.loadingcontroller.create({
-  //     spinner: 'hide',
-  //     duration: 3000,
-  //     content: `<img src="../assets/story_loader.gif" />`,
-  //     cssClass: 'custom-class custom-loading'
-  //   });
-  //   return await loading.present();
-  // }
+  bannerImageOpen() {
+    this.bannerImageHt = 260;
+    this.scaleDeg = 1;
+    this.mgTop = 5;
+  }
+  bannerImageClose() {
+    this.bannerImageHt = 0;
+    this.scaleDeg = 0;
+    this.mgTop = 20;
+  }
+  async presentLoadingWithOptions(duration) {
+    const loading = await this.loadingcontroller.create({
+      spinner: 'hide',
+      duration: duration,
+      content: `<img src="../assets/loader.gif" />`,
+      cssClass: 'custom-class custom-loading'
+    });
+    return await loading.present();
+  }
   checkuser() {
     let body = {
       "username": this.uname,
@@ -123,15 +142,17 @@ export class MyApp {
     }
     this.checkusername(body);
     this.checkemail(body);
+    this.presentLoadingWithOptions(4000);
     setTimeout(() => {
       if (this.validUsername && this.validEmail) {
         this.subscriptionList.push(this.auth.confirmationMail(body).subscribe());
         const prompt = this.alertCtrl.create({
           message: 'Enter a Confirmation code sent to <b>' + this.mail + '</b>',
+          enableBackdropDismiss: false,
           inputs: [
             {
               name: 'code',
-              max: 6,
+              min: 6,
               type: 'number',
               placeholder: 'XXXXXX'
             }
@@ -141,7 +162,13 @@ export class MyApp {
               text: 'OK',
               handler: data => {
                 this.confirmationCode(data.code);
-              }
+              },
+            },
+            {
+              text: 'Cancel',
+              handler: data => {
+                this.alertCtrl;
+              },
             }
           ]
         });
@@ -176,12 +203,17 @@ export class MyApp {
       "lastname": this.lname,
       "password": this.pass,
       "mail": this.mail,
-      "lastseen":new Date()
+      "lastseen": new Date()
     }
     this.subscriptionList.push(this.auth.register(body).subscribe(data => {
       if (Boolean(data)) {
         this.toaster("User added successfully!!");
         this.subscriptionList.push(this.msgServ.setlastseen(body).subscribe());
+        this.presentLoadingWithOptions(2000);
+        setTimeout(() => {
+          console.log(this.uname);
+          this.login(this.uname, this.pass);
+        }, 2000);
       }
       else {
         this.toaster("Username already used!!");
@@ -192,21 +224,20 @@ export class MyApp {
     this.displogin = !this.displogin;
     this.dispreg = !this.dispreg;
   }
+  connectionCheck() {
+    // watch network for a disconnection
+    let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
+      this.alertCtrl.create({
+        enableBackdropDismiss: true,
+        title: "<img src='../../assets/disconnect.png'/><br><i>Please Check Your Internet Connection!!</i>",
+      }).present();
+    });
+    // watch network for a connection
+    let connectSubscription = this.network.onConnect().subscribe(() => {
+    });
+  }
   ionViewCanLeave() {
-    // return new Promise((resolve, reject) => {
-    //     this.alertCtrl.create({
-    //         enableBackdropDismiss: false,
-    //         /* title and message etc ... */
-    //         buttons: [{
-    //             text: "Leave",
-    //             handler: resolve
-    //         },{
-    //             text: "Stay",
-    //             handler: reject
-    //         }]
-    //     }).present();
-    // });
-}
+  }
   ngOnDestroy() {
     for (const subscribedMethod of this.subscriptionList) {
       subscribedMethod.unsubscribe();

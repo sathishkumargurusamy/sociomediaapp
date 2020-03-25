@@ -18,23 +18,35 @@ export class AuthenticationProvider {
     return this.currentUserSubject.value;
   }
 
-  login(username: string, password: string) {
+  login(username: string, password: string,rememberMe:boolean) {
     return this.http.post<any>(this.apiurl + `/user`, { username: username, password: password })
       .pipe(map(user => {
         if (!user) {
-          localStorage.setItem('state', '');
+          if(rememberMe){
+            localStorage.setItem('state', '');
+          }
+          else{
+            sessionStorage.setItem('state','');
+          }
         }
         else {
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          localStorage.setItem('state', '1');
-          this.currentUserSubject.next(user);
+          if(rememberMe){
+            localStorage.setItem('currentUser', JSON.stringify(user));
+            localStorage.setItem('state', '1');
+            this.currentUserSubject.next(user);
+          }
+          else{
+            sessionStorage.setItem('currentUser', JSON.stringify(user));
+            sessionStorage.setItem('state', '1');
+            this.currentUserSubject.next(user);
+          }
         }
         return user;
       }));
   }
-  setstatus(body) {
-    return this.http.put(this.apiurl + `/user/` + body.id, body);
-  }
+  // setstatus(body) {
+  //   return this.http.put(this.apiurl + `/user/` + body.id, body);
+  // }
   checkusername(body) {
     return this.http.post(this.apiurl + `/checkusername`, body);
   }
@@ -58,6 +70,8 @@ export class AuthenticationProvider {
     return this.http.post(this.apiurl + `/secure`, body);
   }
   logout() {
+    sessionStorage.removeItem('currentUser');
+    sessionStorage.setItem('state', '');
     localStorage.removeItem('currentUser');
     localStorage.setItem('state', '');
     this.currentUserSubject.next(null);

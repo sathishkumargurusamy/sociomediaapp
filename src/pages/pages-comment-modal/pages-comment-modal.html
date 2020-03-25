@@ -1,0 +1,27 @@
+<ion-header class='comments_heading'>
+    <div (click)='goBack()'>
+        <ion-icon style='font-size: 24px;' name="arrow-round-back"></ion-icon>
+        <b style='font-size: 24px;'>&nbsp;Comments <span *ngIf='commentcount!=0' >({{commentcount}})</span></b>
+    </div>
+</ion-header>
+<ion-content padding>
+    <div class='comments_content'>
+        <div *ngFor='let comment of dispcomment'>
+            <div *ngIf='comment.postid==postid'>
+                <div class='comments_section'>
+                    <img [src]='profileimage[comment.userid]||"../../assets/profile.png"' class='profile_image_thumbnail'>
+                    <div class='comments'>
+                        <div class='del_icon' *ngIf='userid==comment.userid' (click)='deletecomment(comment._id)'>
+                            <ion-icon name="add"></ion-icon>
+                        </div>
+                        <b>{{comment.username}}</b><br><br> {{comment.comment}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ion-content>
+<ion-footer style='transition: ease-out 0.3s;' [style.height]='ht+ "px"' class='editor'>
+    <ion-textarea placeholder='Comment here..' [(ngModel)]='commentText' rows="3" cols="8" (focusin)='showTextarea()' (focusout)='hideTextarea()' class='comment_area'></ion-textarea>
+    <button style='width:auto' [disabled]='!commentText' ion-button (click)='addcomment()'>Comment</button>
+</ion-footer>

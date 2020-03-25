@@ -1,0 +1,25 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Friend Requests</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <div *ngFor='let f of fuList'>
+        <div *ngFor='let fl of fList'>
+            <div class="avatar-container" *ngIf='fl.friend1==f._id'>
+                <ion-chip>
+                    <ion-avatar>
+                        <img [src]='f.profileimage || "../../assets/profile.png"'>
+                    </ion-avatar>
+                </ion-chip>
+                <ion-label class='avatar-label' (click)='gotoprofile(f._id)'>{{f.username}}</ion-label>
+                <ion-badge class='badges' (click)='acceptFriendRequest(f._id)'>
+                    Accept</ion-badge>
+                <ion-badge class='danger-badges' (click)='deleteFriendRequest(f._id)'>
+                    Decline</ion-badge>
+            </div>
+        </div>
+    </div>
+
+</ion-content>

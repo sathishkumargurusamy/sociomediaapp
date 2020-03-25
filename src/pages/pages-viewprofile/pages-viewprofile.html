@@ -88,6 +88,7 @@
                     <img class='profile_image_common_style ' *ngIf='!proimage ' src='../../assets/profile.png ' imageViewer>
                 </ion-avatar>
                 <div class='post_profile_name'>{{i.username}}</div>
+                <div class='currentLocation'>{{i.postedplace}}</div>
                 <div class="dcicon" style="color:darkslateblue" *ngIf='userid==i.userid ' (click)='deletepost(i._id) '>
                 </div>
             </ion-item>
@@ -113,35 +114,10 @@
             <ion-col>
                 <button ion-button icon-start clear small style="color:darkslateblue">
       <ion-icon name="text"></ion-icon>
-      <div (click)='showcommenttoggle(j) ' > View Comments</div>
+      <div (click)='showcommenttoggle(i._id) ' > View Comments</div>
     </button>
             </ion-col>
 
-        </ion-row>
-
-        <ion-row *ngIf='showcommenttoggle1[j] '>
-            <div *ngFor='let c of dispcomment ' style="width:100%">
-                <ion-card *ngIf='i._id==c.postid '>
-
-                    <ion-item>
-                        <!-- <ion-avatar item-start>
-              <img src="img/marty-avatar.png">
-          </ion-avatar> -->
-                        <h2 style="color:mediumblue;">{{c.username}}</h2>
-
-                        <div class="dcicon" *ngIf='userid==c.userid ' (click)='deletecomment(c._id) '></div>
-
-
-                    </ion-item>
-
-                    <!-- <img src="img/advance-card-bttf.png"> -->
-
-                    <ion-card-content>
-                        <p>{{c.comment}}</p>
-                    </ion-card-content>
-
-                </ion-card>
-            </div>
         </ion-row>
         <ion-row>
             <div class='comment ' *ngIf='showcommenttoggle1[j]'>

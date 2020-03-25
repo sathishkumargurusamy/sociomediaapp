@@ -72,8 +72,7 @@
     </div>
     <br>
     <div class="input">
-        <ion-input class='input_box' [(ngModel)]='date_of_birth' [readonly]='readonly==3?!isreadonly:isreadonly'></ion-input>
-
+        <ion-input class='input_box' placeholder="DD-MM-YYYY" [(ngModel)]='date_of_birth' [readonly]='readonly==3?!isreadonly:isreadonly'></ion-input>
         <div class='editico' (tap)='showDatePicker()'>
             <ion-icon *ngIf='readonly!=3' name="create"></ion-icon>
             <ion-icon *ngIf='readonly==3' name="checkmark" (click)='showDatePicker()'></ion-icon>

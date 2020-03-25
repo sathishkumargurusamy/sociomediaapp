@@ -1,0 +1,31 @@
+page-pages-notifications {
+    .avatar-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        border-bottom: 0.5px grey solid;
+        box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
+        padding: 10px;
+    }
+    .avatar-label {
+        margin-left: 9px;
+    }
+    .badges {
+        padding: 8px;
+        background-color: greenyellow;
+        color: black;
+    }
+    .normal_badge {
+        padding: 8px;
+        background-color: transparent;
+        color: darkslateblue;
+        border: 0.5px solid darkslateblue;
+        margin-right: 2px;
+    }
+    .danger-badges {
+        padding: 8px;
+        background-color: red;
+        margin-left: 4px;
+    }
+}

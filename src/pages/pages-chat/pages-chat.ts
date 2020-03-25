@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, trigger, state, style, transition, animate } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController, MenuController } from 'ionic-angular';
 import { ChatProvider } from '../../providers/chat/chat';
 import { MessageProvider } from '../../providers/message/message';
@@ -18,7 +18,7 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio';
 @IonicPage()
 @Component({
   selector: 'page-pages-chat',
-  templateUrl: 'pages-chat.html',
+  templateUrl: 'pages-chat.html'
 })
 export class PagesChatPage {
   subscriptionList: ISubscription[] = [];
@@ -33,22 +33,21 @@ export class PagesChatPage {
   public biometricdata: BiometricData[];
   public user: User[];
   public friends: User[];
-  public offcountno; oncountno;
   public offcount: any;
   public oncount: any;
   public toggleoffline1 = false;
   public groupname;
-  public toChat:boolean;
+  public toChat: boolean;
   public segment = 'chat';
   public groupid;
   public groups;
   public lastseenid;
-  public allLastSeendata:LastseenData[];
-  public lastSeenData:LastseenData[];
+  public allLastSeendata: LastseenData[];
+  public lastSeenData: LastseenData[];
   public room: String;
   public messageText: String;
   public messageArray: Array<{ user: String, message: String }> = [];
-  
+
   constructor(public navCtrl: NavController,
     public postserv: PostProvider,
     public navParams: NavParams,
@@ -58,21 +57,26 @@ export class PagesChatPage {
     private toastController: ToastController,
     private messageService: MessageProvider,
     private fingeraio: FingerprintAIO,
-    public platform:Platform) {
+    public platform: Platform) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
     platform.pause.subscribe(() => {
       this.setLastSeenStatus(new Date())
     });
-    platform.resume.subscribe(()=>{
+    platform.resume.subscribe(() => {
       this.setLastSeenStatus('Online')
     });
-    this.user = JSON.parse(localStorage.getItem('currentUser'));
+    if (localStorage.getItem('currentUser')) {
+      this.user = JSON.parse(localStorage.getItem('currentUser'));
+    }
+    else {
+      this.user = JSON.parse(sessionStorage.getItem('currentUser'));
+    }
     this.pusher = new Pusher('74df637180c0aa9440a4', { cluster: 'ap2', forceTLS: true });
     const unreadmessages_channel = this.pusher.subscribe('message');
     const userstatus_channel = this.pusher.subscribe('user');
-    const lastseen_channel=this.pusher.subscribe('lastseen');
-    lastseen_channel.bind('lastseen_status',(data)=>{
+    const lastseen_channel = this.pusher.subscribe('lastseen');
+    lastseen_channel.bind('lastseen_status', (data) => {
       this.getalllastseendata();
     });
     userstatus_channel.bind('user-logged', (data) => {
@@ -87,10 +91,7 @@ export class PagesChatPage {
     });
 
   }
-  ionViewDidLoad() {
-    this.getallusers();
-    this.getUnreadmessages();
-  }
+
   ngOnInit() {
     for (const i of this.user) {
       this.username = i.username;
@@ -98,17 +99,19 @@ export class PagesChatPage {
     }
     this.getallusers();
     this.getallusers();
-    this.getUnreadmessages();
     this.getBiometricData();
-    this.setLastSeenStatus('Online');
     this.getalllastseendata();
   }
-  ionViewWillEnter(){
+
+  ionViewWillEnter() {
     this.setLastSeenStatus('Online');
     this.getalllastseendata();
+    this.intitaliseUnreadmessages();
+    this.getUnreadmessages();
   }
+
   gotouser(friend_id, friend_name) {
-    this.toChat=true;
+    this.toChat = true;
     if (this.biometricToggle) {
       this.fingeraio.show({
         clientId: 'Fingerprint-Demo',
@@ -141,16 +144,18 @@ export class PagesChatPage {
       });
     }
   }
+
   toggleoffline() {
     this.toggleoffline1 = !this.toggleoffline1;
   }
-  getalllastseendata(){
-    this.subscriptionList.push(this.messageService.getalllastseendata().subscribe(data=>
-      {
-        this.allLastSeendata=data;
-      }
-      ));
+
+  getalllastseendata() {
+    this.subscriptionList.push(this.messageService.getalllastseendata().subscribe(data => {
+      this.allLastSeendata = data;
+    }
+    ));
   }
+
   getallusers() {
     this.subscriptionList.push(this.postserv.getallusers().subscribe(data => {
       this.friends = data;
@@ -164,6 +169,28 @@ export class PagesChatPage {
         }
       }));
   }
+
+  intitaliseUnreadmessages() {
+    this.subscriptionList.push(this.postserv.getallusers().subscribe(data => {
+      this.friends = data;
+      for (const friend of this.friends) {
+        this.messageService.getallmessage().subscribe(data => {
+          this.all_messages = data;
+          for (const allmessage of this.all_messages) {
+            if (allmessage.senderid == friend._id && allmessage.read == true) {
+              this.unreadMessages[friend._id] = 0;
+            }
+          }
+        });
+      }
+    },
+      error => {
+        if (error) {
+          console.log('Error getting unread messages!', error);
+        }
+      }));
+  }
+
   getUnreadmessages() {
     this.subscriptionList.push(this.postserv.getallusers().subscribe(data => {
       this.friends = data;
@@ -202,6 +229,7 @@ export class PagesChatPage {
     });
     toast.present();
   }
+
   getBiometricData() {
     this.authServ.getbiometricData(this.userid).subscribe(data => {
       this.biometricdata = data;
@@ -216,8 +244,9 @@ export class PagesChatPage {
       }
     })
   }
+
   setBiometricData() {
-    
+
     this.authServ.getbiometricData(this.userid).subscribe(data => {
       this.biometricdata = data;
       if (this.biometricdata.length == 0) {
@@ -229,16 +258,16 @@ export class PagesChatPage {
           localizedReason: 'Please authenticate' //Only for iOS
         })
           .then((result: any) => {
-              let postbody = {
-                userid: this.userid,
-                username: this.username,
-                secure: this.biometricToggle
-              };
-              this.authServ.setbiometricData(postbody).subscribe(data => {
-                if (data) {
-                  this.getBiometricData();
-                }
-              });
+            let postbody = {
+              userid: this.userid,
+              username: this.username,
+              secure: this.biometricToggle
+            };
+            this.authServ.setbiometricData(postbody).subscribe(data => {
+              if (data) {
+                this.getBiometricData();
+              }
+            });
           })
           .catch((error: any) => {
             this.getBiometricData();
@@ -285,34 +314,36 @@ export class PagesChatPage {
     });
   }
 
-  setLastSeenStatus(status){
-    this.subscriptionList.push(this.messageService.getlastseen(this.username).subscribe(data=>{
-      for(const lastseenData of data){
-        this.lastseenid=lastseenData._id;
+  setLastSeenStatus(status) {
+    this.subscriptionList.push(this.messageService.getlastseen(this.username).subscribe(data => {
+      for (const lastseenData of data) {
+        this.lastseenid = lastseenData._id;
       }
-      const body={
-        id:this.lastseenid,
-        username:this.username,
-        lastseen:status
+      const body = {
+        id: this.lastseenid,
+        username: this.username,
+        lastseen: status
       }
       this.subscriptionList.push(this.messageService.putlastseen(body).subscribe());
     }));
   }
+
   openSideMenu() {
     this.menuCtrl.enable(true, 'chat');
     this.menuCtrl.toggle('chat');
   }
+
   ionViewDidLeave() {
     this.segment = 'chat';
     for (const subsceribeMethods of this.subscriptionList) {
       subsceribeMethods.unsubscribe();
     }
-    if(!this.toChat){
+    if (!this.toChat) {
       this.setLastSeenStatus(new Date());
     }
-    else{
-      this.toChat=false;
+    else {
+      this.toChat = false;
     }
-    
   }
+
 }

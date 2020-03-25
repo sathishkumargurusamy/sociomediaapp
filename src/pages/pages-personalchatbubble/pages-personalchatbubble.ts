@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, trigger, transition, style, animate } from '@angular/core';
 import { IonicPage, NavController, NavParams, MenuController } from 'ionic-angular';
 import { ChatProvider } from '../../providers/chat/chat';
 import { PostProvider } from '../../providers/post/post';
@@ -13,7 +13,7 @@ import { PagesCameratestPage } from '../../pages/pages-cameratest/pages-camerate
 @IonicPage()
 @Component({
   selector: 'page-pages-personalchatbubble',
-  templateUrl: 'pages-personalchatbubble.html',
+  templateUrl: 'pages-personalchatbubble.html'
 })
 export class PagesPersonalchatbubblePage {
   @ViewChild(Content)
@@ -54,9 +54,14 @@ export class PagesPersonalchatbubblePage {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
     this.pusher = new Pusher('74df637180c0aa9440a4', { cluster: 'ap2', forceTLS: true });
-    this.user = JSON.parse(localStorage.getItem('currentUser'));
+    if (localStorage.getItem('currentUser')) {
+      this.user = JSON.parse(localStorage.getItem('currentUser'));
+    }
+    else {
+      this.user = JSON.parse(sessionStorage.getItem('currentUser'));
+    }
     const messages_channel = this.pusher.subscribe('message');
-    const lastseen_channel=this.pusher.subscribe('lastseen');
+    const lastseen_channel = this.pusher.subscribe('lastseen');
     // messages_channel.bind('message-received', (data) => {
     //   if (data) {
     //     this.allmessage = data;
@@ -92,7 +97,7 @@ export class PagesPersonalchatbubblePage {
             };
             this.msgsrv.setreadstatus(body).subscribe(data => { this.getmessage(); });
           }
-          
+
           this.scrolldown();
           this.notification.schedule({
             id: 1,
@@ -102,7 +107,7 @@ export class PagesPersonalchatbubblePage {
         }
       }
     });
-    lastseen_channel.bind('lastseen_status',(data)=>{
+    lastseen_channel.bind('lastseen_status', (data) => {
       this.getLastSeenStatus();
     });
     // this._chatService.newUserJoined()
@@ -130,7 +135,7 @@ export class PagesPersonalchatbubblePage {
     this.friend_id = '';
     this.userid = '';
   }
-  openCamera(){
+  openCamera() {
     this.navCtrl.push(PagesCameratestPage);
   }
   handleSelection(event) {
@@ -160,7 +165,7 @@ export class PagesPersonalchatbubblePage {
         if (this.content.scrollToBottom) {
           this.content.scrollToBottom();
         }
-      }, 400)
+      },400)
     }
   }
   ngOnInit() {
@@ -185,7 +190,7 @@ export class PagesPersonalchatbubblePage {
       read: false
     };
     this.msgsrv.sendmessasge(body).subscribe(data => {
-      
+
     });
     this.messageText = '';
     this.getmessage();
@@ -203,7 +208,7 @@ export class PagesPersonalchatbubblePage {
           if (all_message.senderid === this.userid && all_message.friendid === this.friend_id) {
             all_message.message = CryptoJS.AES.decrypt(all_message.message.trim(), this.friend_id.trim()).toString(CryptoJS.enc.Utf8);
             this.messageArray.push(all_message);
-            this.scrolldown();
+            // this.scrolldown();
           }
           if (all_message.senderid === this.friend_id && all_message.friendid === this.userid) {
             all_message.message = CryptoJS.AES.decrypt(all_message.message.trim(), this.userid.trim()).toString(CryptoJS.enc.Utf8);
@@ -212,12 +217,13 @@ export class PagesPersonalchatbubblePage {
                 _id: all_message._id,
                 read: !all_message.read
               };
-              this.msgsrv.setreadstatus(body).subscribe(data => {  });
+              this.msgsrv.setreadstatus(body).subscribe(data => { });
             }
             this.messageArray.push(all_message);
-            this.scrolldown();
+            // this.scrolldown();
           }
         }
+        this.scrolldown();
       }
     },
       error => {
@@ -226,17 +232,16 @@ export class PagesPersonalchatbubblePage {
         }
       });
   }
-  getLastSeenStatus(){
-  this.msgsrv.getlastseen(this.friend_name).subscribe(data=>{
-      for(const lastseenData of data){
-          this.lastseenstatus=lastseenData.lastseen;
-          console.log(this.lastseenstatus);
+  getLastSeenStatus() {
+    this.msgsrv.getlastseen(this.friend_name).subscribe(data => {
+      for (const lastseenData of data) {
+        this.lastseenstatus = lastseenData.lastseen;
       }
     });
   }
   ionViewWillEnter() {
     this.picture = this.navParams.get('picture');
-    if(this.picture){
+    if (this.picture) {
     }
     this.getprofilepic();
     this.getmessage();

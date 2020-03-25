@@ -1,0 +1,81 @@
+<ion-header>
+    <ion-navbar>
+        <ion-title>Search</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+    <!-- <div class="search-hero">
+        <input class="form-control" type="text" name="search" [(ngModel)]="searchText" autocomplete="off" placeholder="&#61442; Search.">
+    </div> -->
+    <ion-item *ngIf='rList.length==0 && fList.length==0'>
+        <div class='loader'>
+            <content-loader>
+                <svg:circle cx="40" cy="40" r="40" />
+                <svg:rect x="90" y="45" rx="3" ry="3" width="150" height="15" />
+            </content-loader>
+        </div>
+    </ion-item>
+    <div *ngFor='let f of ruList'>
+        <div *ngFor='let fl of rList'>
+            <div class="avatar-container" *ngIf='(fl.friend1==userid && fl.status==="0")'>
+                <ion-chip>
+                    <ion-avatar>
+                        <img [src]='f.profileimage || "../../assets/profile.png"'>
+                    </ion-avatar>
+                </ion-chip>
+                <ion-label class='avatar-label' (click)='gotoprofile(f._id)'>{{f.username}}</ion-label>
+                <ion-badge class='danger-badges' (click)='deleteFriendRequest(f._id)'>Cancel Request</ion-badge>
+            </div>
+            <div class="avatar-container" *ngIf='(fl.friend2==userid && fl.status==="0")'>
+                <ion-chip>
+                    <ion-avatar>
+                        <img [src]='f.profileimage || "../../assets/profile.png"'>
+                    </ion-avatar>
+                </ion-chip>
+                <ion-label class='avatar-label' (click)='gotoprofile(f._id)'>{{f.username}}</ion-label>
+                <ion-badge class='success-badges' (click)='acceptFriendRequest(f._id)'>Accept</ion-badge>
+                <ion-badge class='danger-badges' (click)='deleteFriendRequest(f._id)'>Decline</ion-badge>
+            </div>
+            <div class="avatar-container" *ngIf='(fl.friend1==userid && fl.status==="1")'>
+                <ion-chip>
+                    <ion-avatar>
+                        <img [src]='f.profileimage || "../../assets/profile.png"'>
+                    </ion-avatar>
+                </ion-chip>
+                <ion-label class='avatar-label' (click)='gotoprofile(f._id)'>{{f.username}}</ion-label>
+                <ion-badge class='normal_badge'>
+                    <ion-icon ios="ios-checkmark-circle" md="md-checkmark-circle"></ion-icon>
+
+                    Friends</ion-badge>
+            </div>
+            <div class="avatar-container" *ngIf='(fl.friend2==userid && fl.status==="1")'>
+                <ion-chip>
+                    <ion-avatar>
+                        <img [src]='f.profileimage || "../../assets/profile.png"'>
+                    </ion-avatar>
+                </ion-chip>
+                <ion-label class='avatar-label' (click)='gotoprofile(f._id)'>{{f.username}}</ion-label>
+                <ion-badge class='normal_badge'>
+                    <ion-icon ios="ios-checkmark-circle" md="md-checkmark-circle"></ion-icon>
+
+                    Friends</ion-badge>
+            </div>
+            <!-- <div *ngIf='(fl.friend1==userid && fl.status==="0")'>{{f.username}} <button ion-button>Request Sent</button><button (click)='deleteFriendRequest(f._id)' ion-button>Cancel Request</button></div> -->
+            <!-- <div *ngIf='(fl.friend2==userid && fl.status==="0")'>{{f.username}} <button ion-button>Request Sent</button><button (click)='deleteFriendRequest(f._id)' ion-button>Cancel Request</button></div> -->
+            <!-- <div *ngIf='(fl.friend1==userid && fl.status==="1")'>{{f.username}} <button ion-button>already Friend</button></div>
+            <div *ngIf='(fl.friend2==userid && fl.status==="1")'>{{f.username}} <button ion-button>already Friend</button></div> -->
+        </div>
+    </div>
+    <div *ngFor='let f of fList'>
+        <div class="avatar-container">
+            <ion-chip>
+                <ion-avatar>
+                    <img [src]='f.profileimage || "../../assets/profile.png"'>
+                </ion-avatar>
+            </ion-chip>
+            <ion-label class='avatar-label' (click)='gotoprofile(f._id)'>{{f.username}}</ion-label>
+            <ion-badge class='badges' color="primary" (click)='addFriend(f._id)'>Add Friend</ion-badge>
+        </div>
+    </div>
+</ion-content>

@@ -7,6 +7,7 @@ import { AuthenticationProvider } from '../../providers/authentication/authentic
 import { PagesEditprofilePage } from '../pages-editprofile/pages-editprofile';
 import { MyApp } from '../../app/app.component';
 import { ISubscription } from "rxjs/Subscription";
+import { PagesCommentModalPage } from '../pages-comment-modal/pages-comment-modal';
 // import * as jwt_decode from 'jwt-decode';
 
 @IonicPage()
@@ -44,7 +45,12 @@ export class PagesViewprofilePage {
     public postserv: PostProvider) {
     // const jwt = JSON.parse(localStorage.getItem('currentUser'));
     // const jwtData = jwt_decode(jwt);
-    this.user = JSON.parse(localStorage.getItem('currentUser'));;
+    if(localStorage.getItem('currentUser')){
+      this.user = JSON.parse(localStorage.getItem('currentUser'));
+    }
+    else{
+      this.user = JSON.parse(sessionStorage.getItem('currentUser'));
+    }
   }
   menutoggle() {
     this.menu.enable(false, 'home');
@@ -74,6 +80,9 @@ export class PagesViewprofilePage {
       }
     }));
   }
+  showcommenttoggle(post_id){
+    this.navCtrl.push(PagesCommentModalPage,{postid:post_id});
+    }
   ionViewWillEnter() {
     this.getmypost(this.userid);
     this.getcomment();
@@ -166,9 +175,6 @@ export class PagesViewprofilePage {
       this.getcomment();
       this.presentToast('Comment deleted successfully!!..')
     }));
-  }
-  showcommenttoggle(j) {
-    this.showcommenttoggle1[j] = !this.showcommenttoggle1[j];
   }
   async presentToast(msg) {
     const toast = await this.toastController.create({

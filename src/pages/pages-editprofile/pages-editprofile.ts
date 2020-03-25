@@ -42,7 +42,12 @@ export class PagesEditprofilePage {
     public swipe: IonicSwipeAllModule,
     private datePipe: DatePipe
   ) {
-    this.user = JSON.parse(localStorage.getItem('currentUser'));
+    if(localStorage.getItem('currentUser')){
+      this.user = JSON.parse(localStorage.getItem('currentUser'));
+    }
+    else{
+      this.user = JSON.parse(sessionStorage.getItem('currentUser'));
+    }
     this.readonly = -1;
   }
   ngOnInit() {
@@ -135,6 +140,7 @@ export class PagesEditprofilePage {
     };
     this.subscriptionList.push(this.postservice.updateprofile(body).subscribe(data => {
       this.toaster('Profile Updated Successfully!!');
+      this.navCtrl.pop();
     }));
   }
   removephoto() {

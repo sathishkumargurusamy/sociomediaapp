@@ -7,6 +7,7 @@ import { TabsPage } from '../pages/tabs/tabs';
 import { PagesAddpostPage } from '../pages/addpost/pages-addpost';
 import { PagesViewpostPage } from '../pages/pages-viewpost/pages-viewpost';
 import { PagesViewprofilePage } from '../pages/pages-viewprofile/pages-viewprofile';
+import { PagesCommentModalPage } from '../pages/pages-comment-modal/pages-comment-modal';
 import { HttpClientModule } from '@angular/common/http';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -36,6 +37,14 @@ import { CameraPreview } from '@ionic-native/camera-preview';
 import { PagesCameratestPage } from '../pages/pages-cameratest/pages-cameratest'
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { ContentLoaderModule } from '@netbasal/ngx-content-loader';
+import { Geolocation } from "@ionic-native/geolocation";
+import { NativeGeocoder } from '@ionic-native/native-geocoder';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { PagesNotificationsPage } from '../pages/pages-notifications/pages-notifications';
+import { PagesSearchfriendsPage } from '../pages/pages-searchfriends/pages-searchfriends';
+import { Network } from '@ionic-native/network';
+import { FriendProvider } from '../providers/friend/friend';
+
 @NgModule({
   declarations: [
     MyApp,
@@ -44,7 +53,10 @@ import { ContentLoaderModule } from '@netbasal/ngx-content-loader';
     PagesAddpostPage,
     PagesViewpostPage,
     PagesEditprofilePage,
+    PagesNotificationsPage,
+    PagesSearchfriendsPage,
     PagesViewprofilePage,
+    PagesCommentModalPage,
     PagesChatPage,
     PagesStoryViewerPage,
     TimeAgoPipe,
@@ -61,6 +73,7 @@ import { ContentLoaderModule } from '@netbasal/ngx-content-loader';
     ContentLoaderModule,
     IonicSwipeAllModule,
     LongPressModule,
+    BrowserAnimationsModule,
     EmojiPickerModule.forRoot(),
     IonicImageViewerModule],
   bootstrap: [IonicApp],
@@ -70,15 +83,21 @@ import { ContentLoaderModule } from '@netbasal/ngx-content-loader';
     HomePage,
     TabsPage,
     PagesChatPage,
+    PagesNotificationsPage,
+    PagesSearchfriendsPage,
     PagesEditprofilePage,
     PagesAddpostPage,
     PagesViewprofilePage,
+    PagesCommentModalPage,
     PagesViewpostPage,
     PagesPersonalchatbubblePage,
     PagesCameratestPage
   ],
   providers: [
     StatusBar,
+    Network,
+    Geolocation,
+    NativeGeocoder,
     SocialSharing,
     CameraPreview,
     DatePipe,
@@ -93,10 +112,11 @@ import { ContentLoaderModule } from '@netbasal/ngx-content-loader';
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     PostProvider,
     AuthenticationProvider,
-    MessageProvider
+    MessageProvider,
+    FriendProvider
 
   ],
-  exports: [PagesAddpostPage, PagesStoryViewerPage, PagesCameratestPage]
+  exports: [PagesAddpostPage, PagesStoryViewerPage, PagesCameratestPage, PagesCommentModalPage]
 })
 export class AppModule { }
 
